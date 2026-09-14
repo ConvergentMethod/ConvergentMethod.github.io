@@ -16,64 +16,96 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: var(--bkgd);
+            background: var(--primary);
         }
 
         .development-page::before,
         .development-page::after {
             content: "";
             position: fixed;
-            inset: -20%;
+            inset: -45%;
             z-index: -1;
             pointer-events: none;
-            background-size: 350% 350%;
+            background-repeat: no-repeat;
+            background-blend-mode: screen, soft-light, normal;
+            filter: blur(48px) saturate(1.08);
+            transform-origin: center;
+            will-change: transform, background-position;
         }
 
         .development-page::before {
-            background-image: linear-gradient(
-                115deg,
-                var(--bkgd) 0%,
-                var(--primary) 23%,
-                var(--accent) 43%,
-                var(--bkgd) 63%,
-                rgba(254, 195, 101, 0.42) 76%,
-                var(--bkgd) 100%
-            );
-            animation: development-gradient-wave 18s ease-in-out infinite alternate;
+            background-image: radial-gradient(
+                    ellipse at 18% 22%,
+                    var(--accent) 0%,
+                    transparent 56%
+                ),
+                radial-gradient(
+                    ellipse at 76% 72%,
+                    var(--gold) 0%,
+                    transparent 54%
+                ),
+                conic-gradient(
+                    from 210deg at 52% 48%,
+                    var(--primary),
+                    var(--accent),
+                    var(--gold),
+                    var(--primary),
+                    var(--bkgd)
+                ),
+                radial-gradient(
+                    ellipse at 50% 50%,
+                    var(--primary) 0%,
+                    var(--bkgd) 68%
+                );
+            animation: development-fluid-blue 24s ease-in-out infinite alternate;
         }
 
         .development-page::after {
-            opacity: 0.3;
-            background-image: repeating-linear-gradient(
-                115deg,
-                transparent 0%,
-                transparent 18%,
-                rgba(236, 240, 241, 0.16) 24%,
-                transparent 31%,
-                transparent 48%
-            );
-            animation: development-gradient-shimmer 26s linear infinite;
+            opacity: 0.72;
+            background-image: radial-gradient(
+                    ellipse at 74% 20%,
+                    var(--yellow) 0%,
+                    transparent 48%
+                ),
+                radial-gradient(
+                    ellipse at 24% 76%,
+                    var(--accent) 0%,
+                    transparent 52%
+                ),
+                conic-gradient(
+                    from 30deg at 48% 54%,
+                    transparent,
+                    var(--yellow),
+                    var(--accent),
+                    transparent 72%
+                ),
+                radial-gradient(
+                    ellipse at 50% 50%,
+                    transparent 26%,
+                    var(--primary) 82%
+                );
+            animation: development-fluid-gold 30s ease-in-out infinite alternate;
         }
 
-        @keyframes development-gradient-wave {
+        @keyframes development-fluid-blue {
             from {
-                background-position: 0% 50%;
-                transform: rotate(-2deg) scale(1.05);
+                background-position: 12% 18%, 82% 72%, 50% 50%, 50% 50%;
+                transform: translate3d(-3%, -2%, 0) rotate(-8deg) scale(1.02);
             }
             to {
-                background-position: 100% 50%;
-                transform: rotate(2deg) scale(1.15);
+                background-position: 34% 44%, 62% 56%, 50% 50%, 50% 50%;
+                transform: translate3d(4%, 3%, 0) rotate(8deg) scale(1.14);
             }
         }
 
-        @keyframes development-gradient-shimmer {
+        @keyframes development-fluid-gold {
             from {
-                background-position: 0% 50%;
-                transform: translateX(-8%) rotate(-2deg);
+                background-position: 74% 18%, 24% 82%, 50% 50%, 50% 50%;
+                transform: translate3d(4%, 3%, 0) rotate(8deg) scale(1.08);
             }
             to {
-                background-position: 100% 50%;
-                transform: translateX(8%) rotate(2deg);
+                background-position: 56% 36%, 44% 62%, 50% 50%, 50% 50%;
+                transform: translate3d(-4%, -4%, 0) rotate(-8deg) scale(1.2);
             }
         }
 
@@ -146,6 +178,15 @@
             font-size: 1.1rem;
         }
 
+        .development-panel .linkedin-btn {
+            width: fit-content;
+            max-width: none;
+            margin-top: 1.5rem;
+            padding: 8px 14px;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
         .development-footer {
             position: relative;
             z-index: 1;
@@ -178,6 +219,16 @@
                 to learn more about our work in engineering, construction, and
                 healthcare.
             </p>
+
+            <a
+                class="linkedin-btn"
+                href="https://www.linkedin.com/company/convergent-method-llc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Convergent Method on LinkedIn"
+            >
+                <img src="media/linkedin.png" alt="">
+            </a>
         </section>
     </main>
 
