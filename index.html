@@ -10,19 +10,79 @@
 
     <style>
         .development-page {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(41, 128, 185, 0.18),
-                    transparent 55%
-                ),
-                var(--bkgd);
+            background: var(--bkgd);
+        }
+
+        .development-page::before,
+        .development-page::after {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            width: 70vw;
+            height: 70vw;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(12px);
+        }
+
+        .development-page::before {
+            top: -28vw;
+            left: -20vw;
+            background: radial-gradient(
+                circle,
+                rgba(41, 128, 185, 0.42) 0%,
+                rgba(41, 128, 185, 0.12) 42%,
+                transparent 70%
+            );
+            animation: development-blue-drift 24s ease-in-out infinite alternate;
+        }
+
+        .development-page::after {
+            right: -24vw;
+            bottom: -34vw;
+            background: radial-gradient(
+                circle,
+                rgba(254, 195, 101, 0.2) 0%,
+                rgba(254, 195, 101, 0.06) 38%,
+                transparent 68%
+            );
+            animation: development-gold-drift 30s ease-in-out infinite alternate;
+        }
+
+        @keyframes development-blue-drift {
+            from {
+                transform: translate3d(-3vw, -2vh, 0) scale(0.95);
+            }
+            to {
+                transform: translate3d(18vw, 20vh, 0) scale(1.15);
+            }
+        }
+
+        @keyframes development-gold-drift {
+            from {
+                transform: translate3d(4vw, 5vh, 0) scale(1);
+            }
+            to {
+                transform: translate3d(-18vw, -18vh, 0) scale(1.2);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .development-page::before,
+            .development-page::after {
+                animation: none;
+            }
         }
 
         .development-header {
+            position: relative;
+            z-index: 1;
             background: rgba(12, 43, 73, 0.85);
             border-bottom: 1px solid rgba(254, 195, 101, 0.25);
             padding: 1rem 20px;
@@ -34,6 +94,8 @@
         }
 
         .development-content {
+            position: relative;
+            z-index: 1;
             flex: 1;
             display: flex;
             align-items: center;
@@ -81,6 +143,8 @@
         }
 
         .development-footer {
+            position: relative;
+            z-index: 1;
             padding: 1.5rem 20px;
             border-top: 1px solid rgba(236, 240, 241, 0.12);
             color: rgba(238, 238, 238, 0.7);
