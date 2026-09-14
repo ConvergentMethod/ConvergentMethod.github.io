@@ -143,6 +143,11 @@ nav {
   color: var(--accent);
 }
 
+.menu-toggle,
+.menu-button {
+  display: none;
+}
+
 /* =========================================
    Home Page Scroll Reveal Setup
    ========================================= */
@@ -571,15 +576,104 @@ footer {
 }
 
 /* Media Queries */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px), screen and (max-height: 700px) {
   nav {
+    position: relative;
+    min-height: 50px;
+  }
+
+  .logo {
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .logo img {
+    height: 42px;
+  }
+
+  .menu-button {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    gap: 5px;
   }
-  
+
+  .menu-button span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .nav-links {
-    justify-content: center;
-    width: 100%;
+    display: none;
+    position: absolute;
+    top: calc(100% + 1rem);
+    left: 20px;
+    right: 20px;
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: rgba(12, 43, 73, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .menu-toggle:checked ~ .nav-links {
+    display: flex;
+  }
+
+  .menu-toggle:checked + .menu-button span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle:checked + .menu-button span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle:checked + .menu-button span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .page-one.hero {
+    height: 100svh;
+    min-height: 0;
+    padding: 5.5rem 20px 2rem;
+  }
+
+  .responsive-gap {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .hero-badge {
+    margin-bottom: 1rem;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+
+  .hero h2 {
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  .hero .btn {
+    padding: 10px 24px;
   }
 
   .column {
