@@ -14,6 +14,7 @@
                 <img src="media/CMFullWhite.png" alt="CM Logo">
                 Convergent Method
             </a>
+            <!-- CSS uses this checkbox as the menu's state, so the static site needs no menu script. -->
             <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
             <label for="menu-toggle" class="menu-button" aria-label="Toggle navigation menu">
                 <span></span>
@@ -31,7 +32,7 @@
 
     <main class="home-scroll-container">
         
-        <!-- PAGE ONE (Stays stuck behind) -->
+        <!-- The hero stays sticky while page-two scrolls over it; keep this section before page-two. -->
         <section class="page-one hero">
             <div class="hero-badge">
                 <span>Engineering • Construction • Healthcare</span>
@@ -48,7 +49,7 @@
             </div>
         </section>
 
-        <!-- PAGE TWO (Slides up and locks at top: 0) -->
+        <!-- This section's higher stacking level creates the home page's scroll reveal. -->
         <section class="page-two">
             <div class="container">
                 <h2 class="page-title">Welcome to the Convergence of Excellence.</h2>
@@ -59,7 +60,7 @@
             </div>
         </section>
 
-        <!-- FOOTER (Slides over the locked Page Two) -->
+        <!-- The footer remains above the sticky hero and page-two content. -->
         <footer>
             <p>&copy; 2026 Convergent Method LLC. All Rights Reserved.</p>
         </footer>

@@ -173,7 +173,7 @@ nav {
   padding: clamp(2rem, 5vw, 4rem) 20px;
 }
 
-/* Page One specific overrides for the Home Page */
+/* The home hero is sticky so page-two can scroll over it as a reveal effect. */
 .page-one.hero {
   height: 100vh; 
   position: sticky; 
@@ -237,7 +237,7 @@ nav {
   -webkit-text-fill-color: transparent;
   font-weight: 600;
 }
-/* Page Two: The sliding content */
+/* Page two sits above the sticky hero and supplies the scrolling content. */
 .page-two {
   min-height: 100vh;
   position: relative;
@@ -575,7 +575,7 @@ footer {
   gap: 10px;
 }
 
-/* Media Queries */
+/* Compact navigation applies to narrow or short windows so the fixed header does not cover hero content. */
 @media screen and (max-width: 768px), screen and (max-height: 700px) {
   nav {
     position: relative;
