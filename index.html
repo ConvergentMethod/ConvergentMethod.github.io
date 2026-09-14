@@ -23,53 +23,57 @@
         .development-page::after {
             content: "";
             position: fixed;
+            inset: -20%;
             z-index: -1;
-            width: 70vw;
-            height: 70vw;
-            border-radius: 50%;
             pointer-events: none;
-            filter: blur(12px);
+            background-size: 350% 350%;
         }
 
         .development-page::before {
-            top: -28vw;
-            left: -20vw;
-            background: radial-gradient(
-                circle,
-                rgba(41, 128, 185, 0.42) 0%,
-                rgba(41, 128, 185, 0.12) 42%,
-                transparent 70%
+            background-image: linear-gradient(
+                115deg,
+                var(--bkgd) 0%,
+                var(--primary) 23%,
+                var(--accent) 43%,
+                var(--bkgd) 63%,
+                rgba(254, 195, 101, 0.42) 76%,
+                var(--bkgd) 100%
             );
-            animation: development-blue-drift 24s ease-in-out infinite alternate;
+            animation: development-gradient-wave 18s ease-in-out infinite alternate;
         }
 
         .development-page::after {
-            right: -24vw;
-            bottom: -34vw;
-            background: radial-gradient(
-                circle,
-                rgba(254, 195, 101, 0.2) 0%,
-                rgba(254, 195, 101, 0.06) 38%,
-                transparent 68%
+            opacity: 0.3;
+            background-image: repeating-linear-gradient(
+                115deg,
+                transparent 0%,
+                transparent 18%,
+                rgba(236, 240, 241, 0.16) 24%,
+                transparent 31%,
+                transparent 48%
             );
-            animation: development-gold-drift 30s ease-in-out infinite alternate;
+            animation: development-gradient-shimmer 26s linear infinite;
         }
 
-        @keyframes development-blue-drift {
+        @keyframes development-gradient-wave {
             from {
-                transform: translate3d(-3vw, -2vh, 0) scale(0.95);
+                background-position: 0% 50%;
+                transform: rotate(-2deg) scale(1.05);
             }
             to {
-                transform: translate3d(18vw, 20vh, 0) scale(1.15);
+                background-position: 100% 50%;
+                transform: rotate(2deg) scale(1.15);
             }
         }
 
-        @keyframes development-gold-drift {
+        @keyframes development-gradient-shimmer {
             from {
-                transform: translate3d(4vw, 5vh, 0) scale(1);
+                background-position: 0% 50%;
+                transform: translateX(-8%) rotate(-2deg);
             }
             to {
-                transform: translate3d(-18vw, -18vh, 0) scale(1.2);
+                background-position: 100% 50%;
+                transform: translateX(8%) rotate(2deg);
             }
         }
 
