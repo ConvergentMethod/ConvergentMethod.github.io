@@ -1,0 +1,599 @@
+/* Variables */
+:root {
+  --primary: #2c3e50;
+  --accent: #2980b9;
+  --bkgd: #0C2B49;
+  --light: #ecf0f1;
+  --dark: #1a252f;
+  --text: #eeeeee;
+  --white: #fff;
+  --black: #000;
+  --gold: #fec365;
+  --yellow: #f1c40f;
+}
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: var(--text);
+  background: var(--bkgd);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1 {
+  font-weight: 450;
+  letter-spacing: 2px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--light);
+  margin-bottom: clamp(2rem, 4vw, 4rem);
+}
+
+h2 {
+  font-weight: 300;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--light);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) 20px;
+}
+
+.page-title {
+  text-align: center;
+  color: var(--text);
+  margin-bottom: 3rem;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+}
+
+.section-divider {
+  border: 0;
+  height: 2px;
+  background: var(--light);
+  width: 90%;
+  max-width: 1100px;
+  margin: clamp(2rem, 5vw, 4rem) auto;
+}
+
+.responsive-gap {
+  display: block;
+  margin-bottom: clamp(50px, 10vw, 150px) !important;
+}
+
+/* Navigation */
+header {
+  background: rgba(12, 43, 73, 0.85); /* Semi-transparent --bkgd color */
+  backdrop-filter: blur(10px); /* Blurs the content scrolling underneath */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 1rem 0;
+  
+  /* Keeps it sticky on all your normal pages (Team, Gallery, etc.) */
+  position: sticky; 
+  top: 0;
+  z-index: 1000;
+}
+
+/* THE FIX: Makes the header float ONLY on the home page */
+body:has(.home-scroll-container) header {
+  position: fixed;
+  width: 100%;
+}
+
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--white);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+}
+
+/* =========================================
+   Home Page Scroll Reveal Setup
+   ========================================= */
+
+.home-scroll-container {
+  position: relative;
+}
+
+/* Standard Hero Styles */
+.hero {
+  position: relative;
+  min-height: 60vh;
+  background: radial-gradient(circle at center, rgba(12, 43, 73, 0.4) 0%, rgba(12, 43, 73, 0.8) 100%),
+    linear-gradient(135deg, rgba(243, 156, 18, 0.15), transparent 60%),
+    url('../media/mcnair.webp') center/cover;
+  background-color: var(--bkgd);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  padding: clamp(2rem, 5vw, 4rem) 20px;
+}
+
+/* Page One specific overrides for the Home Page */
+.page-one.hero {
+  height: 100vh; 
+  position: sticky; 
+  top: 0;
+  z-index: 1; 
+}
+
+/* Subtle base gradient at the bottom of the hero */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(50px, 10vw, 150px);
+  background: linear-gradient(to bottom, transparent, var(--bkgd));
+  pointer-events: none;
+}
+
+.hero h1 {
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+/* Add a glowing accent style for the hero button */
+/* Hero CTA Button - Normal State */
+.hero .btn {
+  background: linear-gradient(135deg, var(--yellow), var(--gold));
+  color: var(--accent);
+  font-weight: 700;
+  border-radius: 30px;
+  padding: 14px 32px;
+  box-shadow: 0 4px 20px var(--gold);
+  transition: all 0.3s ease;
+}
+
+/* Hero CTA Button - Hover State */
+.hero .btn:hover {
+  /* Explicitly sets a brighter warm background so it doesn't turn blue */
+  background: linear-gradient(135deg, var(--yellow), var(--gold));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  font-size: 1.225rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold); /* Warm gold text */
+}
+
+.highlight-text {
+  background: linear-gradient(120deg, var(--gold), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+/* Page Two: The sliding content */
+.page-two {
+  min-height: 100vh;
+  position: relative;
+  z-index: 2; /* Glides over page one */
+  background-color: var(--bkgd);
+  margin-top: 50px;
+  
+  /* Flexbox automatically centers the text vertically in the window */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 20px; /* Safe padding for mobile */
+}
+
+/* Enhancing the text layout for Page Two */
+.page-two p {
+  /* Overrides the 800px inline style to let it stretch beautifully on big monitors */
+  max-width: clamp(800px, 75vw, 1400px) !important;
+  
+  /* Font size scales smoothly: 1.1rem on mobile up to 1.5rem on large desktops */
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.8;
+  margin: 0 auto;
+}
+
+/* The glassy top edge that blurs Page One as it slides up */
+.page-two::before {
+  content: '';
+  position: absolute;
+  /* Made the transition area taller (150px) so the fade is softer */
+  top: -150px; 
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to bottom, transparent, var(--bkgd));
+  
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* THE FIX: This mask fades the blur effect itself from 0% at the top to 100% at the bottom */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  
+  pointer-events: none;
+}
+/* =========================================
+   Page Two Content Box (Story Section Style)
+   ========================================= */
+
+.page-two .container {
+  /* Matches the dark background and accent border of the story section */
+  background-color: var(--dark);
+  border: clamp(4px, 1vw, 8px) solid var(--gold);
+  border-radius: 12px;
+  
+  /* Adds some depth so the box pops off the blue background */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  
+  /* Internal spacing for the box */
+  padding: clamp(2rem, 5vw, 5rem) clamp(20px, 5vw, 4rem);
+  
+  /* Ensures everything inside stays perfectly centered */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Optional: Make the title inside the box pop with the accent color, 
+   just like the About Us section heading */
+.page-two .page-title {
+  color: var(--accent);
+  margin-bottom: 2rem;
+
+
+/* Page Two: The sliding content */
+.page-two {
+  min-height: 100vh;
+  position: relative;
+  z-index: 2; /* Glides over page one */
+  background-color: var(--bkgd);
+  padding-top: 4rem; /* Safe spacing from the blur */
+}
+}
+.hero h1 {
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+/* The glassy top edge that blurs Page One as it slides up */
+.page-two::before {
+  content: '';
+  position: absolute;
+  top: -80px; 
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--bkgd));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  pointer-events: none;
+}
+
+/* =========================================
+   Buttons & General Components
+   ========================================= */
+
+.btn {
+  display: inline-block;
+  padding: 10px 25px;
+  background: var(--accent);
+  text-decoration: none;
+  color: var(--light);
+  border-radius: 4px;
+  margin-top: 20px;
+  position: relative;
+  z-index: 10;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #1f6391;
+}
+
+.linkedin-btn {
+  display: flex;
+  max-width: 300px;
+  margin: 20px auto 0;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background-color: var(--accent);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  padding: 12px 25px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.linkedin-btn img {
+  height: 20px;
+  width: auto;
+}
+
+/* Story Section */
+.story-section {
+  border: clamp(4px, 1vw, 8px) solid var(--gold);
+  background-color: var(--dark);
+  border-radius: 8px;
+  padding: clamp(1.5rem, 5vw, 4rem) clamp(15px, 5vw, 3rem);
+  text-align: center;
+  width: 100%;
+}
+
+.story-section h1 {
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+}
+
+.story-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.story-section p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text);
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Team Grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.member-card {
+  background: var(--dark);
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.member-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.member-img {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 26 / 38;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-top: 30px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.member-info {
+  padding: 20px;
+}
+
+.role {
+  color: var(--accent);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Values Grid */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(20px, 5vw, 100px); 
+  padding: 0 clamp(20px, 5vw, 200px);
+  width: 100%;
+
+  /* THE FIX: Elevates the grid above the footer and provides bottom clearance */
+  position: relative;
+  z-index: 5; /* Brings any bottom shadows/gradients forward in front of the footer */
+  margin-bottom: clamp(3rem, 6vw, 6rem); /* Creates breathing room so the bottom edge isn't cut off */
+}
+
+.column {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03); 
+  border: 1px solid rgba(255, 255, 255, 0.05); 
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.column:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.column h3{
+  color: var(--accent);
+  text-align: center;
+}
+.column p {
+  text-align: center;
+  color: var(--text);
+}
+
+/* Gallery Grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Contact Form */
+.contact-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 2; /* Ensures it renders above page-one if they ever overlap */
+  background: linear-gradient(to bottom, var(--bkgd), var(--dark));
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  padding: 15px 20px;
+  margin-top: auto; 
+  text-align: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .column {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 30px;
+  }
+
+  .column:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  footer {
+    background: var(--bkgd);
+    font-size: 0.85rem;
+  }
+}
