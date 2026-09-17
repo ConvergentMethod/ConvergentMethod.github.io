@@ -7,9 +7,9 @@ const projectPhotos = [
     },
     {
         project: 'McNair Campus',
-        image: '/media/McNair/Corridor.jpg',
-        alt: 'Bright clinical corridor with repeated doorways and directional signage',
-        story: 'Operational thinking turns circulation into a calmer, more intuitive part of care delivery.'
+        image: '/media/McNair/ReceptionDesk.jpg',
+        alt: 'Welcoming clinical reception desk with a clear, organized layout',
+        story: 'A thoughtful reception balances wayfinding, privacy, and the needs of the teams serving each patient.'
     },
     {
         project: 'McNair Campus',
