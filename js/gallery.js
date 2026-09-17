@@ -9,7 +9,7 @@ const projectPhotos = [
         project: 'McNair Campus',
         image: '/media/McNair/ReceptionDesk.jpg',
         alt: 'Welcoming clinical reception desk with a clear, organized layout',
-        story: 'A thoughtful reception balances wayfinding, privacy, and the needs of the teams serving each patient.'
+        story: 'An intentionally designed reception balances wayfinding, privacy, and the needs of the teams serving each patient.'
     },
     {
         project: 'McNair Campus',
