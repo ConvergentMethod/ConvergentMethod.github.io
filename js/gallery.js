@@ -45,16 +45,16 @@ const projectPhotos = [
     {
         project: 'Fort Lauderdale Airport',
         legacyExperience: true,
-        image: '/media/FLL Airport/DSCF0650.JPG',
+        image: '/media/FLL Airport/RacPhotos 051.jpg',
         alt: 'Airport terminal concourse with an open passenger waiting area',
-        story: 'Every successful project connects the finished place to the larger systems and communities around it.'
+        story: 'High-traffic spaces depend on disciplined phasing, clear communication, and resilient infrastructure.'
     },
     {
         project: 'Fort Lauderdale Airport',
         legacyExperience: true,
-        image: '/media/FLL Airport/RacPhotos 051.jpg',
+        image: '/media/FLL Airport/DSCF0650.JPG',
         alt: 'Airport facility exterior viewed from the surrounding roadway',
-        story: 'High-traffic spaces depend on disciplined phasing, clear communication, and resilient infrastructure.'
+        story: 'Every successful project connects the finished place to the larger systems and communities around it.'
     },
     {
         project: 'Office Depot Global Headquarters',
