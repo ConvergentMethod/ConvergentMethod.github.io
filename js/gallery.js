@@ -37,36 +37,42 @@ const projectPhotos = [
     },
     {
         project: 'Fort Lauderdale Airport',
+        legacyExperience: true,
         image: '/media/FLL Airport/09-28-2005_2.jpg',
         alt: 'Airport terminal interior with structural columns and passenger circulation space',
         story: 'Experience across demanding public environments sharpens our ability to coordinate complex work.'
     },
     {
         project: 'Fort Lauderdale Airport',
+        legacyExperience: true,
         image: '/media/FLL Airport/DSCF0650.JPG',
         alt: 'Airport terminal concourse with an open passenger waiting area',
         story: 'Every successful project connects the finished place to the larger systems and communities around it.'
     },
     {
         project: 'Fort Lauderdale Airport',
+        legacyExperience: true,
         image: '/media/FLL Airport/RacPhotos 051.jpg',
         alt: 'Airport facility exterior viewed from the surrounding roadway',
         story: 'High-traffic spaces depend on disciplined phasing, clear communication, and resilient infrastructure.'
     },
     {
         project: 'Office Depot Global Headquarters',
+        legacyExperience: true,
         image: '/media/OfficeDepotGlobalHeadquarters/OD_EXT_D_IMG_9267.jpg',
         alt: 'Exterior view of the Office Depot Global Headquarters with a landscaped entrance',
         story: 'A strong workplace begins with an arrival that reflects the organization and welcomes its people.'
     },
     {
         project: 'Office Depot Global Headquarters',
+        legacyExperience: true,
         image: '/media/OfficeDepotGlobalHeadquarters/OD_INT_A_IMG_7529.jpg',
         alt: 'Interior office space at the Office Depot Global Headquarters with open work areas',
         story: 'Flexible, well-coordinated interiors help teams work comfortably as needs change over time.'
     },
     {
         project: 'Office Depot Global Headquarters',
+        legacyExperience: true,
         image: '/media/OfficeDepotGlobalHeadquarters/OD_INT_C_IMG_8675.jpg',
         alt: 'Office Depot Global Headquarters interior showing a finished collaborative space',
         story: 'The details of a finished environment turn a complex build into a place people can use with confidence.'
@@ -75,16 +81,21 @@ const projectPhotos = [
 
 const gallery = document.querySelector('[data-gallery]');
 
-projectPhotos.forEach(({ project, image, alt, story }, index) => {
+projectPhotos.forEach(({ project, legacyExperience, image, alt, story }, index) => {
     const item = document.createElement('article');
     item.className = 'gallery-item';
+    const experienceMarker = legacyExperience
+        ? '<sup class="gallery-footnote-marker" aria-label="See experience note">†</sup>'
+        : '';
+    const experienceDescription = legacyExperience
+        ? ' aria-describedby="gallery-experience-note"'
+        : '';
     item.innerHTML = `
-        <button class="gallery-trigger" type="button" aria-expanded="false" aria-controls="gallery-story-${index}">
+        <button class="gallery-trigger" type="button" aria-expanded="false" aria-controls="gallery-story-${index}"${experienceDescription}>
             <img src="${image}" alt="${alt}" loading="lazy" decoding="async">
             <span class="gallery-story" id="gallery-story-${index}">
-                <span class="gallery-project">${project}</span>
+                <span class="gallery-project">${project}${experienceMarker}</span>
                 <span class="gallery-value">${story}</span>
-                <span class="gallery-action" aria-hidden="true">View project value</span>
             </span>
         </button>
     `;
