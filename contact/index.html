@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | Convergent Method</title>
-    <link rel="icon" type="image/png" href="media/favicon.webp">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="/media/favicon.webp">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <header>
@@ -24,7 +24,7 @@
                 <a href="/">Home</a>
                 <a href="/team/">Team</a>
                 <a href="/gallery/">Gallery</a>
-                <a href="/contact.html" class="active">Contact</a>
+                <a href="/contact/" class="active">Contact</a>
             </div>
         </nav>
     </header>
@@ -32,12 +32,12 @@
     <main class="container">
         <h1 class="page-title">Get in Touch</h1>
         <a href="https://www.linkedin.com/company/convergent-method" target="_blank" class="linkedin-btn">
-            <img src="media/linkedin.png" alt="LinkedIn Logo" >
+            <img src="/media/linkedin.png" alt="LinkedIn Logo">
             Connect on LinkedIn
         </a>
         
         <div class="contact-wrapper">
-            <form action="backend/mailer.php" method="POST">
+            <form action="/backend/mailer.php" method="POST">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -74,6 +74,6 @@
     } else if (status === 'server_error') {
         alert("Sorry, our email server is having trouble. Please try again later.");
     }
-</script>
+    </script>
 </body>
 </html>
