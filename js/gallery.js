@@ -37,7 +37,7 @@ const projectPhotos = [
     },
     {
         project: 'Fort Lauderdale Airport',
-        image: 'media/FLL Airport/09-28-2005_3.jpg',
+        image: 'media/FLL Airport/09-28-2005_2.jpg',
         alt: 'Airport terminal interior with structural columns and passenger circulation space',
         story: 'Experience across demanding public environments sharpens our ability to coordinate complex work.'
     },
@@ -45,13 +45,31 @@ const projectPhotos = [
         project: 'Fort Lauderdale Airport',
         image: 'media/FLL Airport/DSCF0650.JPG',
         alt: 'Airport terminal concourse with an open passenger waiting area',
-        story: 'High-traffic spaces depend on disciplined phasing, clear communication, and resilient infrastructure.'
+        story: 'Every successful project connects the finished place to the larger systems and communities around it.'
     },
     {
         project: 'Fort Lauderdale Airport',
         image: 'media/FLL Airport/RacPhotos 051.jpg',
         alt: 'Airport facility exterior viewed from the surrounding roadway',
-        story: 'Every successful project connects the finished place to the larger systems and communities around it.'
+        story: 'High-traffic spaces depend on disciplined phasing, clear communication, and resilient infrastructure.'
+    },
+    {
+        project: 'Office Depot Global Headquarters',
+        image: 'media/OfficeDepotGlobalHeadquarters/OD_EXT_D_IMG_9267.jpg',
+        alt: 'Exterior view of the Office Depot Global Headquarters with a landscaped entrance',
+        story: 'A strong workplace begins with an arrival that reflects the organization and welcomes its people.'
+    },
+    {
+        project: 'Office Depot Global Headquarters',
+        image: 'media/OfficeDepotGlobalHeadquarters/OD_INT_A_IMG_7529.jpg',
+        alt: 'Interior office space at the Office Depot Global Headquarters with open work areas',
+        story: 'Flexible, well-coordinated interiors help teams work comfortably as needs change over time.'
+    },
+    {
+        project: 'Office Depot Global Headquarters',
+        image: 'media/OfficeDepotGlobalHeadquarters/OD_INT_C_IMG_8675.jpg',
+        alt: 'Office Depot Global Headquarters interior showing a finished collaborative space',
+        story: 'The details of a finished environment turn a complex build into a place people can use with confidence.'
     }
 ];
 
