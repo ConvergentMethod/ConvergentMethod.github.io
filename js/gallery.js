@@ -85,7 +85,7 @@ projectPhotos.forEach(({ project, legacyExperience, image, alt, story }, index) 
     const item = document.createElement('article');
     item.className = 'gallery-item';
     const experienceMarker = legacyExperience
-        ? '<sup class="gallery-footnote-marker" aria-label="See experience note">†</sup>'
+        ? '<sup class="gallery-footnote-marker" aria-label="See experience note">*</sup>'
         : '';
     const experienceDescription = legacyExperience
         ? ' aria-describedby="gallery-experience-note"'
