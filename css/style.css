@@ -477,6 +477,10 @@ nav {
   margin-bottom: clamp(3rem, 6vw, 6rem); /* Creates breathing room so the bottom edge isn't cut off */
 }
 
+.page-two .values-grid {
+  width: calc(100% + 40px);
+}
+
 .column {
   text-align: center;
   background: rgba(255, 255, 255, 0.03); 
@@ -630,11 +634,50 @@ nav {
   text-align: center;
 }
 
+.gallery-values {
+  margin-top: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 0;
+}
+
 /* Contact Form */
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr);
+  align-items: center;
+}
+
 .contact-wrapper {
+  grid-column: 2;
+  grid-row: 1;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
   width: 100%;
+}
+
+.contact-note {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+}
+
+@media screen and (max-width: 1196px) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 600px);
+    justify-content: center;
+  }
+
+  .contact-wrapper {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0 auto;
+  }
+
+  .contact-note {
+    grid-column: 1;
+    grid-row: 2;
+    max-width: 600px;
+    margin: clamp(2rem, 5vw, 4rem) auto 0;
+  }
 }
 
 .form-group {
