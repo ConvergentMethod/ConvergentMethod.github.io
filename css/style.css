@@ -83,14 +83,12 @@ header {
   -webkit-backdrop-filter: blur(10px); /* For Safari */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   padding: 1rem 0;
-  
-  /* Keeps it sticky on all your normal pages (Team, Gallery, etc.) */
+
   position: sticky; 
   top: 0;
   z-index: 1000;
 }
 
-/* THE FIX: Makes the header float ONLY on the home page */
 body:has(.home-scroll-container) header {
   position: fixed;
   width: 100%;
@@ -173,7 +171,6 @@ nav {
   padding: clamp(2rem, 5vw, 4rem) 20px;
 }
 
-/* The home hero is sticky so page-two can scroll over it as a reveal effect. */
 .page-one.hero {
   height: 100vh; 
   position: sticky; 
@@ -197,7 +194,6 @@ nav {
   margin-bottom: 1rem;
   line-height: 1.2;
 }
-/* Add a glowing accent style for the hero button */
 /* Hero CTA Button - Normal State */
 .hero .btn {
   background: linear-gradient(135deg, var(--light-blue), var(--alt-light-blue));
@@ -211,7 +207,6 @@ nav {
 
 /* Hero CTA Button - Hover State */
 .hero .btn:hover {
-  /* Explicitly sets a brighter warm background so it doesn't turn blue */
   background: linear-gradient(135deg, var(--alt-light-blue), var(--light-blue));
   transform: translateY(-2px);
   box-shadow: 0 8px 25px var(--accent);
@@ -237,15 +232,13 @@ nav {
   -webkit-text-fill-color: transparent;
   font-weight: 600;
 }
-/* Page two sits above the sticky hero and supplies the scrolling content. */
 .page-two {
   min-height: 100vh;
   position: relative;
   z-index: 2; /* Glides over page one */
   background-color: var(--bkgd);
   margin-top: 50px;
-  
-  /* Flexbox automatically centers the text vertically in the window */
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -255,33 +248,27 @@ nav {
 
 /* Enhancing the text layout for Page Two */
 .page-two > .container > p {
-  /* Overrides the 800px inline style to let it stretch beautifully on big monitors */
   max-width: clamp(800px, 75vw, 1400px) !important;
-  
-  /* Font size scales smoothly: 1.1rem on mobile up to 1.5rem on large desktops */
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   line-height: 1.8;
   margin: 0 auto;
 }
 
-/* The glassy top edge that blurs Page One as it slides up */
 .page-two::before {
   content: '';
   position: absolute;
-  /* Made the transition area taller (150px) so the fade is softer */
   top: -150px; 
   left: 0;
   width: 100%;
   height: 150px;
   background: linear-gradient(to bottom, transparent, var(--bkgd));
-  
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  
-  /* THE FIX: This mask fades the blur effect itself from 0% at the top to 100% at the bottom */
+
   mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-  
+
   pointer-events: none;
 }
 /* =========================================
@@ -289,30 +276,21 @@ nav {
    ========================================= */
 
 .page-two .container {
-  /* Matches the dark background and accent border of the story section */
   background-color: var(--dark);
   border: clamp(4px, 1vw, 8px) solid var(--light-blue);
   border-radius: 12px;
-  
-  /* Adds some depth so the box pops off the blue background */
+
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  
-  /* Internal spacing for the box */
   padding: clamp(2rem, 5vw, 5rem) clamp(20px, 5vw, 4rem);
-  
-  /* Ensures everything inside stays perfectly centered */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-/* Optional: Make the title inside the box pop with the accent color, 
-   just like the About Us section heading */
 .page-two .page-title {
   color: var(--accent);
   margin-bottom: 2rem;
-
 
 /* Page Two: The sliding content */
 .page-two {
@@ -320,14 +298,13 @@ nav {
   position: relative;
   z-index: 2; /* Glides over page one */
   background-color: var(--bkgd);
-  padding-top: 4rem; /* Safe spacing from the blur */
+  padding-top: 4rem;
 }
 }
 .hero h1 {
   margin-bottom: 1rem;
   line-height: 1.2;
 }
-/* The glassy top edge that blurs Page One as it slides up */
 .page-two::before {
   content: '';
   position: absolute;
@@ -467,14 +444,13 @@ nav {
 .values-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: clamp(20px, 5vw, 100px); 
+  gap: clamp(20px, 5vw, 100px);
   padding: 0 clamp(20px, 5vw, 200px);
   width: 100%;
 
-  /* THE FIX: Elevates the grid above the footer and provides bottom clearance */
   position: relative;
-  z-index: 5; /* Brings any bottom shadows/gradients forward in front of the footer */
-  margin-bottom: clamp(3rem, 6vw, 6rem); /* Creates breathing room so the bottom edge isn't cut off */
+  z-index: 5;
+  margin-bottom: clamp(3rem, 6vw, 6rem);
 }
 
 .page-two .values-grid {
@@ -512,11 +488,11 @@ nav {
 
 .column {
   text-align: center;
-  background: rgba(255, 255, 255, 0.03); 
-  border: 1px solid rgba(255, 255, 255, 0.05); 
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -756,7 +732,7 @@ textarea {
 /* Footer */
 footer {
   position: relative;
-  z-index: 2; /* Ensures it renders above page-one if they ever overlap */
+  z-index: 2;
   background: linear-gradient(to bottom, var(--bkgd), var(--dark));
   color: var(--text);
   display: flex;
@@ -764,13 +740,12 @@ footer {
   align-items: center;
   min-height: 60px;
   padding: 15px 20px;
-  margin-top: auto; 
+  margin-top: auto;
   text-align: center;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-/* Compact navigation applies to narrow or short windows so the fixed header does not cover hero content. */
 @media screen and (max-width: 768px), screen and (max-height: 700px) {
   nav {
     position: relative;
@@ -907,7 +882,7 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   footer {
     background: var(--bkgd);
     font-size: 0.85rem;
