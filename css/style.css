@@ -534,6 +534,14 @@ nav {
   color: var(--text);
 }
 
+@media screen and (min-width: 589px) and (max-width: 937px) {
+  .values-grid > .column:last-child:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - clamp(20px, 5vw, 100px)) / 2);
+  }
+}
+
 /* Gallery */
 .gallery-page {
   max-width: 1200px;
