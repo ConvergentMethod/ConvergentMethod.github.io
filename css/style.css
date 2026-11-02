@@ -478,7 +478,36 @@ nav {
 }
 
 .page-two .values-grid {
-  width: calc(100% + 40px);
+  width: 100%;
+  max-width: 1100px;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0;
+}
+
+.page-two .values-grid .column {
+  text-align: left;
+  background: linear-gradient(115deg, rgba(41, 128, 185, 0.18), rgba(255, 255, 255, 0.035));
+  border: 1px solid rgba(254, 195, 101, 0.55);
+  border-left: 5px solid var(--gold);
+  border-radius: 4px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.page-two .values-grid .column h3,
+.page-two .values-grid .column p {
+  text-align: left;
+}
+
+.page-two .values-grid .column h3 {
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.page-two .values-grid .column p:last-child {
+  margin-top: 1rem;
+  color: var(--light);
+  font-weight: 600;
+  text-align: right;
 }
 
 .column {
