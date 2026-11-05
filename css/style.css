@@ -1,3 +1,27 @@
+/* Sansation Fonts */
+@font-face {
+  font-family: 'Sansation';
+  src: url('../Sansation/Sansation-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../Sansation/Sansation-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../Sansation/Sansation-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
 /* Variables */
 :root {
   --primary: #2c3e50;
@@ -19,7 +43,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Sansation', Arial, sans-serif;
   color: var(--text);
   background: var(--bkgd);
   line-height: 1.6;
@@ -29,19 +53,26 @@ body {
 }
 
 h1 {
-  font-weight: 450;
-  letter-spacing: 2px;
+  font-weight: 700;
+  letter-spacing: 1px;
   font-size: clamp(2rem, 5vw, 3rem);
   color: var(--light);
   margin-bottom: clamp(2rem, 4vw, 4rem);
 }
 
 h2 {
-  font-weight: 300;
+  font-weight: 700;
   font-size: clamp(1.5rem, 4vw, 2rem);
   color: var(--light);
   padding-bottom: 20px;
   margin-bottom: 20px;
+}
+
+p {
+  font-family: 'Sansation', Arial, sans-serif;
+  font-weight: 400; /* Use 400 for Regular, 300 for Light, or 700 for Bold */
+  font-size: 1.1rem;
+  line-height: 1.7;
 }
 
 main {
