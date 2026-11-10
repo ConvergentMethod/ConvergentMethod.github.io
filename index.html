@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Convergent Method</title>
     <link rel="icon" type="image/png" href="media/favicon.webp">
-    <link rel="stylesheet" href="css/style.css?v=2">
+
+    <!-- Google Fonts (Urbanist) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css?v=270">
 </head>
 <body>
+
+    <!-- Global Navigation -->
     <header>
-        <nav>
+        <nav aria-label="Main Navigation">
             <a href="index.html" class="logo">
-                <img src="media/CMFullWhite.png" alt="CM Logo">
+                <img src="media/CMFullWhite.png" alt="Convergent Method Logo" height="50">
                 Convergent Method
             </a>
             <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
@@ -21,63 +30,250 @@
                 <span></span>
             </label>
             <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="team/">Team</a>
-                <a href="gallery/">Gallery</a>
-                <a href="contact/">Contact</a>
+                <a href="index.html" class="active" aria-current="page">Home</a>
+                <a href="team/index.html">Team</a>
+                <a href="contact/index.html">Contact</a>
             </div>
         </nav>
     </header>
 
+    <!-- Main Content Area -->
     <main class="home-scroll-container">
 
-        <section class="page-one hero">
-            <div class="hero-badge">
-                <span>Engineering • Construction • Healthcare</span>
-            </div>
-            <div class="hero-content">
-                <h1 class="responsive-gap">
-                    Built for <span class="highlight-text">building</span>,<br>
-                    by the people who do it best.
+        <!-- Page One: Hero Image Slider & Navigation Card -->
+        <section class="page-one hero" aria-label="Featured Projects Showcase">
+            <div class="hero-slider" id="hero-slider" aria-live="polite"></div>
+
+            <!-- Blue Overlay Column Covering Left Side -->
+            <div class="hero-left-panel"></div>
+
+            <!-- Left Project Title Frame -->
+            <div class="hero-title-frame">
+                <h1 class="hero-project-title">
+                    CommonSpirit<br>
+                    Baylor St. Luke's<br>
+                    Medical Center
                 </h1>
-                <h2>There is no alternative to the expertise and dedication that goes into every 
-                    project. This is what we do.</h2>
-                    <a href="contact/" class="btn">Contact Us</a>
-                </div>
+                <div class="hero-campus">McNair Campus</div>
+                <a href="#our-projects" class="hero-project-link">
+                    See project <span class="arrow">&rsaquo;</span>
+                </a>
+            </div>
+
+            <!-- Bottom-Left Project Navigation Card -->
+            <div class="hero-project-bar" id="project-bar" role="tablist" aria-label="Project Slides">
+                <button type="button" class="project-tab active" data-index="0" role="tab" aria-selected="true" aria-controls="hero-slider">
+                    <span class="tab-timer"><span class="tab-progress"></span></span>
+                    <span class="tab-body">
+                        <span class="tab-num">01</span>
+                        <span class="tab-title">Reception<br>Desk</span>
+                    </span>
+                </button>
+                <button type="button" class="project-tab" data-index="1" role="tab" aria-selected="false" aria-controls="hero-slider">
+                    <span class="tab-timer"><span class="tab-progress"></span></span>
+                    <span class="tab-body">
+                        <span class="tab-num">02</span>
+                        <span class="tab-title">Stations</span>
+                    </span>
+                </button>
+                <button type="button" class="project-tab" data-index="2" role="tab" aria-selected="false" aria-controls="hero-slider">
+                    <span class="tab-timer"><span class="tab-progress"></span></span>
+                    <span class="tab-body">
+                        <span class="tab-num">03</span>
+                        <span class="tab-title">Lobby</span>
+                    </span>
+                </button>
             </div>
         </section>
 
-        <section class="page-two">
-            <div class="container">
-                <h2 class="page-title">Welcome to the Convergence of Excellence.</h2>
-                <p style="text-align: center; max-width: 800px; margin: 0 auto;">
-                    Convergent Method was established with a clear vision to merge distinct practices rarely integrated into a single company. We combine the expertise of contractors, engineers, and healthcare providers to create the unique Convergent Method. Our team possesses the knowledge and experience necessary to provide unparalleled value to our clients. We strive to bring excellence with a holistic approach to your project, starting from the initial concept through the construction phase and ultimately to long-term sustainable operations that aim to reduce maintenance costs over the lifespan of your building while taking care of your team, patients, and customers.
-                    <br><br>At Convergent Method, we operate under one principle: <b>Know where you're going before you get there.</b>
+        <!-- Page Two: Overview & Testimonial -->
+        <section class="page-two" aria-labelledby="intro-heading">
+            <div class="intro-block">
+                <h2 id="intro-heading" class="page-title">Welcome to the <span class="highlight-pop">Convergence</span> of Excellence.</h2>
+                <p>
+                    Convergent Method was founded on a special vision: to unify multidisciplinary practices rarely housed within a single firm. By integrating the specialized expertise of general contractors, professional engineers, and healthcare providers, we deliver a cohesive, end-to-end delivery model tailored to complex facilities.
+                    <br><br>Our integrated approach guides clients through every phase of the project lifecycle: from initial concept and planning through construction execution and sustainable, long-term operations. This comprehensive oversight optimizes building performance, reduces lifecycle maintenance costs, and ensures safe, functional environments for staff, patients, and visitors alike.
+                    <br><br>At Convergent Method, our guiding operational standard remains simple: <b>Know where you're going before you get there.</b>
                 </p>
             </div>
+
             <hr class="section-divider">
-            <section class="values-grid" aria-label="What sets Convergent Method apart">
-                <!--<div class="column">
-                    <h3>25+ years of experience</h3>
-                    <p>With owner experience ranging from multi-million dollar construction projects across three states to internal operations of hospitals and clinics, our team is veteran to this industry.</p>
-                </div> -->
-                <div class="column">
-                    <h3>A True Partnership</h3>
-                    <p>"Convergent Method is a welcome extension of the Owner's team. They are a true partner and provide a value I had not experienced in 40 plus years developing hospitals. It is rare to find a firm like Convergent Method that has inhouse expertise in electrical, mechanical, and low voltage healthcare systems as well as the architectural systems. They bring significant value in diagnosing existing system issues as well as helping solve design challenges through its peer review expertise. I found their skills and results in contract development, contract management, schedule management, document control, financial management, risk management, and quality control to be outstanding. They have a unique way of finding alternate design and phasing approaches that saved our projects millions of dollars. They have my highest recommendation." </p>
-                    <p> </p>
-                    <p>- Lofton Moore, Common Spirit.</p>
+            
+            <!-- Gallery Section Title -->
+            <h2 class="section-title gallery-section-title" id="our-projects">Our Projects</h2>
+
+            <!-- 3-Pane Project Showcase Gallery -->
+            <div class="featured-gallery-grid" aria-label="Featured Project Showcase">
+                
+                <!-- Pane 1: McNair Campus -->
+                <div class="gallery-pane" data-index="0">
+                    <div class="pane-slides">
+                        <div class="pane-slide active" style="background-image: url('media/McNair/Exterior.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/McNair/AboveCeiling.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/McNair/Stations.jpg');"></div>
+                    </div>
+                    <div class="pane-overlay"></div>
+                    <div class="pane-text-box">
+                        <h3 class="pane-title">McNair Campus</h3>
+                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                    </div>
                 </div>
-                <!--<div class="column">
-                    <h3>Family Owned + Operated</h3>
-                    <p>Convergent Method was born out of necessity; and with lifelong personal commitments to an industry, our own success, and the success of our clients, you can trust that great is what we do best.</p>
-                </div> -->
-            </section>
+
+                <!-- Pane 2: Fort Lauderdale Airport -->
+                <div class="gallery-pane" data-index="1">
+                    <div class="pane-slides">
+                        <div class="pane-slide active" style="background-image: url('media/FLL Airport/09-28-2005_2.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/FLL Airport/RacPhotos 051.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/FLL Airport/DSCF0650.JPG');"></div>
+                    </div>
+                    <div class="pane-overlay"></div>
+                    <div class="pane-text-box">
+                        <h3 class="pane-title">Fort Lauderdale Airport</h3>
+                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                    </div>
+                </div>
+
+                <!-- Pane 3: Office Depot Global Headquarters -->
+                <div class="gallery-pane" data-index="2">
+                    <div class="pane-slides">
+                        <div class="pane-slide active" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_EXT_D_IMG_9267.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_INT_C_IMG_8675.jpg');"></div>
+                        <div class="pane-slide" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_INT_A_IMG_7529.jpg');"></div>
+                    </div>
+                    <div class="pane-overlay"></div>
+                    <div class="pane-text-box">
+                        <h3 class="pane-title">Office Depot Global Headquarters</h3>
+                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="section-divider">
+
+            <!-- Testimonial Section Title -->
+            <h2 class="section-title testimonial-section-title">Trusted by Project Owners</h2>
+
+            <!-- Testimonial Block -->
+            <div class="values-grid" aria-label="Client Testimonial">
+                <div class="column testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-title-group">
+                            <div class="testimonial-name-row">
+                                <h3 class="testimonial-name">Lofton Moore</h3>
+                                <img src="media/CSH_Logo.png" alt="CommonSpirit Health Logo" class="testimonial-logo">
+                            </div>
+                            <div class="testimonial-role">Director at CommonSpirit Health</div>
+                        </div>
+                    </div>
+                    <p class="testimonial-body">
+                        "Convergent Method is a welcome extension of the Owner's team. They are a true partner and provide a value I had not experienced in 40-plus years developing hospitals. It is rare to find a firm like Convergent Method with in-house expertise in electrical, mechanical, and low-voltage healthcare systems, as well as architectural systems. They bring significant value in diagnosing existing system issues and solving design challenges through their peer review expertise. I found their skills and results in contract development, contract management, schedule management, document control, financial management, risk management, and quality control to be outstanding. They have a unique way of finding alternate design and phasing approaches that saved our projects millions of dollars. They have my highest recommendation."
+                    </p>
+                </div>
+            </div>
         </section>
 
-        <footer>
-            <p>&copy; 2026 Convergent Method LLC. All Rights Reserved.</p>
-        </footer>
-
     </main>
+
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <p class="footer-copyright">
+                    &copy; 2026 Convergent Method LLC. All Rights Reserved.
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="media/CMFullColor.png" alt="Convergent Method Logo" class="footer-logo">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Hero Slider & Gallery Controllers -->
+    <script>
+        const heroSlidesData = [
+            { src: 'media/McNair/ReceptionDesk.jpg', title: 'Reception Desk' },
+            { src: 'media/McNair/Stations(2).jpg', title: 'Stations' },
+            { src: 'media/McNair/Lobby(1).jpg', title: 'Lobby' }
+        ];
+
+        const slider = document.getElementById('hero-slider');
+        const tabs = document.querySelectorAll('.hero-project-bar .project-tab');
+        const slideDuration = 10000;
+        let currentIndex = 0;
+        let slideTimer = null;
+
+        heroSlidesData.forEach((item, index) => {
+            const slide = document.createElement('div');
+            slide.className = `hero-slide${index === 0 ? ' active' : ''}`;
+            const safePath = encodeURI(item.src).replace(/\(/g, '%28').replace(/\)/g, '%29');
+            slide.style.backgroundImage = `url("${safePath}")`;
+            slider.appendChild(slide);
+        });
+
+        const slides = slider.querySelectorAll('.hero-slide');
+
+        function activateSlide(index) {
+            clearTimeout(slideTimer);
+            currentIndex = index;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+
+            tabs.forEach((tab, i) => {
+                const isActive = (i === index);
+                tab.classList.toggle('active', isActive);
+                tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+
+                const bar = tab.querySelector('.tab-progress');
+                if (bar) {
+                    bar.style.transition = 'none';
+                    bar.style.transform = 'scaleX(0)';
+
+                    if (isActive) {
+                        void bar.offsetWidth;
+                        bar.style.transition = `transform ${slideDuration}ms linear`;
+                        bar.style.transform = 'scaleX(1)';
+                    }
+                }
+            });
+
+            slideTimer = setTimeout(() => {
+                activateSlide((currentIndex + 1) % heroSlidesData.length);
+            }, slideDuration);
+        }
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                activateSlide(parseInt(tab.dataset.index, 10));
+            });
+        });
+
+        activateSlide(0);
+
+        // 3-Pane Gallery: Synchronized Offset Cascade Rotator
+        const galleryPanes = document.querySelectorAll('.gallery-pane');
+        const cycleDuration = 5500; // Shared cycle period keeps all panes in tempo
+        const staggerOffset = 1000; // 1.5s offset creates a continuous wave across the 3 panes
+
+        galleryPanes.forEach((pane, paneIndex) => {
+            const paneSlides = pane.querySelectorAll('.pane-slide');
+            if (paneSlides.length <= 1) return;
+            let activeIndex = 0;
+
+            function advanceSlide() {
+                paneSlides[activeIndex].classList.remove('active');
+                activeIndex = (activeIndex + 1) % paneSlides.length;
+                paneSlides[activeIndex].classList.add('active');
+            }
+
+            // Offset the initial trigger by 1.5s per pane, then repeat on the identical cycle
+            setTimeout(() => {
+                advanceSlide();
+                setInterval(advanceSlide, cycleDuration);
+            }, cycleDuration + (paneIndex * staggerOffset));
+        });
+    </script>
 </body>
 </html>

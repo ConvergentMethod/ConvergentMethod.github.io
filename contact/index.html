@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | Convergent Method</title>
     <link rel="icon" type="image/png" href="../media/favicon.webp">
-    <link rel="stylesheet" href="../css/style.css?v=2">
+
+    <!-- Google Fonts (Urbanist) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css?v=370">
 </head>
-<body>
+<body class="contact-page-body">
+
+    <!-- Global Navigation -->
     <header>
-        <nav>
+        <nav aria-label="Main Navigation">
             <a href="../index.html" class="logo">
-                <img src="../media/CMFullWhite.png" alt="CM Logo">
+                <img src="../media/CMFullWhite.png" alt="Convergent Method Logo" height="50">
                 Convergent Method
             </a>
             <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
@@ -22,19 +31,21 @@
             </label>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
-                <a href="../team/">Team</a>
-                <a href="../gallery/">Gallery</a>
-                <a href="./" class="active">Contact</a>
+                <a href="../team/index.html">Team</a>
+                <a href="./" class="active" aria-current="page">Contact</a>
             </div>
         </nav>
     </header>
 
+    <!-- Main Content Area -->
     <main class="container contact-page">
-        <h1 class="page-title">Get in Touch</h1>
-        <a href="https://www.linkedin.com/company/convergent-method" target="_blank" class="linkedin-btn">
-            <img src="../media/linkedin.png" alt="LinkedIn Logo">
-            Connect on LinkedIn
-        </a>
+        <div class="contact-header-block">
+            <h1 class="page-title">Get in Touch</h1>
+            <a href="https://www.linkedin.com/company/convergent-method" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                <img src="../media/linkedin.png" alt="LinkedIn Logo">
+                Connect on LinkedIn
+            </a>
+        </div>
 
         <div class="contact-layout">
             <div class="contact-wrapper">
@@ -61,13 +72,24 @@
             </div>
             <aside class="column contact-note">
                 <h3>Start a conversation</h3>
-                <p>Tell us what you are planning. We bring owners, builders, engineers, and healthcare teams together to move complex projects forward.</p>
+                <p>Tell us what you are planning. We bring owners, contractors, engineers, and key stakeholders together to drive complex projects forward.</p>
             </aside>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Convergent Method LLC. All Rights Reserved.</p>
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <p class="footer-copyright">
+                    &copy; 2026 Convergent Method LLC. All Rights Reserved.
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="../media/CMFullColor.png" alt="Convergent Method Logo" class="footer-logo">
+            </div>
+        </div>
     </footer>
+
 </body>
 </html>
