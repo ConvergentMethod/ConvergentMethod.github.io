@@ -54,6 +54,20 @@ body {
   min-height: 100vh;
 }
 
+/* White background under footer on mobile bounce */
+body.home-page::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  background-color: #ffffff;
+  box-shadow: 0 50vh 0 0 #ffffff;
+  z-index: -1;
+  pointer-events: none;
+}
+
 main {
   flex: 1;
 }
@@ -188,14 +202,26 @@ nav {
   position: relative;
 }
 
+/* Seamless top rubber-band overscroll for hero on mobile */
+.home-scroll-container::before {
+  content: '';
+  position: absolute;
+  top: -100vh;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background-color: var(--bkgd);
+  pointer-events: none;
+}
+
 .hero,
 .page-one.hero {
   position: relative;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
+  height: 100svh;
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
   background-color: var(--bkgd);
   display: flex;
   flex-direction: column;
