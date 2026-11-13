@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Convergent Method</title>
-    <link rel="icon" type="image/png" href="media\favicon.png">
+    <link rel="icon" type="image/png" href="media/favicon.png">
 
     <!-- Google Fonts (Urbanist) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=270">
+    <link rel="stylesheet" href="css/style.css?v=371">
 </head>
 <body>
 
@@ -115,7 +115,7 @@
                     <div class="pane-overlay"></div>
                     <div class="pane-text-box">
                         <h3 class="pane-title">McNair Campus</h3>
-                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                        <p class="pane-desc">High-performance clinical and hospital facility oversight balancing patient experience and complex infrastructure.</p>
                     </div>
                 </div>
 
@@ -129,7 +129,7 @@
                     <div class="pane-overlay"></div>
                     <div class="pane-text-box">
                         <h3 class="pane-title">Fort Lauderdale Airport</h3>
-                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                        <p class="pane-desc">High-traffic public transit and aviation spaces requiring disciplined phasing and resilient infrastructure.</p>
                     </div>
                 </div>
 
@@ -143,7 +143,7 @@
                     <div class="pane-overlay"></div>
                     <div class="pane-text-box">
                         <h3 class="pane-title">Office Depot Global Headquarters</h3>
-                        <p class="pane-desc" style="display:none;">REPLACE TEXT</p>
+                        <p class="pane-desc">Large-scale commercial headquarters delivery optimizing long-term facility performance and adaptable interiors.</p>
                     </div>
                 </div>
 
@@ -255,7 +255,7 @@
         // 3-Pane Gallery: Synchronized Offset Cascade Rotator
         const galleryPanes = document.querySelectorAll('.gallery-pane');
         const cycleDuration = 5500; // Shared cycle period keeps all panes in tempo
-        const staggerOffset = 1000; // 1.5s offset creates a continuous wave across the 3 panes
+        const staggerOffset = 1000; // 1.0s offset creates a continuous wave across the 3 panes
 
         galleryPanes.forEach((pane, paneIndex) => {
             const paneSlides = pane.querySelectorAll('.pane-slide');
@@ -268,7 +268,7 @@
                 paneSlides[activeIndex].classList.add('active');
             }
 
-            // Offset the initial trigger by 1.5s per pane, then repeat on the identical cycle
+            // Offset the initial trigger by 1.0s per pane, then repeat on the identical cycle
             setTimeout(() => {
                 advanceSlide();
                 setInterval(advanceSlide, cycleDuration);
