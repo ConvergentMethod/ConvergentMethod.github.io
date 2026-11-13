@@ -54,20 +54,6 @@ body {
   min-height: 100vh;
 }
 
-/* White background under footer on mobile bounce */
-body.home-page::after {
-  content: '';
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50vh;
-  background-color: #ffffff;
-  box-shadow: 0 50vh 0 0 #ffffff;
-  z-index: -1;
-  pointer-events: none;
-}
-
 main {
   flex: 1;
 }
@@ -517,7 +503,7 @@ h1.hero-project-title {
 }
 
 .gallery-section-title {
-  scroll-margin-top: clamp(90px, 11vh, 120px);
+  scroll-margin-top: clamp(120px, 15vh, 150px);
 }
 
 .testimonial-section-title {
@@ -842,6 +828,10 @@ footer.site-footer {
   .testimonial-section-title {
     font-size: clamp(2rem, 6.5vw, 2.45rem);
     margin-bottom: 1.5rem;
+  }
+
+  .gallery-section-title {
+    scroll-margin-top: clamp(130px, 18vh, 160px);
   }
 
   .logo {

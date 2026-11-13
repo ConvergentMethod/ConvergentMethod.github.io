@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=374">
+    <link rel="stylesheet" href="css/style.css?v=376">
 </head>
 <body class="home-page">
 
@@ -275,6 +275,25 @@
                 setInterval(advanceSlide, cycleDuration);
             }, cycleDuration + (paneIndex * staggerOffset));
         });
+
+        // Dynamic Overscroll Canvas Background: Blue at top hero, White at bottom content/footer
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        function updateOverscrollBackground() {
+            const isTop = window.scrollY < (window.innerHeight * 0.5);
+            const targetBg = isTop ? '#0C2B49' : '#ffffff';
+            if (document.body.style.backgroundColor !== targetBg) {
+                document.body.style.backgroundColor = targetBg;
+                document.documentElement.style.backgroundColor = targetBg;
+            }
+            if (metaThemeColor) {
+                const targetTheme = isTop ? '#0C2B49' : '#ffffff';
+                if (metaThemeColor.getAttribute('content') !== targetTheme) {
+                    metaThemeColor.setAttribute('content', targetTheme);
+                }
+            }
+        }
+        window.addEventListener('scroll', updateOverscrollBackground, { passive: true });
+        updateOverscrollBackground();
     </script>
 </body>
 </html>
