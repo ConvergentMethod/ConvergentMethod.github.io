@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=393">
+    <link rel="stylesheet" href="css/style.css?v=395">
 </head>
 <body class="home-page">
 
@@ -104,6 +104,7 @@
             <div class="projects-section-header">
                 <h2 class="section-title gallery-section-title" id="our-projects">Our Projects</h2>
                 <div class="projects-mobile-controls" aria-label="Project slider navigation">
+                    <span class="projects-counter" id="projects-counter">1 / 13</span>
                     <button type="button" class="slider-btn mobile-prev-btn" id="projects-prev-mobile" aria-label="Previous projects">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
@@ -259,6 +260,12 @@
                 </button>
             </div>
 
+            <!-- Mobile Swipe Hint & Dots Navigation -->
+            <div class="projects-mobile-indicator" aria-hidden="true">
+                <span class="swipe-hint">Swipe to explore &rarr;</span>
+                <div class="projects-dots" id="projects-dots"></div>
+            </div>
+
             <p class="project-disclaimer">* Portfolio includes select historical and large-scale commercial projects managed by leadership prior to the establishment of Convergent Method.</p>
 
             <hr class="section-divider">
@@ -370,8 +377,25 @@
         const projectsNextBtn = document.getElementById('projects-next');
         const projectsPrevMobile = document.getElementById('projects-prev-mobile');
         const projectsNextMobile = document.getElementById('projects-next-mobile');
+        const projectsCounter = document.getElementById('projects-counter');
+        const projectsDotsContainer = document.getElementById('projects-dots');
+        const projectCards = projectsTrack ? projectsTrack.querySelectorAll('.gallery-pane') : [];
 
         if (projectsTrack) {
+            // Generate dot indicators dynamically
+            if (projectsDotsContainer && projectCards.length > 0) {
+                projectCards.forEach((card, idx) => {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = `proj-dot${idx === 0 ? ' active' : ''}`;
+                    dot.setAttribute('aria-label', `Go to project ${idx + 1}`);
+                    dot.addEventListener('click', () => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    });
+                    projectsDotsContainer.appendChild(dot);
+                });
+            }
+
             function getScrollStep() {
                 const card = projectsTrack.querySelector('.gallery-pane');
                 if (!card) return 400;
@@ -401,6 +425,29 @@
                 if (projectsNextBtn) projectsNextBtn.disabled = atEnd;
                 if (projectsPrevMobile) projectsPrevMobile.disabled = atStart;
                 if (projectsNextMobile) projectsNextMobile.disabled = atEnd;
+
+                // Update active index, counter, and dots
+                const firstCard = projectCards[0];
+                if (firstCard) {
+                    const cardWidth = firstCard.offsetWidth;
+                    const style = window.getComputedStyle(projectsTrack);
+                    const gap = parseFloat(style.gap) || 20;
+                    const activeIndex = Math.min(
+                        projectCards.length - 1,
+                        Math.max(0, Math.round(projectsTrack.scrollLeft / (cardWidth + gap)))
+                    );
+
+                    if (projectsCounter) {
+                        projectsCounter.textContent = `${activeIndex + 1} / ${projectCards.length}`;
+                    }
+
+                    if (projectsDotsContainer) {
+                        const dots = projectsDotsContainer.querySelectorAll('.proj-dot');
+                        dots.forEach((dot, dIdx) => {
+                            dot.classList.toggle('active', dIdx === activeIndex);
+                        });
+                    }
+                }
             }
 
             projectsTrack.addEventListener('scroll', updateSliderNav, { passive: true });
