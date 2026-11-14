@@ -965,15 +965,15 @@ footer.site-footer {
     min-height: 50px;
   }
 
-  /* Mobile hero treatment: keep photography crisp and fully visible */
+  /* Mobile hero treatment: subtle blur while preserving image details */
   .hero-left-panel {
     width: 100%;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    backdrop-filter: blur(2.5px);
+    -webkit-backdrop-filter: blur(2.5px);
     background: linear-gradient(
       to bottom,
       rgba(12, 43, 73, 0.45) 0%,
-      rgba(12, 43, 73, 0.25) 30%,
+      rgba(12, 43, 73, 0.22) 30%,
       rgba(12, 43, 73, 0.15) 60%,
       rgba(12, 43, 73, 0.55) 100%
     );
