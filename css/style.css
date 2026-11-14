@@ -989,7 +989,15 @@ footer.site-footer {
   .featured-gallery-grid {
     scroll-snap-type: x mandatory;
     gap: 1.25rem;
-    padding: 0.75rem 0 1.25rem 0;
+    padding: 0.75rem 0 0.5rem 0;
+    margin-bottom: 0.75rem;
+    scrollbar-width: none; /* Hide default scrollbar on mobile */
+    -ms-overflow-style: none;
+  }
+
+  .featured-gallery-grid::-webkit-scrollbar {
+    display: none;
+    height: 0;
   }
 
   /* Reveal dots & swipe hint under panes */
