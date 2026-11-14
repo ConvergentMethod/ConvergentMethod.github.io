@@ -554,6 +554,8 @@ h1.hero-project-title {
   overflow-y: visible;
   touch-action: pan-x pan-y;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 0;
   padding: 0.75rem 0.25rem 1.5rem 0.25rem;
   scrollbar-width: thin;
   scrollbar-color: var(--accent) rgba(12, 43, 73, 0.08);
@@ -922,11 +924,14 @@ footer.site-footer {
   .gallery-pane {
     flex: 0 0 100%;
     min-width: 100%;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   .featured-gallery-grid {
-    scroll-snap-type: x proximity;
+    scroll-snap-type: x mandatory;
+    gap: 1.25rem;
+    padding: 0.75rem 0 1.5rem 0;
   }
 
   /* Hide floating overlay side arrows on mobile/tablet to never block text */
