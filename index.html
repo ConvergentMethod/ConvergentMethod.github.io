@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=386">
+    <link rel="stylesheet" href="css/style.css?v=387">
 </head>
 <body class="home-page">
 
@@ -100,8 +100,18 @@
 
             <hr class="section-divider">
             
-            <!-- Gallery Section Title -->
-            <h2 class="section-title gallery-section-title" id="our-projects">Our Projects</h2>
+            <!-- Gallery Section Title & Mobile Nav Controls -->
+            <div class="projects-section-header">
+                <h2 class="section-title gallery-section-title" id="our-projects">Our Projects</h2>
+                <div class="projects-mobile-controls" aria-label="Project slider navigation">
+                    <button type="button" class="slider-btn mobile-prev-btn" id="projects-prev-mobile" aria-label="Previous projects">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button type="button" class="slider-btn mobile-next-btn" id="projects-next-mobile" aria-label="Next projects">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+            </div>
 
             <!-- Project Showcase Slider Container with Side Arrow Controls -->
             <div class="projects-slider-wrapper">
@@ -358,8 +368,10 @@
         const projectsTrack = document.getElementById('projects-slider');
         const projectsPrevBtn = document.getElementById('projects-prev');
         const projectsNextBtn = document.getElementById('projects-next');
+        const projectsPrevMobile = document.getElementById('projects-prev-mobile');
+        const projectsNextMobile = document.getElementById('projects-next-mobile');
 
-        if (projectsTrack && projectsPrevBtn && projectsNextBtn) {
+        if (projectsTrack) {
             function getScrollStep() {
                 const card = projectsTrack.querySelector('.gallery-pane');
                 if (!card) return 400;
@@ -372,18 +384,23 @@
                 }
             }
 
-            projectsNextBtn.addEventListener('click', () => {
-                projectsTrack.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
-            });
+            const stepForward = () => projectsTrack.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+            const stepBackward = () => projectsTrack.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
 
-            projectsPrevBtn.addEventListener('click', () => {
-                projectsTrack.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
-            });
+            if (projectsNextBtn) projectsNextBtn.addEventListener('click', stepForward);
+            if (projectsPrevBtn) projectsPrevBtn.addEventListener('click', stepBackward);
+            if (projectsNextMobile) projectsNextMobile.addEventListener('click', stepForward);
+            if (projectsPrevMobile) projectsPrevMobile.addEventListener('click', stepBackward);
 
             function updateSliderNav() {
                 const maxScroll = projectsTrack.scrollWidth - projectsTrack.clientWidth - 5;
-                projectsPrevBtn.disabled = projectsTrack.scrollLeft <= 5;
-                projectsNextBtn.disabled = projectsTrack.scrollLeft >= maxScroll;
+                const atStart = projectsTrack.scrollLeft <= 5;
+                const atEnd = projectsTrack.scrollLeft >= maxScroll;
+
+                if (projectsPrevBtn) projectsPrevBtn.disabled = atStart;
+                if (projectsNextBtn) projectsNextBtn.disabled = atEnd;
+                if (projectsPrevMobile) projectsPrevMobile.disabled = atStart;
+                if (projectsNextMobile) projectsNextMobile.disabled = atEnd;
             }
 
             projectsTrack.addEventListener('scroll', updateSliderNav, { passive: true });
