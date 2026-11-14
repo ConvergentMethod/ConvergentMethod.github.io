@@ -503,7 +503,7 @@ h1.hero-project-title {
 }
 
 .gallery-section-title {
-  scroll-margin-top: clamp(120px, 15vh, 150px);
+  scroll-margin-top: clamp(90px, 11vh, 120px);
 }
 
 .testimonial-section-title {
@@ -511,128 +511,228 @@ h1.hero-project-title {
 }
 
 /* =========================================
-   Featured 3-Pane Gallery Grid
+   Featured Project Showcase Slider
    ========================================= */
+.projects-slider-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 .featured-gallery-grid {
   width: 100%;
   max-width: 1100px;
-  margin: 0 auto clamp(3.5rem, 6vw, 5.5rem);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  flex-direction: row;
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.75rem 0.25rem 1.5rem 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(12, 43, 73, 0.08);
+}
+
+.featured-gallery-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.featured-gallery-grid::-webkit-scrollbar-track {
+  background: rgba(12, 43, 73, 0.06);
+  border-radius: 3px;
+}
+
+.featured-gallery-grid::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.featured-gallery-grid::-webkit-scrollbar-thumb:hover {
+  background: #1b5299;
+}
+
+/* Flanking Side Arrows */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid rgba(12, 43, 73, 0.12);
+  color: #0C2B49;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 18px rgba(12, 43, 73, 0.18), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.slider-btn.prev-btn {
+  left: -25px;
+}
+
+.slider-btn.next-btn {
+  right: -25px;
+}
+
+.slider-btn svg {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.slider-btn:hover:not(:disabled) {
+  background: #0C2B49;
+  border-color: #0C2B49;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 8px 24px rgba(12, 43, 73, 0.28);
+}
+
+.slider-btn.prev-btn:hover:not(:disabled) svg {
+  transform: translateX(-2px);
+}
+
+.slider-btn.next-btn:hover:not(:disabled) svg {
+  transform: translateX(2px);
+}
+
+.slider-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.project-disclaimer {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto clamp(2.5rem, 4.5vw, 4rem) auto;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #777777;
+  font-style: italic;
+  text-align: left;
 }
 
 .gallery-pane {
   position: relative;
-  height: clamp(320px, 32vw, 420px);
-  border-radius: 4px;
+  flex: 0 0 calc((100% - clamp(1.25rem, 2vw, 1.75rem)) / 2);
+  min-width: 480px;
+  background: #ffffff;
+  border: 1px solid rgba(12, 43, 73, 0.1);
+  border-top: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: clamp(2rem, 3.2vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 4px 16px rgba(12, 43, 73, 0.06);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.28s ease;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(12, 43, 73, 0.12);
-  background: var(--dark);
+  scroll-snap-align: start;
 }
 
-.pane-slides {
+.gallery-pane:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(12, 43, 73, 0.12);
+  border-color: rgba(41, 128, 185, 0.35);
+  border-top-color: #1b5299;
+}
+
+/* Subtle corner accent glow */
+.gallery-pane::before {
+  content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pane-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0;
-  transform: scale(1);
-  transition: opacity 1.2s ease-in-out, transform 6s ease-out;
-}
-
-.pane-slide.active {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-/* Darkening Gradient Scrim */
-.pane-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(12, 43, 73, 0.15) 0%,
-    rgba(12, 43, 73, 0.45) 50%,
-    rgba(12, 43, 73, 0.95) 100%
-  );
-  z-index: 2;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at top right, rgba(41, 128, 185, 0.08), transparent 70%);
   pointer-events: none;
 }
 
-/* Bottom-Docked Text Lockup */
-.pane-text-box {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  z-index: 3;
+/* Header lockup: Category / Magnitude Tag + Index Number */
+.pane-header {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  pointer-events: auto;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.1rem;
 }
 
+.pane-tag {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(41, 128, 185, 0.08);
+  border: 1px solid rgba(41, 128, 185, 0.18);
+  padding: 0.32rem 0.75rem;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.pane-num {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #c2cbd5;
+  letter-spacing: -0.5px;
+  transition: color 0.25s ease;
+}
+
+.gallery-pane:hover .pane-num {
+  color: var(--accent);
+}
+
+/* Project Title */
 .pane-title {
   font-family: 'Urbanist', sans-serif;
-  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  font-size: clamp(1.15rem, 1.45vw, 1.4rem);
   font-weight: 700;
-  line-height: 1.25;
-  color: var(--white);
-  letter-spacing: 0.5px;
+  line-height: 1.3;
+  color: #0C2B49;
+  letter-spacing: 0.2px;
   text-transform: uppercase;
-  margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-  cursor: pointer;
-  transition: color 0.2s ease;
+  margin: 0 0 1rem 0;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+  transition: color 0.25s ease;
 }
 
-/* Description Hidden by Default, Reveals on Hover */
+.gallery-pane:hover .pane-title {
+  color: var(--accent);
+}
+
+/* Accent Divider */
+.pane-divider {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(41, 128, 185, 0.1) 100%);
+  margin-bottom: 1.35rem;
+}
+
+/* Narrative Body Copy */
 .pane-desc {
   font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
+  font-size: 0.94rem;
   font-weight: 400;
-  line-height: 1.55;
-  color: #d1e5f8;
+  line-height: 1.72;
+  color: #334155;
   margin: 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(10px);
-  transition: max-height 0.35s ease, opacity 0.35s ease, transform 0.35s ease, margin 0.35s ease;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* Hover Trigger on Title or Pane */
-.gallery-pane:hover .pane-title,
-.pane-text-box:hover .pane-title {
-  color: var(--light-blue);
-}
-
-.gallery-pane:hover .pane-desc,
-.pane-text-box:hover .pane-desc {
-  max-height: 140px;
-  opacity: 1;
-  transform: translateY(0);
-  margin-top: 0.65rem;
+  flex: 1;
 }
 
 /* Testimonial Card Frame */
@@ -777,20 +877,37 @@ footer.site-footer {
    8. Responsive Media Queries
    ========================================= */
 @media screen and (max-width: 900px) {
-  .featured-gallery-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
   .gallery-pane {
-    height: 320px;
+    flex: 0 0 100%;
+    min-width: 100%;
   }
 
-  .pane-desc {
-    max-height: 120px;
-    opacity: 1;
-    transform: translateY(0);
-    margin-top: 0.5rem;
+  .slider-btn.prev-btn {
+    left: 8px;
+  }
+
+  .slider-btn.next-btn {
+    right: 8px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .gallery-pane {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .slider-btn.prev-btn {
+    left: 6px;
+  }
+
+  .slider-btn.next-btn {
+    right: 6px;
   }
 }
 

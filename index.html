@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=376">
+    <link rel="stylesheet" href="css/style.css?v=386">
 </head>
 <body class="home-page">
 
@@ -103,52 +103,153 @@
             <!-- Gallery Section Title -->
             <h2 class="section-title gallery-section-title" id="our-projects">Our Projects</h2>
 
-            <!-- 3-Pane Project Showcase Gallery -->
-            <div class="featured-gallery-grid" aria-label="Featured Project Showcase">
-                
-                <!-- Pane 1: McNair Campus -->
-                <div class="gallery-pane" data-index="0">
-                    <div class="pane-slides">
-                        <div class="pane-slide active" style="background-image: url('media/McNair/Exterior.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/McNair/AboveCeiling.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/McNair/Stations.jpg');"></div>
+            <!-- Project Showcase Slider Container with Side Arrow Controls -->
+            <div class="projects-slider-wrapper">
+                <button type="button" class="slider-btn prev-btn" id="projects-prev" aria-label="Previous projects">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+
+                <!-- Project Showcase Slider Track -->
+                <div class="featured-gallery-grid" id="projects-slider" aria-label="Featured Project Showcase">
+
+                <article class="gallery-pane" data-index="0">
+                    <div class="pane-header">
+                        <span class="pane-tag">Healthcare &amp; Institutional</span>
+                        <span class="pane-num">01</span>
                     </div>
-                    <div class="pane-overlay"></div>
-                    <div class="pane-text-box">
-                        <h3 class="pane-title">McNair Campus</h3>
-                        <p class="pane-desc">High-performance clinical and hospital facility oversight balancing patient experience and complex infrastructure.</p>
+                    <h3 class="pane-title">McNair Campus</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">Replace but don't delete this text. This is a placeholder for the project description. It will be replaced with the actual project description once it is available.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="1">
+                    <div class="pane-header">
+                        <span class="pane-tag">$229 Million</span>
+                        <span class="pane-num">02</span>
                     </div>
+                    <h3 class="pane-title">Marriott Marque Hotel</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project constructed a new 28-story, 1,000-key Marriott Marquis hotel attached to the convention center via a skybridge, serving as the host hotel for Super Bowl LI events. The property features 10,000 square feet of meeting space, a 40,000-square-foot ballroom, and a rooftop amenity deck highlighted by a Texas-shaped lazy river. At street level, the ground floor incorporates multiple retail shops, restaurants, and bars facing Discovery Green and the surrounding downtown area.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="2">
+                    <div class="pane-header">
+                        <span class="pane-tag">$180 Million</span>
+                        <span class="pane-num">03</span>
+                    </div>
+                    <h3 class="pane-title">Fort Lauderdale Airport Rental Car Facility</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project constructed a nine-story, cast-in-place concrete structure spanning approximately ten acres per level, creating the largest combined-use facility of its kind for the public and 12 on-site rental car companies. Level one houses a vehicle service area equipped with state-of-the-art washing systems and a fueling operation with 126 dispensers and 150,000 gallons of storage capacity, while Levels 2 through 5 accommodate rental car operations. Because of the facility's unprecedented scale and scope, the project used specialized alternative compliance methods and enhanced life-safety safeguards to meet and exceed technical building code standards.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="3">
+                    <div class="pane-header">
+                        <span class="pane-tag">$170 Million</span>
+                        <span class="pane-num">04</span>
+                    </div>
+                    <h3 class="pane-title">DFW Airport Terminal-A Parking Structure</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project demolished three existing Terminal A parking garage structures at DFW Airport and constructed a single new multi-level Enhanced Parking Structure (ESP). Built with cast-in-place, post-tensioned concrete and exterior perforated metal screen panels, the facility integrates pedestrian bridges, a parking guidance system, wayfinding signage, energy-efficient lighting, and dedicated electrical service upgrades. Executed on a fast-track schedule with both day and night shifts, the work required detailed coordination with DFW Airport and concurrent terminal construction operations.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="4">
+                    <div class="pane-header">
+                        <span class="pane-tag">$152 Million</span>
+                        <span class="pane-num">05</span>
+                    </div>
+                    <h3 class="pane-title">Office Depot Global Headquarters</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This LEED Gold-certified project constructed a five-story global headquarters with offices, executive suites, interview rooms, conference and presentation areas, and an exercise facility. The facility also included a non-fixed-seating auditorium and a 778-person courtyard. Beyond the main building, the $90 million scope encompassed two precast parking garages and surface parking for 2,100 vehicles, extensive landscaping and irrigation, and new storm, sanitary, fire, and domestic utility services.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="5">
+                    <div class="pane-header">
+                        <span class="pane-tag">$140 Million</span>
+                        <span class="pane-num">06</span>
+                    </div>
+                    <h3 class="pane-title">Regional Medical Center & Mental Health Facility</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project constructed North Carolina's first combined prison and hospital facility in two phases, adding to an existing 1884 prison complex. Phase A included extensive site development, the demolition of ten buildings, underground utility installations, two guard towers, four parking lots, and a 15,000-square-foot central utility plant providing electrical, chilled water, steam, and fire protection services. Phase B added a five-story, 167,000-square-foot regional medical center (featuring a diagnostic clinic, labs, radiology, dental, dialysis, pharmacy, physical therapy, a 120-bed inpatient surgical unit, and four 30-bed secure medical housing pods) and a five-story, 149,000-square-foot mental health hospital, connected by corridors.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="6">
+                    <div class="pane-header">
+                        <span class="pane-tag">$130 Million</span>
+                        <span class="pane-num">07</span>
+                    </div>
+                    <h3 class="pane-title">DFW Airport Terminal-A Phase 1 of 3</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project renovated one-third of a 40-year-old terminal at DFW Airport, beginning with the construction of a permanent security wall to isolate active airport operations and major building systems from the work zone. Before demolition commenced, thousands of existing overhead low-voltage wires were traced, tagged, and protected to prevent service disruptions. The comprehensive overhaul included structural alterations, baggage handling systems, architectural walls and finishes, and upgrades to mechanical, electrical, lighting, security, life safety, fire protection, and communication systems. Executed on a fast-track schedule with day and night shifts, the work required managing gate closures and close coordination with DFW Airport and American Airlines.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="7">
+                    <div class="pane-header">
+                        <span class="pane-tag">$77 Million</span>
+                        <span class="pane-num">08</span>
+                    </div>
+                    <h3 class="pane-title">MD Anderson Zayed Lab Buildout</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project built out complex technical laboratories alongside supporting office, common, and public spaces in the Texas Medical Center to integrate basic and clinical research for cancer treatment and pancreatic cancer. The interior scope featured Level 5 finishes throughout the corridors and public areas, paired with custom millwork for kitchens and beverage bars, each with a unique layout. Executed in a partially occupied building, the team coordinated all construction logistics through two service elevators.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="8">
+                    <div class="pane-header">
+                        <span class="pane-tag">$28 Million</span>
+                        <span class="pane-num">09</span>
+                    </div>
+                    <h3 class="pane-title">DFW Airport Terminal-A Rail Station</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project constructed a new rail station at Terminal A serving as the DFW Airport terminus for the DART Irving-3 line. The facility features a main platform area, cast-in-place concrete retaining wall structures, $4 million in architectural canopies, glass-fiber-reinforced concrete (GFRC) panel fascia, and an elaborate lighting package. Additional site components included an adjacent bus drop-off area along Cross Under #2 and a serpentine pedestrian walkway connecting directly to Terminal A.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="9">
+                    <div class="pane-header">
+                        <span class="pane-tag">$18 Million</span>
+                        <span class="pane-num">10</span>
+                    </div>
+                    <h3 class="pane-title">Hilton Americas Hotel Renovation</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project renovated guestrooms and common areas on a phased schedule, taking 25 to 100 rooms out of order at a time based on hotel events and occupancy. The interior scope included updating guestroom and parlor furniture, fixtures, and equipment (FF&E); adding in-room beverage stations; and upgrading lighting, bathroom entry doors, and tubs through tub-to-shower conversions and select replacements. Additional improvements included new flooring throughout the corridors and common areas, along with exterior faÃ§ade upgrades.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="10">
+                    <div class="pane-header">
+                        <span class="pane-tag">$11 Million</span>
+                        <span class="pane-num">11</span>
+                    </div>
+                    <h3 class="pane-title">UTMB West Plant Hardening Phase 1</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project installed a flood barrier system to protect critical infrastructure up to an elevation of 20 feet Mean Sea Level (MSL), ensuring uninterrupted HVAC service across the entire UTMB campus during and after flooding events. Alongside the flood mitigation work, the scope also included constructing a new parking lot and installing associated site landscaping.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="11">
+                    <div class="pane-header">
+                        <span class="pane-tag">$8 Million</span>
+                        <span class="pane-num">12</span>
+                    </div>
+                    <h3 class="pane-title">DFW Airport Public Address/Voice Evacuation</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project extended the existing Terminal D public address (PA) system to Terminals A and C at DFW Airport, wiring existing speaker zones to new head-end equipment without disrupting airline operations. As part of a broader phased terminal renewal program, the upgrades established voice evacuation capabilities while replacing speakers and adding new speaker zones, amplifiers, and ambient noise sensors in unserved areas. Executed on a fast-track schedule with both day and night shifts, the work required detailed coordination with DFW Airport.</p>
+                </article>
+
+                <article class="gallery-pane" data-index="12">
+                    <div class="pane-header">
+                        <span class="pane-tag">$750 Thousand</span>
+                        <span class="pane-num">13</span>
+                    </div>
+                    <h3 class="pane-title">Dunstan Chiller Replacement</h3>
+                    <div class="pane-divider"></div>
+                    <p class="pane-desc">This project removed two existing chillers and replaced two air handling units (AHUs) within a fully operational 24 Hour Fitness facility. Using temporary ducting and phased shutdown sequencing, the new HVAC systems were integrated without requiring external temporary cooling equipment. The team coordinated all demolition and installation activities with property stakeholders and executed them during off-peak hours to prevent disruption to the active gym.</p>
+                </article>
+
                 </div>
 
-                <!-- Pane 2: Fort Lauderdale Airport -->
-                <div class="gallery-pane" data-index="1">
-                    <div class="pane-slides">
-                        <div class="pane-slide active" style="background-image: url('media/FLL Airport/09-28-2005_2.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/FLL Airport/RacPhotos 051.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/FLL Airport/DSCF0650.JPG');"></div>
-                    </div>
-                    <div class="pane-overlay"></div>
-                    <div class="pane-text-box">
-                        <h3 class="pane-title">Fort Lauderdale Airport</h3>
-                        <p class="pane-desc">High-traffic public transit and aviation spaces requiring disciplined phasing and resilient infrastructure.</p>
-                    </div>
-                </div>
-
-                <!-- Pane 3: Office Depot Global Headquarters -->
-                <div class="gallery-pane" data-index="2">
-                    <div class="pane-slides">
-                        <div class="pane-slide active" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_EXT_D_IMG_9267.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_INT_C_IMG_8675.jpg');"></div>
-                        <div class="pane-slide" style="background-image: url('media/OfficeDepotGlobalHeadquarters/OD_INT_A_IMG_7529.jpg');"></div>
-                    </div>
-                    <div class="pane-overlay"></div>
-                    <div class="pane-text-box">
-                        <h3 class="pane-title">Office Depot Global Headquarters</h3>
-                        <p class="pane-desc">Large-scale commercial headquarters delivery optimizing long-term facility performance and adaptable interiors.</p>
-                    </div>
-                </div>
-
+                <button type="button" class="slider-btn next-btn" id="projects-next" aria-label="Next projects">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
+
+            <p class="project-disclaimer">* Portfolio includes select historical and large-scale commercial projects managed by leadership prior to the establishment of Convergent Method.</p>
 
             <hr class="section-divider">
 
@@ -253,28 +354,42 @@
 
         activateSlide(0);
 
-        // 3-Pane Gallery: Synchronized Offset Cascade Rotator
-        const galleryPanes = document.querySelectorAll('.gallery-pane');
-        const cycleDuration = 5500; // Shared cycle period keeps all panes in tempo
-        const staggerOffset = 1000; // 1.0s offset creates a continuous wave across the 3 panes
+        // Projects Horizontal Carousel Controls
+        const projectsTrack = document.getElementById('projects-slider');
+        const projectsPrevBtn = document.getElementById('projects-prev');
+        const projectsNextBtn = document.getElementById('projects-next');
 
-        galleryPanes.forEach((pane, paneIndex) => {
-            const paneSlides = pane.querySelectorAll('.pane-slide');
-            if (paneSlides.length <= 1) return;
-            let activeIndex = 0;
-
-            function advanceSlide() {
-                paneSlides[activeIndex].classList.remove('active');
-                activeIndex = (activeIndex + 1) % paneSlides.length;
-                paneSlides[activeIndex].classList.add('active');
+        if (projectsTrack && projectsPrevBtn && projectsNextBtn) {
+            function getScrollStep() {
+                const card = projectsTrack.querySelector('.gallery-pane');
+                if (!card) return 400;
+                const style = window.getComputedStyle(projectsTrack);
+                const gap = parseFloat(style.gap) || 20;
+                if (projectsTrack.clientWidth >= 900) {
+                    return (card.offsetWidth + gap) * 2;
+                } else {
+                    return (card.offsetWidth + gap);
+                }
             }
 
-            // Offset the initial trigger by 1.0s per pane, then repeat on the identical cycle
-            setTimeout(() => {
-                advanceSlide();
-                setInterval(advanceSlide, cycleDuration);
-            }, cycleDuration + (paneIndex * staggerOffset));
-        });
+            projectsNextBtn.addEventListener('click', () => {
+                projectsTrack.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+            });
+
+            projectsPrevBtn.addEventListener('click', () => {
+                projectsTrack.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+            });
+
+            function updateSliderNav() {
+                const maxScroll = projectsTrack.scrollWidth - projectsTrack.clientWidth - 5;
+                projectsPrevBtn.disabled = projectsTrack.scrollLeft <= 5;
+                projectsNextBtn.disabled = projectsTrack.scrollLeft >= maxScroll;
+            }
+
+            projectsTrack.addEventListener('scroll', updateSliderNav, { passive: true });
+            window.addEventListener('resize', updateSliderNav, { passive: true });
+            updateSliderNav();
+        }
 
         // Dynamic Overscroll Canvas Background: Blue at top hero, White at bottom content/footer
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -297,3 +412,5 @@
     </script>
 </body>
 </html>
+
+
