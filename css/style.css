@@ -551,10 +551,9 @@ h1.hero-project-title {
   flex-direction: row;
   gap: clamp(1.25rem, 2vw, 1.75rem);
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
+  touch-action: pan-x pan-y;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
   padding: 0.75rem 0.25rem 1.5rem 0.25rem;
   scrollbar-width: thin;
   scrollbar-color: var(--accent) rgba(12, 43, 73, 0.08);
@@ -923,6 +922,11 @@ footer.site-footer {
   .gallery-pane {
     flex: 0 0 100%;
     min-width: 100%;
+    scroll-snap-align: center;
+  }
+
+  .featured-gallery-grid {
+    scroll-snap-type: x proximity;
   }
 
   /* Hide floating overlay side arrows on mobile/tablet to never block text */
@@ -961,9 +965,25 @@ footer.site-footer {
     min-height: 50px;
   }
 
-  /* Full width stack on mobile */
+  /* Mobile hero treatment: keep photography crisp and fully visible */
   .hero-left-panel {
     width: 100%;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(12, 43, 73, 0.45) 0%,
+      rgba(12, 43, 73, 0.25) 30%,
+      rgba(12, 43, 73, 0.15) 60%,
+      rgba(12, 43, 73, 0.55) 100%
+    );
+    box-shadow: none;
+    border-right: none;
+  }
+
+  /* Shift Reception Desk image to the right on mobile */
+  .hero-slide.slide-reception-desk {
+    background-position: 75% center;
   }
 
   .hero-title-frame {

@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=387">
+    <link rel="stylesheet" href="css/style.css?v=391">
 </head>
 <body class="home-page">
 
@@ -304,9 +304,9 @@
     <!-- Hero Slider & Gallery Controllers -->
     <script>
         const heroSlidesData = [
-            { src: 'media/McNair/ReceptionDesk.jpg', title: 'Reception Desk' },
-            { src: 'media/McNair/Stations(2).jpg', title: 'Stations' },
-            { src: 'media/McNair/Lobby(1).jpg', title: 'Lobby' }
+            { src: 'media/McNair/ReceptionDesk.jpg', title: 'Reception Desk', className: 'slide-reception-desk' },
+            { src: 'media/McNair/Stations(2).jpg', title: 'Stations', className: 'slide-stations' },
+            { src: 'media/McNair/Lobby(1).jpg', title: 'Lobby', className: 'slide-lobby' }
         ];
 
         const slider = document.getElementById('hero-slider');
@@ -317,7 +317,7 @@
 
         heroSlidesData.forEach((item, index) => {
             const slide = document.createElement('div');
-            slide.className = `hero-slide${index === 0 ? ' active' : ''}`;
+            slide.className = `hero-slide ${item.className || ''}${index === 0 ? ' active' : ''}`.trim();
             const safePath = encodeURI(item.src).replace(/\(/g, '%28').replace(/\)/g, '%29');
             slide.style.backgroundImage = `url("${safePath}")`;
             slider.appendChild(slide);
