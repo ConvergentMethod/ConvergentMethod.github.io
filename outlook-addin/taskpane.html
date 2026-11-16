@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://appsforoffice.microsoft.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://convergentmethod.com data:; connect-src 'none';">
   <title>Convergent Method Signature</title>
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
-  <script type="text/javascript" src="launchevent.js?v=1.0.0.3"></script>
+  <script type="text/javascript" src="launchevent.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -205,35 +205,62 @@
   </div>
 
   <script>
-    // Build dynamic directory from launchevent.js TEAM_DIRECTORY
-    const DIRECTORY = {};
-    if (typeof TEAM_DIRECTORY !== 'undefined' && TEAM_DIRECTORY) {
-      for (const [email, user] of Object.entries(TEAM_DIRECTORY)) {
-        if (!email || !user || !user.name) continue;
-        const key = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-        DIRECTORY[key] = Object.freeze({
-          name: user.name || "Employee",
-          title: user.title || "Convergent Method, LLC",
-          email: user.email || email,
-          phone: user.phone || "(281) 979-1336",
-          phoneLink: user.phoneLink || "+12819791336",
-          hasExtraDetail: user.hasExtraDetail === true,
-          extraLabel: user.extraLabel || "Dealer #:",
-          extraValue: user.extraValue || "",
-          signatures: Object.freeze([
-            { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
-            { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
-            { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
-          ])
-        });
+    // Primary Directory initialized with active team profiles
+    const DIRECTORY = {
+      ethan: Object.freeze({
+        name: "Ethan Stemmans",
+        title: "Electrical Engineering Assistant",
+        email: "ethanstemmans@gmail.com",
+        phone: "(281) 678-6643",
+        phoneLink: "2816786643",
+        hasLogo: true,
+        hasDisclaimer: true,
+        hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: "",
+        signatures: Object.freeze([
+          { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
+          { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true },
+          { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
+        ])
+      })
+    };
+
+    function syncFromTeamDirectory() {
+      if (typeof TEAM_DIRECTORY !== 'undefined' && TEAM_DIRECTORY) {
+        for (const [email, user] of Object.entries(TEAM_DIRECTORY)) {
+          if (!email || !user || !user.name) continue;
+          const key = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+          DIRECTORY[key] = Object.freeze({
+            name: user.name,
+            title: user.title || "Convergent Method, LLC",
+            email: user.email || email,
+            phone: user.phone || "(281) 678-6643",
+            phoneLink: user.phoneLink || "2816786643",
+            hasLogo: user.hasLogo !== false,
+            hasDisclaimer: user.hasDisclaimer !== false,
+            hasEco: user.hasEco !== false,
+            hasExtraDetail: user.hasExtraDetail === true,
+            extraLabel: user.extraLabel || "Dealer #:",
+            extraValue: user.extraValue || "",
+            signatures: Object.freeze([
+              { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
+              { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
+              { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
+            ])
+          });
+        }
       }
     }
+    syncFromTeamDirectory();
 
-    const dirKeys = Object.keys(DIRECTORY);
-    let selectedKey = dirKeys.length > 0 ? dirKeys[0] : 'dynamic';
+    let selectedKey = 'ethan';
     let selectedVariantId = 'standard';
 
     Office.onReady(function (info) {
+      syncFromTeamDirectory();
+      const dirKeys = Object.keys(DIRECTORY);
       if (Office.context && Office.context.mailbox && Office.context.mailbox.userProfile) {
         const email = (Office.context.mailbox.userProfile.emailAddress || '').toLowerCase();
         const name = (Office.context.mailbox.userProfile.displayName || '').toLowerCase();
@@ -258,6 +285,9 @@
       } else {
         chooseProfile('dynamic');
       }
+      renderProfileTabs();
+      renderVariantTabs();
+      updatePreview();
     });
 
     function renderProfileTabs() {
