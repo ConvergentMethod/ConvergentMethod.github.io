@@ -24,7 +24,21 @@ var TEAM_DIRECTORY = Object.freeze({
     hasEco: true,
     hasExtraDetail: false,
     extraLabel: "Dealer #:",
-    extraValue: ""
+    extraValue: "",
+    signatures: Object.freeze([
+      Object.freeze({
+        id: "standard",
+        name: "Corporate Standard",
+        hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6FA0DB",
+        hasDisclaimer: true,
+        hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: ""
+      })
+    ])
   })
 });
 

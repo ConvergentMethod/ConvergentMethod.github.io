@@ -1351,6 +1351,22 @@
       FOLDERS.forEach(emp => {
         if (!emp.email || emp.email.includes('[') || emp.email.includes('firstname')) return;
         const defaultSig = emp.signatures.find(s => s.isDefault || s.id === emp.defaultSigId) || emp.signatures[0] || { hasLogo: true, hasDisclaimer: true, hasEco: true };
+        
+        const signaturesArrayCode = (emp.signatures || []).map(s => {
+          return `      Object.freeze({
+        id: "${(s.id || '').replace(/"/g, '\\"')}",
+        name: "${(s.name || 'Signature').replace(/"/g, '\\"')}",
+        hasLogo: ${s.hasLogo !== false},
+        logo: "${(s.logo || 'https://convergentmethod.com/media/CMFullColor.png').replace(/"/g, '\\"')}",
+        color: "${(s.color || '#6FA0DB').replace(/"/g, '\\"')}",
+        hasDisclaimer: ${s.hasDisclaimer !== false},
+        hasEco: ${s.hasEco !== false},
+        hasExtraDetail: ${s.hasExtraDetail === true},
+        extraLabel: "${(s.extraLabel || 'Dealer #:').replace(/"/g, '\\"')}",
+        extraValue: "${(s.extraValue || '').replace(/"/g, '\\"')}"
+      })`;
+        }).join(',\n');
+
         entries.push(`  "${emp.email.trim().toLowerCase()}": Object.freeze({
     name: "${emp.name.replace(/"/g, '\\"')}",
     title: "${emp.title.replace(/"/g, '\\"')}",
@@ -1362,7 +1378,10 @@
     hasEco: ${defaultSig.hasEco !== false},
     hasExtraDetail: ${defaultSig.hasExtraDetail === true},
     extraLabel: "${(defaultSig.extraLabel || 'Dealer #:').replace(/"/g, '\\"')}",
-    extraValue: "${(defaultSig.extraValue || '').replace(/"/g, '\\"')}"
+    extraValue: "${(defaultSig.extraValue || '').replace(/"/g, '\\"')}",
+    signatures: Object.freeze([
+${signaturesArrayCode}
+    ])
   })`);
       });
 

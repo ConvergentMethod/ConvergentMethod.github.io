@@ -214,15 +214,26 @@
         phone: "(281) 678-6643",
         phoneLink: "2816786643",
         hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6FA0DB",
         hasDisclaimer: true,
         hasEco: true,
         hasExtraDetail: false,
         extraLabel: "Dealer #:",
         extraValue: "",
         signatures: Object.freeze([
-          { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
-          { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true },
-          { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
+          {
+            id: "standard",
+            name: "Corporate Standard",
+            hasLogo: true,
+            logo: "https://convergentmethod.com/media/CMFullColor.png",
+            color: "#6FA0DB",
+            hasDisclaimer: true,
+            hasEco: true,
+            hasExtraDetail: false,
+            extraLabel: "Dealer #:",
+            extraValue: ""
+          }
         ])
       })
     };
@@ -232,23 +243,30 @@
         for (const [email, user] of Object.entries(TEAM_DIRECTORY)) {
           if (!email || !user || !user.name) continue;
           const key = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+          const userSignatures = Array.isArray(user.signatures) && user.signatures.length > 0
+            ? user.signatures
+            : [
+                {
+                  id: "default",
+                  name: user.signatureName || "Default Signature",
+                  hasLogo: user.hasLogo !== false,
+                  logo: user.logo || "https://convergentmethod.com/media/CMFullColor.png",
+                  color: user.color || "#6FA0DB",
+                  hasDisclaimer: user.hasDisclaimer !== false,
+                  hasEco: user.hasEco !== false,
+                  hasExtraDetail: user.hasExtraDetail === true,
+                  extraLabel: user.extraLabel || "Dealer #:",
+                  extraValue: user.extraValue || ""
+                }
+              ];
+
           DIRECTORY[key] = Object.freeze({
             name: user.name,
             title: user.title || "Convergent Method, LLC",
             email: user.email || email,
             phone: user.phone || "(281) 678-6643",
             phoneLink: user.phoneLink || "2816786643",
-            hasLogo: user.hasLogo !== false,
-            hasDisclaimer: user.hasDisclaimer !== false,
-            hasEco: user.hasEco !== false,
-            hasExtraDetail: user.hasExtraDetail === true,
-            extraLabel: user.extraLabel || "Dealer #:",
-            extraValue: user.extraValue || "",
-            signatures: Object.freeze([
-              { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
-              { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
-              { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
-            ])
+            signatures: Object.freeze(userSignatures)
           });
         }
       }
@@ -415,6 +433,9 @@
       const hasDisclaimer = v.hasDisclaimer !== false;
       const hasEco = v.hasEco !== false;
 
+      const accent = escapeHtml(v.color || u.color || '#6FA0DB');
+      const logoUrl = escapeHtml(v.logo || u.logo || 'https://convergentmethod.com/media/CMFullColor.png');
+
       let extraDetailHtml = '';
       if ((v.hasExtraDetail || u.hasExtraDetail) && (v.extraValue || u.extraValue)) {
         const safeExtraLabel = escapeHtml(v.extraLabel || u.extraLabel || 'Dealer #:');
@@ -429,13 +450,13 @@
       if (hasLogo) {
         topHtml = `
     <tr>
-      <td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">
+      <td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid ${accent}; vertical-align: middle;">
         <a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">
-          <img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto;" />
+          <img src="${logoUrl}" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto;" />
         </a>
       </td>
       <td valign="middle" width="387" style="width: 387px; min-width: 387px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
-        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: ${accent}; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
           ${safeName}
         </div>
         <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">
@@ -445,7 +466,7 @@
           Convergent Method, LLC
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
-          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(u.email)}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
           <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${safePhone}</span></a>
