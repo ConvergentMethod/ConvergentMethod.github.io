@@ -6,6 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://appsforoffice.microsoft.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://convergentmethod.com data:; connect-src 'none';">
   <title>Convergent Method Signature</title>
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+  <script type="text/javascript" src="launchevent.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -204,63 +205,58 @@
   </div>
 
   <script>
-    const DIRECTORY = Object.freeze({
-      mark: Object.freeze({
-        name: "Mark Stemmans, P.E.",
-        title: "Construction Program Manager",
-        email: "MarkSt@convergentmethod.com",
-        phone: "(281) 979-1336",
-        phoneLink: "+12819791336",
-        signatures: Object.freeze([
-          { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
-          { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true },
-          { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
-        ])
-      }),
-      amanda: Object.freeze({
-        name: "Amanda Stemmans, MS, APRN, FNP-C",
-        title: "Chief Operations Officer",
-        email: "AmandaSt@convergentmethod.com",
-        phone: "(281) 979-2162",
-        phoneLink: "+12819792162",
-        signatures: Object.freeze([
-          { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
-          { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true },
-          { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
-        ])
-      }),
-      ethan: Object.freeze({
-        name: "Ethan Stemmans",
-        title: "Electrical Engineering Assistant",
-        email: "ethanstemmans@gmail.com",
-        phone: "(281) 678-6643",
-        phoneLink: "+12816786643",
-        signatures: Object.freeze([
-          { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
-          { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true },
-          { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
-        ])
-      })
-    });
+    // Build dynamic directory from launchevent.js TEAM_DIRECTORY
+    const DIRECTORY = {};
+    if (typeof TEAM_DIRECTORY !== 'undefined' && TEAM_DIRECTORY) {
+      for (const [email, user] of Object.entries(TEAM_DIRECTORY)) {
+        if (!email || !user || !user.name) continue;
+        const key = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+        DIRECTORY[key] = Object.freeze({
+          name: user.name || "Employee",
+          title: user.title || "Convergent Method, LLC",
+          email: user.email || email,
+          phone: user.phone || "(281) 979-1336",
+          phoneLink: user.phoneLink || "+12819791336",
+          hasExtraDetail: user.hasExtraDetail === true,
+          extraLabel: user.extraLabel || "Dealer #:",
+          extraValue: user.extraValue || "",
+          signatures: Object.freeze([
+            { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
+            { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true, hasExtraDetail: user.hasExtraDetail === true, extraLabel: user.extraLabel, extraValue: user.extraValue },
+            { id: "compact", name: "Quick Reply (No Logo)", hasLogo: false, hasDisclaimer: false, hasEco: false }
+          ])
+        });
+      }
+    }
 
-    let selectedKey = 'mark';
+    const dirKeys = Object.keys(DIRECTORY);
+    let selectedKey = dirKeys.length > 0 ? dirKeys[0] : 'dynamic';
     let selectedVariantId = 'standard';
 
     Office.onReady(function (info) {
       if (Office.context && Office.context.mailbox && Office.context.mailbox.userProfile) {
         const email = (Office.context.mailbox.userProfile.emailAddress || '').toLowerCase();
         const name = (Office.context.mailbox.userProfile.displayName || '').toLowerCase();
-        if (email.includes('amanda') || name.includes('amanda')) {
-          chooseProfile('amanda');
-        } else if (email.includes('ethan') || name.includes('ethan')) {
-          chooseProfile('ethan');
-        } else if (email.includes('mark') || name.includes('mark')) {
-          chooseProfile('mark');
+        let matchedKey = null;
+        for (const [key, emp] of Object.entries(DIRECTORY)) {
+          const empEmail = (emp.email || '').toLowerCase();
+          const empName = (emp.name || '').toLowerCase();
+          if ((email && empEmail && email === empEmail) || (key && email.includes(key)) || (name && empName && name.includes(key))) {
+            matchedKey = key;
+            break;
+          }
+        }
+        if (matchedKey) {
+          chooseProfile(matchedKey);
+        } else if (dirKeys.length > 0) {
+          chooseProfile(dirKeys[0]);
         } else {
           chooseProfile('dynamic');
         }
+      } else if (dirKeys.length > 0) {
+        chooseProfile(dirKeys[0]);
       } else {
-        chooseProfile('mark');
+        chooseProfile('dynamic');
       }
     });
 
@@ -343,7 +339,18 @@
           ]
         };
       } catch (e) {
-        return DIRECTORY.mark;
+        const firstKey = Object.keys(DIRECTORY)[0];
+        return firstKey ? DIRECTORY[firstKey] : {
+          name: "Convergent Method Team",
+          title: "Convergent Method, LLC",
+          email: "info@convergentmethod.com",
+          phone: "(281) 979-1336",
+          phoneLink: "+12819791336",
+          signatures: [
+            { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
+            { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true }
+          ]
+        };
       }
     }
 
@@ -392,12 +399,12 @@
       if (hasLogo) {
         topHtml = `
     <tr>
-      <td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">
+      <td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">
         <a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">
           <img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto;" />
         </a>
       </td>
-      <td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
+      <td valign="middle" width="387" style="width: 387px; min-width: 387px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
         <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
           ${safeName}
         </div>

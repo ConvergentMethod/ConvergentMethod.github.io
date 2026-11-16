@@ -86,12 +86,12 @@ function buildSignatureHtml(user) {
   if (hasLogo) {
     topSection = 
       '<tr>' +
-        '<td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">' +
+        '<td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">' +
           '<a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">' +
             '<img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto; border: 0; outline: none; text-decoration: none;" />' +
           '</a>' +
         '</td>' +
-        '<td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">' +
+        '<td valign="middle" width="387" style="width: 387px; min-width: 387px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">' +
           '<div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
             safeName +
           '</div>' +
@@ -198,7 +198,8 @@ function resolveCurrentUserInfo() {
       hasEco: true
     };
   } catch (e) {
-    return TEAM_DIRECTORY["markst@convergentmethod.com"] || Object.values(TEAM_DIRECTORY)[0];
+    var keys = Object.keys(TEAM_DIRECTORY);
+    return keys.length > 0 ? TEAM_DIRECTORY[keys[0]] : null;
   }
 }
 
@@ -207,6 +208,10 @@ function applySignature(event) {
     var item = Office.context.mailbox.item;
     if (item && item.body && typeof item.body.setSignatureAsync === "function") {
       var user = resolveCurrentUserInfo();
+      if (!user) {
+        event.completed({ allowEvent: true });
+        return;
+      }
       var signatureHtml = buildSignatureHtml(user);
       item.body.setSignatureAsync(
         signatureHtml,
@@ -227,6 +232,8 @@ function insertSignatureButtonHandler(event) {
   applySignature(event);
 }
 
-Office.actions.associate("insertSignatureButtonHandler", insertSignatureButtonHandler);
-Office.actions.associate("onNewMessageComposeHandler", onNewMessageComposeHandler);
-Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrganizerHandler);
+if (typeof Office !== "undefined" && Office.actions && typeof Office.actions.associate === "function") {
+  Office.actions.associate("insertSignatureButtonHandler", insertSignatureButtonHandler);
+  Office.actions.associate("onNewMessageComposeHandler", onNewMessageComposeHandler);
+  Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrganizerHandler);
+}
