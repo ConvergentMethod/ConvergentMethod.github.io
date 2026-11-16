@@ -136,5 +136,10 @@ function applySignature(event) {
   }
 }
 
+function insertSignatureButtonHandler(event) {
+  applySignature(event);
+}
+
+Office.actions.associate("insertSignatureButtonHandler", insertSignatureButtonHandler);
 Office.actions.associate("onNewMessageComposeHandler", onNewMessageComposeHandler);
 Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrganizerHandler);
