@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convergent Method - Outlook Signature Add-in & Studio</title>
+  <link rel="icon" type="image/png" href="assets/icon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0C2B49;
+      --accent: #6FA0DB;
+      --text: #222222;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(12, 43, 73, 0.15);
+    }
+    header img {
+      height: 48px;
+    }
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    header p {
+      color: #CBD5E1;
+      font-size: 14px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .badge {
+      background: #EBF3FC;
+      color: #2563EB;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    
+    /* Interactive Editor Styling */
+    .editor-section {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    .editor-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #CBD5E1;
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 7px 15px;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-btn:hover {
+      background: #F1F5F9;
+      border-color: var(--accent);
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+    .btn-add-employee {
+      padding: 7px 14px;
+      background: #ECFDF5;
+      color: #047857;
+      border: 1px dashed #059669;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .btn-add-employee:hover {
+      background: #D1FAE5;
+      border-color: #047857;
+    }
+    .tab-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.12);
+      color: inherit;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 3px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-close-btn:hover {
+      background: #EF4444;
+      color: #FFFFFF;
+    }
+    .placeholder-badge {
+      font-size: 10px;
+      background: #FEF3C7;
+      color: #92400E;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .input-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .input-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-group input, 
+    .input-group textarea, 
+    .input-group select {
+      padding: 8px 10px;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #FFFFFF;
+      color: #0F172A;
+    }
+    .input-group input:focus, 
+    .input-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(111, 160, 219, 0.2);
+    }
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .color-picker-row input[type="color"] {
+      padding: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Live Preview Box */
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+    .preview-header span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748B;
+    }
+    .signature-preview-box {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 24px;
+      overflow-x: auto;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+      min-height: 200px;
+    }
+    .hint-bubble {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1E40AF;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Raw HTML Editor */
+    #rawHtmlEditor {
+      width: 100%;
+      height: 240px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      background: #0F172A;
+      color: #E2E8F0;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      resize: vertical;
+      display: none;
+      line-height: 1.4;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #15416D;
+    }
+    .btn-secondary {
+      background: #E2E8F0;
+      color: #334155;
+    }
+    .btn-secondary:hover {
+      background: #CBD5E1;
+    }
+    .btn-accent {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+    .btn-accent:hover {
+      background: #5A8EC9;
+    }
+
+    .steps {
+      list-style-position: inside;
+      margin-top: 12px;
+    }
+    .steps li {
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+    code {
+      background: #F1F5F9;
+      color: #0F172A;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+    }
+    .url-bar {
+      display: flex;
+      gap: 10px;
+      background: #F1F5F9;
+      padding: 8px 12px;
+      border-radius: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .url-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      outline: none;
+      color: #0F172A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="../media/CMWhite.webp" alt="Convergent Method">
+      <div>
+        <h1>Microsoft 365 Outlook Signature Studio</h1>
+        <p>Live signature customizer, editor, and automated organization-wide add-in</p>
+      </div>
+    </header>
+
+    <!-- Editor & Live Preview Card -->
+    <div class="card">
+      <h2>
+        <span>Signature Customizer & Live Editor</span>
+        <span class="badge">Live Sync</span>
+      </h2>
+      <p>Edit any field below to update the signature live. You can test preset profiles, change logos, customize colors, or tweak the disclaimer text:</p>
+
+      <!-- Profile Selector Tabs -->
+      <div class="editor-section">
+        <div class="editor-tabs">
+          <div id="dynamicEmployeeTabs" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;"></div>
+          <button type="button" class="btn-add-employee" onclick="addNewEmployee()">+ Add Employee</button>
+          <div style="flex: 1;"></div>
+          <button type="button" class="tab-btn" id="btnToggleCode" onclick="toggleRawCodeView()">View / Edit Raw HTML</button>
+          <button type="button" class="tab-btn" onclick="resetDefaults()" style="color: #DC2626;">Reset Defaults</button>
+        </div>
+
+        <!-- Form Editor Mode -->
+        <div id="formControlsContainer">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="fName">Full Name & Credentials</label>
+              <input type="text" id="fName" placeholder="e.g. Jane Doe, P.E." value="Mark Stemmans, P.E." oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fTitle">Title / Position</label>
+              <input type="text" id="fTitle" placeholder="e.g. Senior Project Manager" value="Construction Program Manager" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fCompany">Company Name</label>
+              <input type="text" id="fCompany" placeholder="Convergent Method, LLC" value="Convergent Method, LLC" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fEmail">Email Address</label>
+              <input type="email" id="fEmail" placeholder="e.g. JaneD@convergentmethod.com" value="MarkSt@convergentmethod.com" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fPhone">Phone Number</label>
+              <input type="text" id="fPhone" placeholder="e.g. (281) 979-1336" value="(281) 979-1336" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fColor">Accent Color</label>
+              <div class="color-picker-row">
+                <input type="color" id="fColorPicker" value="#6FA0DB" oninput="document.getElementById('fColor').value = this.value; syncFromInputs();">
+                <input type="text" id="fColor" value="#6FA0DB" style="width: 90px;" oninput="document.getElementById('fColorPicker').value = this.value; syncFromInputs();">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="fLogo">Logo Image URL</label>
+              <input type="text" id="fLogo" value="../media/CMFullColor.png" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group">
+              <label for="fWebsite">Website URL</label>
+              <input type="text" id="fWebsite" value="https://convergentmethod.com" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group full-width">
+              <label for="fEcoNotice">Eco / Print Notice</label>
+              <input type="text" id="fEcoNotice" value="Please do not print this e-mail unless necessary" oninput="syncFromInputs()">
+            </div>
+            <div class="input-group full-width">
+              <label for="fDisclaimer">Legal Disclaimer Notice</label>
+              <textarea id="fDisclaimer" rows="3" oninput="syncFromInputs()">Notice: This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Raw HTML Editor Mode (Hidden by default) -->
+        <textarea id="rawHtmlEditor" oninput="syncFromRawCode()"></textarea>
+
+        <div class="hint-bubble">
+          <span>💡 <strong>Live Tip:</strong> You can also click directly onto the signature preview below to edit the text inline!</span>
+        </div>
+      </div>
+
+      <!-- Live Render Preview Box -->
+      <div class="preview-header">
+        <span>Rendered Preview:</span>
+        <span style="font-size: 12px; color: #10B981; font-weight: 600;">✓ Ready to insert</span>
+      </div>
+      <div class="signature-preview-box" id="previewContainer" contenteditable="true" oninput="syncFromWysiwyg()">
+        <!-- Generated live by JS -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="copySignatureHtml()">Copy Signature HTML</button>
+        <button class="btn btn-accent" onclick="saveDirectlyOrDownloadHtml()">Save / Download HTML File</button>
+        <button class="btn btn-secondary" onclick="saveDirectlyOrDownloadJs()">Save / Download launchevent.js</button>
+        <a href="manifest.xml" download class="btn btn-secondary">Download manifest.xml</a>
+      </div>
+    </div>
+
+    <!-- How to Update or Add Employees Guide -->
+    <div class="card" style="border-left: 4px solid #10B981;">
+      <h2>
+        <span>How to Update or Add Employees</span>
+        <span class="badge" style="background: #ECFDF5; color: #047857;">Team Directory</span>
+      </h2>
+      <p>The add-in uses a centralized team directory inside <code>launchevent.js</code>. Here is how you manage employees:</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px;">
+          <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 8px;">Method A: Using this Web Studio (Easiest)</h3>
+          <ol class="steps" style="font-size: 13px; line-height: 1.5;">
+            <li><strong>To update existing staff (e.g. Amanda):</strong> Click the <strong>Amanda Stemmans</strong> tab, update her phone/title/email, and the website auto-saves it.</li>
+            <li><strong>To add a new employee:</strong> Click the <strong>Custom Employee</strong> tab, enter the new hire's name, title, email, and direct phone line.</li>
+            <li>Click <strong>Save / Download launchevent.js</strong> and overwrite <code>outlook-addin/launchevent.js</code> in this folder.</li>
+            <li>Run <code>git push</code> so the updated directory goes live for all users!</li>
+          </ol>
+        </div>
+
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px;">
+          <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 8px;">Method B: Directly in <code>launchevent.js</code> (In Code)</h3>
+          <p style="font-size: 13px; color: #475569; margin-bottom: 8px;">Open <code>outlook-addin/launchevent.js</code> and add or edit entries in <code>TEAM_DIRECTORY</code>:</p>
+          <pre style="background: #0F172A; color: #E2E8F0; padding: 10px; border-radius: 6px; font-size: 11px; overflow-x: auto; line-height: 1.4;"><code>"newemployee@convergentmethod.com": {
+  name: "Jane Doe, P.E.",
+  title: "Senior Project Manager",
+  email: "JaneD@convergentmethod.com",
+  phone: "(281) 979-1336",
+  phoneLink: "+12819791336"
+}</code></pre>
+          <p style="font-size: 12px; color: #64748B; margin-top: 8px;"><em>Note: Any corporate employee not explicitly listed in the dictionary automatically gets an official branded signature pulling their name and email straight from their Microsoft 365 profile!</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- How Updates Push to Outlook Guide -->
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h2>
+        <span>How Updates Push to Outlook (No Re-Deploying Required)</span>
+        <span class="badge" style="background: #E0F2FE; color: #0369A1;">Workflow</span>
+      </h2>
+      <p>Because Outlook loads your add-in live from your secure GitHub Pages site (<code>https://convergentmethod.com/outlook-addin/</code>), <strong>you never need to re-upload the manifest or touch the Microsoft 365 Admin Center</strong> to update signatures.</p>
+
+      <ol class="steps" style="margin-top: 14px;">
+        <li>
+          <strong>Make your edits above:</strong> Change the sender details, disclaimer, or styling until the preview matches what you want.
+        </li>
+        <li>
+          <strong>Save the updated script:</strong> Click <strong>Save / Download launchevent.js</strong> above, and replace the <code>outlook-addin/launchevent.js</code> file in this folder.
+        </li>
+        <li>
+          <strong>Push to GitHub:</strong> Open your terminal and run:
+          <div class="url-bar" style="margin-top: 6px;">
+            <input type="text" readonly id="gitPushCmd" value="git add outlook-addin/launchevent.js signatures/ ; git commit -m &quot;Update Outlook email signature&quot; ; git push">
+            <button class="btn btn-secondary" style="padding: 6px 12px;" onclick="copyGitCmd()">Copy Command</button>
+          </div>
+        </li>
+        <li>
+          <strong>Automatic Org-wide Rollout:</strong>
+          <ul style="list-style-type: disc; margin: 8px 0 0 20px; font-size: 14px; color: #475569;">
+            <li><strong>Outlook on the Web:</strong> Pulls the updated signature immediately upon the next browser refresh.</li>
+            <li><strong>Desktop Outlook (Windows & Mac):</strong> Syncs the new script automatically during its regular background cache refresh.</li>
+            <li><strong>Outlook Mobile (iPhone & Android):</strong> Updates automatically without requiring any user action.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Initial Organization Deployment Guide -->
+    <div class="card">
+      <h2>Initial Setup: Deploy Across Microsoft 365 Organization</h2>
+      <p>If you haven't deployed the add-in to your tenant yet, follow these one-time steps in the Microsoft 365 Admin Center:</p>
+      
+      <ol class="steps">
+        <li>Sign in to the <a href="https://admin.microsoft.com" target="_blank"><strong>Microsoft 365 admin center</strong></a> as a Global or Exchange Administrator.</li>
+        <li>In the left navigation menu, expand <strong>Settings</strong> &rarr; click on <strong>Integrated apps</strong>.</li>
+        <li>Click <strong>Upload custom apps</strong> at the top of the page.</li>
+        <li>Under <strong>App type</strong>, choose <strong>Office Add-in</strong>.</li>
+        <li>Select <strong>Provide link to manifest file</strong> and paste your hosted manifest URL:
+          <div class="url-bar">
+            <input type="text" readonly id="manifestUrl" value="https://convergentmethod.com/outlook-addin/manifest.xml">
+            <button class="btn btn-secondary" style="padding: 6px 12px;" onclick="copyManifestUrl()">Copy URL</button>
+          </div>
+          <span style="font-size: 12px; color: #64748B; margin-top: 4px; display: inline-block;">(Or select <em>Upload manifest file (.xml) from device</em> and upload <code>manifest.xml</code>).</span>
+        </li>
+        <li>Click <strong>Next</strong>. On the <strong>Assign users</strong> page, choose <strong>Entire organization</strong>.</li>
+        <li>Review permissions (<code>ReadWriteItem</code>) and click <strong>Finish deployment</strong>.</li>
+      </ol>
+      <p style="margin-top: 14px; font-size: 14px; color: #64748B;"><em>Deployment completes organization-wide in the background. Users do not need to download or configure anything.</em></p>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_PROFILES = {
+      mark: {
+        name: "Mark Stemmans, P.E.",
+        title: "Construction Program Manager",
+        company: "Convergent Method, LLC",
+        email: "MarkSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        color: "#6FA0DB",
+        logo: "../media/CMFullColor.png",
+        website: "https://convergentmethod.com",
+        eco: "Please do not print this e-mail unless necessary",
+        disclaimer: "Notice: This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer."
+      },
+      amanda: {
+        name: "Amanda Stemmans, MS, APRN, FNP-C",
+        title: "Chief Operations Officer",
+        company: "Convergent Method, LLC",
+        email: "AmandaSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        color: "#6FA0DB",
+        logo: "../media/CMFullColor.png",
+        website: "https://convergentmethod.com",
+        eco: "Please do not print this e-mail unless necessary",
+        disclaimer: "Notice: This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer."
+      },
+      custom: {
+        name: "[EMPLOYEE FULL NAME & CREDENTIALS]",
+        title: "[JOB TITLE / POSITION]",
+        company: "Convergent Method, LLC",
+        email: "firstname.lastname@convergentmethod.com",
+        phone: "(281) XXX-XXXX",
+        color: "#6FA0DB",
+        logo: "../media/CMFullColor.png",
+        website: "https://convergentmethod.com",
+        eco: "Please do not print this e-mail unless necessary",
+        disclaimer: "Notice: This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer."
+      }
+    };
+
+    let PROFILES = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+    let currentProfileKey = 'mark';
+    let isRawMode = false;
+
+    // Load saved profiles from localStorage if available
+    const savedProfiles = localStorage.getItem('cm_signature_profiles');
+    if (savedProfiles) {
+      try {
+        PROFILES = JSON.parse(savedProfiles);
+      } catch (e) {}
+    }
+
+    function saveProfilesToStorage() {
+      try {
+        localStorage.setItem('cm_signature_profiles', JSON.stringify(PROFILES));
+      } catch (e) {}
+    }
+
+    function renderProfileTabs() {
+      const container = document.getElementById('dynamicEmployeeTabs');
+      if (!container) return;
+      container.innerHTML = '';
+
+      for (const [key, p] of Object.entries(PROFILES)) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tab-btn' + (key === currentProfileKey ? ' active' : '');
+        btn.id = 'tab_' + key;
+
+        const isPlaceholder = p.name.includes('[') || key === 'custom';
+        const labelText = isPlaceholder ? (p.name.length > 24 ? '[NEW EMPLOYEE]' : p.name) : p.name;
+
+        btn.innerHTML = `<span class="tab-label">${escapeHtml(labelText)}</span>` + 
+          (isPlaceholder ? ` <span class="placeholder-badge">Template</span>` : '');
+
+        // Allow deletion for added employees (keep Mark and Amanda protected)
+        if (key !== 'mark' && key !== 'amanda') {
+          const delSpan = document.createElement('span');
+          delSpan.className = 'tab-close-btn';
+          delSpan.title = 'Remove this employee';
+          delSpan.innerHTML = '&times;';
+          delSpan.onclick = function(e) {
+            deleteEmployee(key, e);
+          };
+          btn.appendChild(delSpan);
+        }
+
+        btn.onclick = function(e) {
+          if (e.target.classList.contains('tab-close-btn')) return;
+          loadProfile(key);
+        };
+
+        container.appendChild(btn);
+      }
+    }
+
+    function loadProfile(key) {
+      currentProfileKey = key;
+      renderProfileTabs();
+
+      const data = PROFILES[key] || PROFILES.mark;
+      document.getElementById('fName').value = data.name;
+      document.getElementById('fTitle').value = data.title;
+      document.getElementById('fCompany').value = data.company;
+      document.getElementById('fEmail').value = data.email;
+      document.getElementById('fPhone').value = data.phone;
+      document.getElementById('fColor').value = data.color;
+      document.getElementById('fColorPicker').value = data.color;
+      document.getElementById('fLogo').value = data.logo;
+      document.getElementById('fWebsite').value = data.website;
+      document.getElementById('fEcoNotice').value = data.eco;
+      document.getElementById('fDisclaimer').value = data.disclaimer;
+
+      syncFromInputs(false);
+    }
+
+    function addNewEmployee() {
+      const key = 'emp_' + Date.now();
+      PROFILES[key] = {
+        name: "[EMPLOYEE FULL NAME & CREDENTIALS]",
+        title: "[JOB TITLE / POSITION]",
+        company: "Convergent Method, LLC",
+        email: "firstname.lastname@convergentmethod.com",
+        phone: "(281) XXX-XXXX",
+        color: "#6FA0DB",
+        logo: "../media/CMFullColor.png",
+        website: "https://convergentmethod.com",
+        eco: "Please do not print this e-mail unless necessary",
+        disclaimer: "Notice: This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer."
+      };
+
+      saveProfilesToStorage();
+      loadProfile(key);
+      const nameInput = document.getElementById('fName');
+      nameInput.focus();
+      nameInput.select();
+    }
+
+    function deleteEmployee(key, event) {
+      if (event) event.stopPropagation();
+      const p = PROFILES[key];
+      const displayName = p ? p.name : 'this employee';
+      if (!confirm(`Are you sure you want to remove ${displayName}?`)) return;
+
+      delete PROFILES[key];
+      saveProfilesToStorage();
+
+      if (currentProfileKey === key) {
+        currentProfileKey = 'mark';
+      }
+      loadProfile(currentProfileKey);
+    }
+
+    function cleanPhone(phone) {
+      const digits = phone.replace(/\D/g, '');
+      return digits.length === 10 ? '+1' + digits : '+' + digits;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function generateSignatureHtml(p) {
+      const phoneClean = cleanPhone(p.phone);
+      const logoUrl = p.logo.startsWith('../') ? 'https://convergentmethod.com/' + p.logo.replace('../', '') : p.logo;
+
+      return `<!-- Microsoft 365 Auto Signature - Convergent Method, LLC -->
+<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">
+  <table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+    <tr>
+      <!-- Logo Section -->
+      <td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid ${p.color}; vertical-align: middle;">
+        <a href="${p.website}" target="_blank" style="text-decoration: none;">
+          <img src="${logoUrl}" alt="${escapeHtml(p.company)}" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto; border: 0; outline: none; text-decoration: none;" />
+        </a>
+      </td>
+
+      <!-- Contact Info Section -->
+      <td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
+        <!-- Name: Century Gothic Bold -->
+        <div id="sigName" style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: ${p.color}; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
+          ${escapeHtml(p.name)}
+        </div>
+
+        <!-- Role: Century Gothic Semi-Bold -->
+        <div id="sigTitle" style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">
+          ${escapeHtml(p.title)}
+        </div>
+
+        <!-- Company: Aptos Regular -->
+        <div id="sigCompany" style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">
+          ${escapeHtml(p.company)}
+        </div>
+
+        <!-- Contact Links: Aptos -->
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(p.email)}" style="color: ${p.color}; text-decoration: none; font-weight: 500;"><span style="color: ${p.color}; text-decoration: none; font-weight: 500;">${escapeHtml(p.email)}</span></a>
+        </div>
+
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${phoneClean}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${escapeHtml(p.phone)}</span></a>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Spacer row -->
+    <tr>
+      <td colspan="2" height="16" style="height: 16px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
+    </tr>
+
+    <!-- Disclaimer Section -->
+    <tr>
+      <td colspan="2" style="padding: 0; margin: 0; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+        <div style="font-size: 10px; line-height: 14px; color: ${p.color}; font-style: italic; padding-bottom: 6px;">
+          ${escapeHtml(p.eco)}
+        </div>
+        <div style="font-size: 10px; line-height: 14px; color: #888888;">
+          <strong style="color: #666666;">Notice:</strong> ${escapeHtml(p.disclaimer.replace(/^Notice:\s*/i, ''))}
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>`;
+    }
+
+    function syncFromInputs(updateTab = true) {
+      const p = {
+        name: document.getElementById('fName').value,
+        title: document.getElementById('fTitle').value,
+        company: document.getElementById('fCompany').value,
+        email: document.getElementById('fEmail').value,
+        phone: document.getElementById('fPhone').value,
+        color: document.getElementById('fColor').value,
+        logo: document.getElementById('fLogo').value,
+        website: document.getElementById('fWebsite').value,
+        eco: document.getElementById('fEcoNotice').value,
+        disclaimer: document.getElementById('fDisclaimer').value
+      };
+
+      // Persist to the currently selected profile
+      PROFILES[currentProfileKey] = p;
+      saveProfilesToStorage();
+
+      // Dynamically update the header tab button label as the user types their name!
+      if (updateTab) {
+        const activeTab = document.getElementById('tab_' + currentProfileKey);
+        if (activeTab) {
+          const isPlaceholder = p.name.includes('[') || currentProfileKey === 'custom';
+          const labelSpan = activeTab.querySelector('.tab-label');
+          if (labelSpan) {
+            labelSpan.textContent = isPlaceholder ? (p.name.length > 24 ? '[NEW EMPLOYEE]' : p.name) : p.name;
+          }
+          const badge = activeTab.querySelector('.placeholder-badge');
+          if (isPlaceholder && !badge) {
+            const newBadge = document.createElement('span');
+            newBadge.className = 'placeholder-badge';
+            newBadge.textContent = 'Template';
+            const closeBtn = activeTab.querySelector('.tab-close-btn');
+            if (closeBtn) {
+              activeTab.insertBefore(newBadge, closeBtn);
+            } else {
+              activeTab.appendChild(newBadge);
+            }
+          } else if (!isPlaceholder && badge) {
+            badge.remove();
+          }
+        }
+      }
+
+      const html = generateSignatureHtml(p);
+      document.getElementById('previewContainer').innerHTML = html;
+      document.getElementById('rawHtmlEditor').value = html;
+    }
+
+    function syncFromRawCode() {
+      const rawHtml = document.getElementById('rawHtmlEditor').value;
+      document.getElementById('previewContainer').innerHTML = rawHtml;
+    }
+
+    function syncFromWysiwyg() {
+      const currentHtml = document.getElementById('previewContainer').innerHTML;
+      document.getElementById('rawHtmlEditor').value = currentHtml;
+    }
+
+    function toggleRawCodeView() {
+      isRawMode = !isRawMode;
+      const formBox = document.getElementById('formControlsContainer');
+      const rawBox = document.getElementById('rawHtmlEditor');
+      const btn = document.getElementById('btnToggleCode');
+
+      if (isRawMode) {
+        formBox.style.display = 'none';
+        rawBox.style.display = 'block';
+        btn.textContent = 'Switch to Form Editor';
+      } else {
+        formBox.style.display = 'block';
+        rawBox.style.display = 'none';
+        btn.textContent = 'View / Edit Raw HTML';
+      }
+    }
+
+    function resetDefaults() {
+      if (!confirm('Reset all employee profiles and custom settings back to original defaults?')) return;
+      localStorage.removeItem('cm_signature_profiles');
+      PROFILES = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+      currentProfileKey = 'mark';
+      loadProfile('mark');
+    }
+
+    function copySignatureHtml() {
+      const html = document.getElementById('previewContainer').innerHTML.trim();
+      navigator.clipboard.writeText(html);
+      alert('Signature HTML copied to clipboard!');
+    }
+
+    function downloadSignatureHtml() {
+      const html = document.getElementById('previewContainer').innerHTML.trim();
+      const blob = new Blob([html], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Mark Email Signature.html';
+      a.click();
+    }
+
+    async function saveDirectlyOrDownloadHtml() {
+      const html = document.getElementById('previewContainer').innerHTML.trim();
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: 'Mark Email Signature.html',
+            types: [{ description: 'HTML File', accept: { 'text/html': ['.html'] } }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(html);
+          await writable.close();
+          alert('Saved successfully!');
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return;
+        }
+      }
+      downloadSignatureHtml();
+    }
+
+    async function saveDirectlyOrDownloadJs() {
+      // Build full team directory from all saved profiles (Mark, Amanda, Custom)
+      const directoryEntries = [];
+      for (const [key, p] of Object.entries(PROFILES)) {
+        if (!p.email || p.email.includes('firstname.lastname') || p.email.includes('[')) continue;
+        const phoneClean = cleanPhone(p.phone);
+        directoryEntries.push(`  "${p.email.trim().toLowerCase()}": {
+    name: "${p.name.replace(/"/g, '\\"')}",
+    title: "${p.title.replace(/"/g, '\\"')}",
+    email: "${p.email.trim()}",
+    phone: "${p.phone.trim()}",
+    phoneLink: "${phoneClean}"
+  }`);
+      }
+
+      const jsCode = `/**
+ * Convergent Method - Microsoft 365 Outlook Add-in
+ * Automatically applies the official corporate HTML signature and disclaimer.
+ */
+
+/* global Office */
+
+// Configuration & Team Directory
+var TEAM_DIRECTORY = {
+${directoryEntries.join(',\n')}
+};
+
+// If true, forces Mark Stemmans' signature across all accounts regardless of logged-in user
+var FORCE_MARK_SIGNATURE = false;
+
+Office.onReady(function () {});
+
+function onNewMessageComposeHandler(event) {
+  applySignature(event);
+}
+
+function onNewAppointmentOrganizerHandler(event) {
+  applySignature(event);
+}
+
+function buildSignatureHtml(user) {
+  return (
+    '<!-- Microsoft 365 Auto Signature - Convergent Method, LLC -->' +
+    '<div style="font-family: \\'Aptos\\', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">' +
+      '<table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: \\'Aptos\\', Calibri, Arial, sans-serif;">' +
+        '<tr>' +
+          '<td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">' +
+            '<a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">' +
+              '<img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto; border: 0; outline: none; text-decoration: none;" />' +
+            '</a>' +
+          '</td>' +
+          '<td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">' +
+            '<div style="font-family: \\'Century Gothic\\', CenturyGothic, \\'Apple Gothic\\', \\'Avenir Next\\', Avenir, \\'Segoe UI\\', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
+              escapeHtml(user.name) +
+            '</div>' +
+            '<div style="font-family: \\'Century Gothic\\', CenturyGothic, \\'Apple Gothic\\', \\'Avenir Next\\', Avenir, \\'Segoe UI\\', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">' +
+              escapeHtml(user.title) +
+            '</div>' +
+            '<div style="font-family: \\'Aptos\\', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">' +
+              'Convergent Method, LLC' +
+            '</div>' +
+            '<div style="font-family: \\'Aptos\\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
+              '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
+              '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' +
+                '<span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' + escapeHtml(user.email) + '</span>' +
+              '</a>' +
+            '</div>' +
+            '<div style="font-family: \\'Aptos\\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
+              '<span style="font-weight: 600; color: #333333;">P:&nbsp;</span>' +
+              '<a href="tel:' + user.phoneLink + '" style="color: #444444; text-decoration: none;">' +
+                '<span style="color: #444444; text-decoration: none;">' + escapeHtml(user.phone) + '</span>' +
+              '</a>' +
+            '</div>' +
+          '</td>' +
+        '</tr>' +
+        '<tr><td colspan="2" height="16" style="height: 16px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td></tr>' +
+        '<tr>' +
+          '<td colspan="2" style="padding: 0; margin: 0; font-family: \\'Aptos\\', Calibri, Arial, sans-serif;">' +
+            '<div style="font-size: 10px; line-height: 14px; color: #6FA0DB; font-style: italic; padding-bottom: 6px;">' +
+              'Please do not print this e-mail unless necessary' +
+            '</div>' +
+            '<div style="font-size: 10px; line-height: 14px; color: #888888;">' +
+              '<strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.' +
+            '</div>' +
+          '</td>' +
+        '</tr>' +
+      '</table>' +
+    '</div>'
+  );
+}
+
+function resolveCurrentUserInfo() {
+  if (FORCE_MARK_SIGNATURE) {
+    return TEAM_DIRECTORY["markst@convergentmethod.com"] || Object.values(TEAM_DIRECTORY)[0];
+  }
+  try {
+    var profile = Office.context.mailbox.userProfile;
+    var email = (profile && profile.emailAddress) ? profile.emailAddress.trim().toLowerCase() : "";
+    var displayName = (profile && profile.displayName) ? profile.displayName.trim() : "";
+
+    if (email && TEAM_DIRECTORY[email]) return TEAM_DIRECTORY[email];
+    if (email.indexOf("mark") !== -1 || displayName.toLowerCase().indexOf("mark") !== -1) {
+      return TEAM_DIRECTORY["markst@convergentmethod.com"];
+    }
+    if (email.indexOf("amanda") !== -1 || displayName.toLowerCase().indexOf("amanda") !== -1) {
+      return TEAM_DIRECTORY["amandast@convergentmethod.com"];
+    }
+    return {
+      name: displayName || "Convergent Method Team",
+      title: "Convergent Method, LLC",
+      email: email || "info@convergentmethod.com",
+      phone: "(281) 979-1336",
+      phoneLink: "+12819791336"
+    };
+  } catch (e) {
+    return TEAM_DIRECTORY["markst@convergentmethod.com"] || Object.values(TEAM_DIRECTORY)[0];
+  }
+}
+
+function applySignature(event) {
+  try {
+    var item = Office.context.mailbox.item;
+    if (item && item.body && typeof item.body.setSignatureAsync === "function") {
+      var user = resolveCurrentUserInfo();
+      var signatureHtml = buildSignatureHtml(user);
+      item.body.setSignatureAsync(
+        signatureHtml,
+        { coercionType: Office.CoercionType.Html },
+        function (asyncResult) {
+          event.completed({ allowEvent: true });
+        }
+      );
+    } else {
+      event.completed({ allowEvent: true });
+    }
+  } catch (err) {
+    event.completed({ allowEvent: true });
+  }
+}
+
+Office.actions.associate("onNewMessageComposeHandler", onNewMessageComposeHandler);
+Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrganizerHandler);
+`;
+
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: 'launchevent.js',
+            types: [{ description: 'JavaScript File', accept: { 'application/javascript': ['.js'] } }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(jsCode);
+          await writable.close();
+          alert('launchevent.js saved successfully! Now push to GitHub.');
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return;
+        }
+      }
+      
+      const blob = new Blob([jsCode], { type: 'application/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'launchevent.js';
+      a.click();
+    }
+
+    function copyGitCmd() {
+      const input = document.getElementById('gitPushCmd');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert('Git command copied to clipboard!');
+    }
+
+    function copyManifestUrl() {
+      const input = document.getElementById('manifestUrl');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert('Manifest URL copied to clipboard: ' + input.value);
+    }
+
+    // Initialize with Mark's profile
+    loadProfile('mark');
+  </script>
+</body>
+</html>
