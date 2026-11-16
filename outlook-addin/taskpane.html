@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convergent Method Signature</title>
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0C2B49;
+      --accent: #6FA0DB;
+      --text: #222222;
+      --bg: #F8FAFC;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.4;
+    }
+    .header {
+      background: var(--primary);
+      color: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .header img {
+      height: 32px;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .header p {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .profile-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      padding: 6px 12px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      background: #E2E8F0;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+    .btn-insert {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-insert:hover {
+      background: #15416D;
+    }
+    .status-msg {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+    .status-success {
+      color: #059669;
+    }
+    .status-error {
+      color: #DC2626;
+    }
+    .preview-box {
+      background: #FFFFFF;
+      border: 1px dashed #CBD5E1;
+      border-radius: 6px;
+      padding: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="../media/CMWhite.webp" alt="Convergent Method">
+    <div>
+      <h1>Convergent Method</h1>
+      <p>Official Corporate Email Signature</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Select Sender Profile:</div>
+    <div class="profile-tabs" id="profileTabs">
+      <button type="button" class="tab-btn active" id="btnMark" onclick="chooseProfile('mark')">Mark Stemmans, P.E.</button>
+      <button type="button" class="tab-btn" id="btnAmanda" onclick="chooseProfile('amanda')">Amanda Stemmans</button>
+      <button type="button" class="tab-btn" id="btnDynamic" onclick="chooseProfile('dynamic')">Current Account</button>
+    </div>
+
+    <button type="button" class="btn-insert" id="btnInsert" onclick="insertSignatureNow()">
+      <span>Insert Signature Into Email</span>
+    </button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Signature Preview:</div>
+    <div class="preview-box" id="previewContainer"></div>
+  </div>
+
+  <script>
+    const DIRECTORY = {
+      mark: {
+        name: "Mark Stemmans, P.E.",
+        title: "Construction Program Manager",
+        email: "MarkSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        phoneLink: "+12819791336"
+      },
+      amanda: {
+        name: "Amanda Stemmans, MS, APRN, FNP-C",
+        title: "Chief Operations Officer",
+        email: "AmandaSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        phoneLink: "+12819791336"
+      }
+    };
+
+    let selectedKey = 'mark';
+
+    Office.onReady(function (info) {
+      // Auto-detect current account
+      if (Office.context && Office.context.mailbox && Office.context.mailbox.userProfile) {
+        const email = (Office.context.mailbox.userProfile.emailAddress || '').toLowerCase();
+        const name = (Office.context.mailbox.userProfile.displayName || '').toLowerCase();
+        if (email.includes('amanda') || name.includes('amanda')) {
+          chooseProfile('amanda');
+        } else if (email.includes('mark') || name.includes('mark')) {
+          chooseProfile('mark');
+        } else {
+          chooseProfile('dynamic');
+        }
+      } else {
+        chooseProfile('mark');
+      }
+    });
+
+    function chooseProfile(key) {
+      selectedKey = key;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(key === 'mark' ? 'btnMark' : (key === 'amanda' ? 'btnAmanda' : 'btnDynamic'));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      updatePreview();
+    }
+
+    function getSelectedUserData() {
+      if (selectedKey === 'mark') return DIRECTORY.mark;
+      if (selectedKey === 'amanda') return DIRECTORY.amanda;
+
+      // Dynamic account from Office
+      try {
+        const p = Office.context.mailbox.userProfile;
+        return {
+          name: p.displayName || "Convergent Method Team",
+          title: "Convergent Method, LLC",
+          email: p.emailAddress || "info@convergentmethod.com",
+          phone: "(281) 979-1336",
+          phoneLink: "+12819791336"
+        };
+      } catch (e) {
+        return DIRECTORY.mark;
+      }
+    }
+
+    function buildHtml(u) {
+      return `
+<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">
+  <table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+    <tr>
+      <td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">
+        <a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">
+          <img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto;" />
+        </a>
+      </td>
+      <td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
+          ${escapeHtml(u.name)}
+        </div>
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">
+          ${escapeHtml(u.title)}
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">
+          Convergent Method, LLC
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">${escapeHtml(u.email)}</span></a>
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${u.phoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${escapeHtml(u.phone)}</span></a>
+        </div>
+      </td>
+    </tr>
+    <tr><td colspan="2" height="16" style="height: 16px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td></tr>
+    <tr>
+      <td colspan="2" style="padding: 0; margin: 0; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+        <div style="font-size: 10px; line-height: 14px; color: #6FA0DB; font-style: italic; padding-bottom: 6px;">
+          Please do not print this e-mail unless necessary
+        </div>
+        <div style="font-size: 10px; line-height: 14px; color: #888888;">
+          <strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>`;
+    }
+
+    function escapeHtml(t) {
+      if (!t) return "";
+      return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function updatePreview() {
+      const u = getSelectedUserData();
+      document.getElementById('previewContainer').innerHTML = buildHtml(u);
+    }
+
+    function insertSignatureNow() {
+      const msg = document.getElementById('statusMsg');
+      msg.style.display = 'none';
+
+      try {
+        if (!Office.context || !Office.context.mailbox || !Office.context.mailbox.item) {
+          msg.textContent = 'Please open an email draft first.';
+          msg.className = 'status-msg status-error';
+          msg.style.display = 'block';
+          return;
+        }
+
+        const item = Office.context.mailbox.item;
+        const u = getSelectedUserData();
+        const html = buildHtml(u);
+
+        if (item.body && typeof item.body.setSignatureAsync === 'function') {
+          item.body.setSignatureAsync(html, { coercionType: Office.CoercionType.Html }, function (res) {
+            if (res.status === Office.AsyncResultStatus.Succeeded) {
+              msg.textContent = '✓ Signature inserted successfully!';
+              msg.className = 'status-msg status-success';
+            } else {
+              // Fallback to setSelectedDataAsync
+              fallbackInsert(item, html, msg);
+            }
+            msg.style.display = 'block';
+          });
+        } else {
+          fallbackInsert(item, html, msg);
+        }
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+        msg.className = 'status-msg status-error';
+        msg.style.display = 'block';
+      }
+    }
+
+    function fallbackInsert(item, html, msg) {
+      if (item.body && item.body.setSelectedDataAsync) {
+        item.body.setSelectedDataAsync(html, { coercionType: Office.CoercionType.Html }, function (res) {
+          if (res.status === Office.AsyncResultStatus.Succeeded) {
+            msg.textContent = '✓ Signature inserted successfully!';
+            msg.className = 'status-msg status-success';
+          } else {
+            msg.textContent = 'Could not insert signature: ' + (res.error ? res.error.message : 'Unknown error');
+            msg.className = 'status-msg status-error';
+          }
+          msg.style.display = 'block';
+        });
+      } else {
+        msg.textContent = 'Signature insertion not supported on this view.';
+        msg.className = 'status-msg status-error';
+        msg.style.display = 'block';
+      }
+    }
+
+    updatePreview();
+  </script>
+</body>
+</html>

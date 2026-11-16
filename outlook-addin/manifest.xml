@@ -6,7 +6,7 @@
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides"
   xsi:type="MailApp">
   <Id>e3a891d4-8df2-4217-a068-07b9a5e12f6b</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.0.1</Version>
   <ProviderName>Convergent Method, LLC</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Convergent Method Auto Signature" />
@@ -28,8 +28,8 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://convergentmethod.com/outlook-addin/launchevent.html" />
-        <RequestedHeight>250</RequestedHeight>
+        <SourceLocation DefaultValue="https://convergentmethod.com/outlook-addin/taskpane.html" />
+        <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
     </Form>
   </FormSettings>
@@ -39,7 +39,86 @@
   </Rule>
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 
+  <!-- VersionOverrides 1.0 (Supported by all Outlook Desktop 2016+, Mac, Web) -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Description resid="AddinDesc" />
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.3">
+        <bt:Set Name="Mailbox" />
+      </bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="sigGroup0">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="btnInsertSig">
+                  <Label resid="ButtonLabel"/>
+                  <Supertip>
+                    <Title resid="ButtonLabel"/>
+                    <Description resid="AddinDesc"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+          <ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="sigGroup1">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="btnInsertSigAppt">
+                  <Label resid="ButtonLabel"/>
+                  <Supertip>
+                    <Title resid="ButtonLabel"/>
+                    <Description resid="AddinDesc"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-16.png" />
+        <bt:Image id="Icon.32x32" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-32.png" />
+        <bt:Image id="Icon.64x64" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-64.png" />
+        <bt:Image id="Icon.80x80" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-80.png" />
+        <bt:Image id="Icon.128x128" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-128.png" />
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://convergentmethod.com/outlook-addin/taskpane.html" />
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GroupLabel" DefaultValue="Convergent Method" />
+        <bt:String id="AddinTitle" DefaultValue="Convergent Method Signature" />
+        <bt:String id="ButtonLabel" DefaultValue="Insert Signature" />
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="AddinDesc" DefaultValue="Automatically inserts the official Convergent Method email signature and compliance disclaimer." />
+      </bt:LongStrings>
+    </Resources>
+
+    <!-- Nested VersionOverrides 1.1 (Supports Event-Based LaunchEvent & Mobile) -->
     <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
       <Description resid="AddinDesc" />
       <Requirements>
@@ -50,19 +129,18 @@
       <Hosts>
         <Host xsi:type="MailHost">
           <Runtimes>
-            <!-- HTML runtime used by Outlook on the web, Mac, and new Outlook for Windows -->
+            <!-- HTML runtime used by Outlook on Web, Mac, and New Outlook -->
             <Runtime resid="WebViewRuntime.Url">
-              <!-- Pure JavaScript override used by Classic Outlook on Windows -->
+              <!-- JavaScript runtime override for Classic Outlook on Windows -->
               <Override type="javascript" resid="JSRuntime.Url" />
             </Runtime>
           </Runtimes>
           <DesktopFormFactor>
-            <FunctionFile resid="WebViewRuntime.Url" />
             <ExtensionPoint xsi:type="MessageComposeCommandSurface">
               <OfficeTab id="TabDefault">
-                <Group id="sigGroup0">
+                <Group id="sigGroup0_v11">
                   <Label resid="GroupLabel"/>
-                  <Control xsi:type="Button" id="btnInsertSig">
+                  <Control xsi:type="Button" id="btnInsertSig_v11">
                     <Label resid="ButtonLabel"/>
                     <Supertip>
                       <Title resid="ButtonLabel"/>
@@ -73,8 +151,30 @@
                       <bt:Image size="32" resid="Icon.32x32"/>
                       <bt:Image size="80" resid="Icon.80x80"/>
                     </Icon>
-                    <Action xsi:type="ExecuteFunction">
-                      <FunctionName>insertSignatureButtonHandler</FunctionName>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+            <ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="sigGroup1_v11">
+                  <Label resid="GroupLabel"/>
+                  <Control xsi:type="Button" id="btnInsertSigAppt_v11">
+                    <Label resid="ButtonLabel"/>
+                    <Supertip>
+                      <Title resid="ButtonLabel"/>
+                      <Description resid="AddinDesc"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
                     </Action>
                   </Control>
                 </Group>
@@ -107,6 +207,7 @@
           <bt:Image id="Icon.128x128" DefaultValue="https://convergentmethod.com/outlook-addin/assets/icon-128.png" />
         </bt:Images>
         <bt:Urls>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://convergentmethod.com/outlook-addin/taskpane.html" />
           <bt:Url id="WebViewRuntime.Url" DefaultValue="https://convergentmethod.com/outlook-addin/launchevent.html" />
           <bt:Url id="JSRuntime.Url" DefaultValue="https://convergentmethod.com/outlook-addin/launchevent.js" />
         </bt:Urls>
@@ -116,7 +217,7 @@
           <bt:String id="ButtonLabel" DefaultValue="Insert Signature" />
         </bt:ShortStrings>
         <bt:LongStrings>
-          <bt:String id="AddinDesc" DefaultValue="Automatically adds the official company signature and legal disclaimer when composing new emails." />
+          <bt:String id="AddinDesc" DefaultValue="Automatically inserts the official Convergent Method email signature and compliance disclaimer." />
         </bt:LongStrings>
       </Resources>
     </VersionOverrides>
