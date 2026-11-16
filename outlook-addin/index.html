@@ -640,9 +640,10 @@
       <!-- Action Buttons -->
       <div class="btn-group">
         <button class="btn btn-primary" onclick="copySignatureHtml()">📋 Copy Signature HTML</button>
-        <button class="btn btn-sync" onclick="autoOverwriteLauncheventJs()">⚡ Overwrite launchevent.js</button>
-        <button class="btn btn-secondary" onclick="downloadHtmlFile()">💾 Download .html File</button>
+        <button class="btn btn-sync" onclick="autoOverwriteAllFiles()">⚡ Overwrite Add-in Files (JS &amp; Taskpane)</button>
+        <button class="btn btn-secondary" onclick="downloadHtmlFile()">💾 Download .html Signature</button>
         <button class="btn btn-secondary" onclick="downloadJsFile()">💾 Download launchevent.js</button>
+        <button class="btn btn-secondary" onclick="downloadTaskpaneFile()">💾 Download taskpane.html</button>
       </div>
     </div>
   </div>
@@ -1641,18 +1642,609 @@ Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrg
       downloadJsFile();
     }
 
+    function buildUpdatedTaskpaneHtml() {
+      const dirEntries = [];
+      FOLDERS.forEach((emp, idx) => {
+        if (!emp.email || emp.email.includes('[') || emp.email.includes('firstname')) return;
+        const key = (emp.email.split('@')[0] || ('emp_' + idx)).toLowerCase().replace(/[^a-z0-9]/g, '');
+        const sigArray = (emp.signatures || []).map(s => {
+          return `          Object.freeze({
+            id: "${s.id || 'sig_' + Math.random().toString(36).substr(2, 5)}",
+            name: "${(s.name || 'Signature').replace(/"/g, '\\"')}",
+            isDefault: ${s.isDefault === true},
+            hasLogo: ${s.hasLogo !== false},
+            hasDisclaimer: ${s.hasDisclaimer !== false},
+            hasEco: ${s.hasEco !== false},
+            hasExtraDetail: ${s.hasExtraDetail === true},
+            extraLabel: "${(s.extraLabel || 'Dealer #:').replace(/"/g, '\\"')}",
+            extraValue: "${(s.extraValue || '').replace(/"/g, '\\"')}"
+          })`;
+        });
+        dirEntries.push(`      "${key}": Object.freeze({
+        name: "${(emp.name || '').replace(/"/g, '\\"')}",
+        title: "${(emp.title || '').replace(/"/g, '\\"')}",
+        email: "${(emp.email || '').replace(/"/g, '\\"')}",
+        phone: "${(emp.phone || '').replace(/"/g, '\\"')}",
+        phoneLink: "${sanitizePhoneLink(emp.phone || '')}",
+        signatures: Object.freeze([
+${sigArray.join(',\n')}
+        ])
+      })`);
+      });
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://appsforoffice.microsoft.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://convergentmethod.com data:; connect-src 'none';">
+  <title>Convergent Method Signature</title>
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0C2B49;
+      --accent: #6FA0DB;
+      --text: #222222;
+      --bg: #F8FAFC;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.4;
+    }
+    .header {
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .header img {
+      height: 28px;
+    }
+    .header h1 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .header p {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .profile-tabs, .variant-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      padding: 6px 10px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      background: #E2E8F0;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+    .variant-btn {
+      padding: 5px 9px;
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .variant-btn:hover {
+      background: #F1F5F9;
+      border-color: var(--accent);
+    }
+    .variant-btn.active {
+      background: #EBF3FC;
+      color: #1E40AF;
+      border-color: #6FA0DB;
+      font-weight: 700;
+    }
+    .btn-insert {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-insert:hover {
+      background: #15416D;
+    }
+    .status-msg {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+    .status-success {
+      color: #059669;
+    }
+    .status-error {
+      color: #DC2626;
+    }
+    .preview-box {
+      background: #FFFFFF;
+      border: 1px dashed #CBD5E1;
+      border-radius: 6px;
+      padding: 10px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+    .security-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #059669;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #F1F5F9;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="../media/CMFullWhite.png" alt="Convergent Method">
+    <div>
+      <h1>Convergent Method</h1>
+      <p>Official Corporate Email Signature</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1. Employee Folder:</div>
+    <div class="profile-tabs" id="profileTabs"></div>
+
+    <div class="card-title">2. Select Signature Variant:</div>
+    <div class="variant-tabs" id="variantTabs"></div>
+
+    <button type="button" class="btn-insert" id="btnInsert" onclick="insertSignatureNow()">
+      <span>Insert Selected Signature</span>
+    </button>
+    <div class="status-msg" id="statusMsg"></div>
+
+    <div class="security-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span>Privacy Verified: Zero email reading. No data collected.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Live Preview:</div>
+    <div class="preview-box" id="previewContainer"></div>
+  </div>
+
+  <script>
+    const DIRECTORY = Object.freeze({
+${dirEntries.join(',\n')}
+    });
+
+    let selectedKey = Object.keys(DIRECTORY)[0] || 'dynamic';
+    let selectedVariantId = 'standard';
+
+    Office.onReady(function (info) {
+      if (Office.context && Office.context.mailbox && Office.context.mailbox.userProfile) {
+        const email = (Office.context.mailbox.userProfile.emailAddress || '').toLowerCase();
+        const name = (Office.context.mailbox.userProfile.displayName || '').toLowerCase();
+        let matched = null;
+        for (const [key, emp] of Object.entries(DIRECTORY)) {
+          if ((emp.email && email === emp.email.toLowerCase()) || 
+              (emp.name && name.includes(emp.name.toLowerCase().split(',')[0]))) {
+            matched = key;
+            break;
+          }
+        }
+        chooseProfile(matched || Object.keys(DIRECTORY)[0] || 'dynamic');
+      } else {
+        chooseProfile(Object.keys(DIRECTORY)[0] || 'dynamic');
+      }
+    });
+
+    function renderProfileTabs() {
+      const container = document.getElementById('profileTabs');
+      if (!container) return;
+      container.innerHTML = '';
+      for (const [key, emp] of Object.entries(DIRECTORY)) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tab-btn' + (key === selectedKey ? ' active' : '');
+        btn.id = 'btn_' + key;
+        btn.textContent = emp.name ? emp.name.split(',')[0] : 'Employee';
+        btn.onclick = () => chooseProfile(key);
+        container.appendChild(btn);
+      }
+      const dynBtn = document.createElement('button');
+      dynBtn.type = 'button';
+      dynBtn.className = 'tab-btn' + (selectedKey === 'dynamic' ? ' active' : '');
+      dynBtn.id = 'btn_dynamic';
+      dynBtn.textContent = 'Current Account';
+      dynBtn.onclick = () => chooseProfile('dynamic');
+      container.appendChild(dynBtn);
+    }
+
+    function chooseProfile(key) {
+      selectedKey = key;
+      document.querySelectorAll('.profile-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn_' + key);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderVariantTabs();
+      updatePreview();
+    }
+
+    function renderVariantTabs() {
+      const container = document.getElementById('variantTabs');
+      container.innerHTML = '';
+
+      const u = getSelectedUserData();
+      const variants = u.signatures || [
+        { id: "standard", name: "With Logo", hasLogo: true, hasDisclaimer: true, hasEco: true },
+        { id: "nologo", name: "No Logo", hasLogo: false, hasDisclaimer: true, hasEco: true }
+      ];
+
+      if (!variants.some(v => v.id === selectedVariantId)) {
+        const def = variants.find(v => v.isDefault);
+        selectedVariantId = def ? def.id : variants[0].id;
+      }
+
+      variants.forEach(v => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'variant-btn' + (v.id === selectedVariantId ? ' active' : '');
+        btn.innerHTML = (v.hasLogo ? '🖼️ ' : '📄 ') + escapeHtml(v.name);
+        btn.onclick = function() {
+          selectedVariantId = v.id;
+          document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          updatePreview();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function getSelectedUserData() {
+      if (DIRECTORY[selectedKey]) return DIRECTORY[selectedKey];
+
+      try {
+        const p = Office.context.mailbox.userProfile;
+        return {
+          name: p.displayName || "Convergent Method Team",
+          title: "Convergent Method, LLC",
+          email: p.emailAddress || "info@convergentmethod.com",
+          phone: "(281) 979-1336",
+          phoneLink: "+12819791336",
+          signatures: [
+            { id: "standard", name: "With Logo", hasLogo: true, hasDisclaimer: true, hasEco: true },
+            { id: "nologo", name: "No Logo", hasLogo: false, hasDisclaimer: true, hasEco: true }
+          ]
+        };
+      } catch (e) {
+        return Object.values(DIRECTORY)[0] || {};
+      }
+    }
+
+    function getSelectedVariant() {
+      const u = getSelectedUserData();
+      const variants = u.signatures || [];
+      return variants.find(v => v.id === selectedVariantId) || variants[0] || { hasLogo: true, hasDisclaimer: true, hasEco: true };
+    }
+
+    function escapeHtml(t) {
+      if (t === null || t === undefined) return "";
+      return String(t)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function sanitizePhoneLink(link) {
+      if (!link) return "";
+      return String(link).replace(/[^0-9+]/g, "");
+    }
+
+    function buildHtml(u, v) {
+      const safeName = escapeHtml(u.name);
+      const safeTitle = escapeHtml(u.title);
+      const safeEmail = escapeHtml(u.email);
+      const safePhone = escapeHtml(u.phone);
+      const safePhoneLink = sanitizePhoneLink(u.phoneLink);
+      const hasLogo = v.hasLogo !== false;
+      const hasDisclaimer = v.hasDisclaimer !== false;
+      const hasEco = v.hasEco !== false;
+
+      let extraDetailHtml = '';
+      if ((v.hasExtraDetail || u.hasExtraDetail) && (v.extraValue || u.extraValue)) {
+        const safeExtraLabel = escapeHtml(v.extraLabel || u.extraLabel || 'Dealer #:');
+        const safeExtraValue = escapeHtml(v.extraValue || u.extraValue);
+        extraDetailHtml = \`
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">\${safeExtraLabel}&nbsp;</span><span style="color: #444444;">\${safeExtraValue}</span>
+        </div>\`;
+      }
+
+      let topHtml = '';
+      if (hasLogo) {
+        topHtml = \`
+    <tr>
+      <td valign="middle" width="145" style="width: 145px; min-width: 145px; max-width: 145px; padding: 0 16px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">
+        <a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">
+          <img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto;" />
+        </a>
+      </td>
+      <td valign="middle" width="395" style="width: 395px; min-width: 395px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">
+          \${safeName}
+        </div>
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">
+          \${safeTitle}
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">
+          Convergent Method, LLC
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:\${encodeURIComponent(u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">\${safeEmail}</span></a>
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
+          <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:\${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">\${safePhone}</span></a>
+        </div>
+        \${extraDetailHtml}
+      </td>
+    </tr>\`;
+      } else {
+        topHtml = \`
+    <tr>
+      <td colspan="2" valign="top" style="padding: 0 0 6px 0; vertical-align: top;">
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0;">
+          \${safeName}
+        </div>
+        <div style="font-family: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'Avenir Next', Avenir, 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0;">
+          \${safeTitle}
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">
+          Convergent Method, LLC
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:\${encodeURIComponent(u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">\${safeEmail}</span></a>
+        </div>
+        <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">
+          <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:\${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">\${safePhone}</span></a>
+        </div>
+        \${extraDetailHtml}
+      </td>
+    </tr>\`;
+      }
+
+      let bottomHtml = '';
+      if (hasEco || hasDisclaimer) {
+        bottomHtml = \`
+    <tr><td colspan="2" height="14" style="height: 14px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td></tr>
+    <tr>
+      <td colspan="2" style="padding: 0; margin: 0; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+        \${hasEco ? '<div style="font-size: 10px; line-height: 14px; color: #6FA0DB; font-style: italic; padding-bottom: 6px;">Please do not print this e-mail unless necessary</div>' : ''}
+        \${hasDisclaimer ? '<div style="font-size: 10px; line-height: 14px; color: #888888;"><strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</div>' : ''}
+      </td>
+    </tr>\`;
+      }
+
+      return \`
+<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">
+  <table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; font-family: 'Aptos', Calibri, Arial, sans-serif;">
+    \${topHtml}
+    \${bottomHtml}
+  </table>
+</div>\`;
+    }
+
+    function updatePreview() {
+      const u = getSelectedUserData();
+      const v = getSelectedVariant();
+      document.getElementById('previewContainer').innerHTML = buildHtml(u, v);
+    }
+
+    function insertSignatureNow() {
+      const msg = document.getElementById('statusMsg');
+      msg.style.display = 'none';
+
+      try {
+        if (!Office.context || !Office.context.mailbox || !Office.context.mailbox.item) {
+          msg.textContent = 'Please open an email draft first.';
+          msg.className = 'status-msg status-error';
+          msg.style.display = 'block';
+          return;
+        }
+
+        const item = Office.context.mailbox.item;
+        const u = getSelectedUserData();
+        const v = getSelectedVariant();
+        const html = buildHtml(u, v);
+
+        if (item.body && typeof item.body.setSignatureAsync === 'function') {
+          item.body.setSignatureAsync(html, { coercionType: Office.CoercionType.Html }, function (res) {
+            if (res.status === Office.AsyncResultStatus.Succeeded) {
+              msg.textContent = '✓ ' + v.name + ' inserted!';
+              msg.className = 'status-msg status-success';
+            } else {
+              fallbackInsert(item, html, msg, v.name);
+            }
+            msg.style.display = 'block';
+          });
+        } else {
+          fallbackInsert(item, html, msg, v.name);
+        }
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+        msg.className = 'status-msg status-error';
+        msg.style.display = 'block';
+      }
+    }
+
+    function fallbackInsert(item, html, msg, variantName) {
+      if (item.body && item.body.setSelectedDataAsync) {
+        item.body.setSelectedDataAsync(html, { coercionType: Office.CoercionType.Html }, function (res) {
+          if (res.status === Office.AsyncResultStatus.Succeeded) {
+            msg.textContent = '✓ ' + variantName + ' inserted!';
+            msg.className = 'status-msg status-success';
+          } else {
+            msg.textContent = 'Could not insert: ' + (res.error ? res.error.message : 'Unknown error');
+            msg.className = 'status-msg status-error';
+          }
+          msg.style.display = 'block';
+        });
+      } else {
+        msg.textContent = 'Signature insertion not supported on this view.';
+        msg.className = 'status-msg status-error';
+        msg.style.display = 'block';
+      }
+    }
+
+    renderProfileTabs();
+    renderVariantTabs();
+    updatePreview();
+  </script>
+</body>
+</html>\`;
+    }
+
+    // Direct Disk Auto-Overwrite Feature (writes both launchevent.js and taskpane.html)
+    async function autoOverwriteAllFiles() {
+      const newJs = buildUpdatedJsContent();
+      const newTaskpane = buildUpdatedTaskpaneHtml();
+
+      // If workspace directory is connected, write both directly
+      if (workspaceDirHandle) {
+        try {
+          const fileHandleJs = await workspaceDirHandle.getFileHandle('launchevent.js', { create: true });
+          const writableJs = await fileHandleJs.createWritable();
+          await writableJs.write(newJs);
+          await writableJs.close();
+
+          const fileHandleTp = await workspaceDirHandle.getFileHandle('taskpane.html', { create: true });
+          const writableTp = await fileHandleTp.createWritable();
+          await writableTp.write(newTaskpane);
+          await writableTp.close();
+
+          updateSyncBanner(true, '✓ Successfully auto-overwrote launchevent.js & taskpane.html on disk!');
+          alert('✓ Successfully updated launchevent.js and taskpane.html directly on your computer!\n\nCommit and push to GitHub so Outlook can load the updates.');
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // Prompt file picker for launchevent.js
+      await autoOverwriteLauncheventJs();
+    }
+
+    async function autoOverwriteLauncheventJs() {
+      const newJs = buildUpdatedJsContent();
+
+      if (workspaceDirHandle) {
+        try {
+          const fileHandle = await workspaceDirHandle.getFileHandle('launchevent.js', { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(newJs);
+          await writable.close();
+          updateSyncBanner(true, '✓ Successfully overwrote launchevent.js on disk!');
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if ('showSaveFilePicker' in window) {
+        try {
+          fileHandleJs = await window.showSaveFilePicker({
+            suggestedName: 'launchevent.js',
+            types: [{ description: 'JavaScript File', accept: { 'text/javascript': ['.js'] } }]
+          });
+          const writable = await fileHandleJs.createWritable();
+          await writable.write(newJs);
+          await writable.close();
+          updateSyncBanner(true, '✓ Linked & overwrote launchevent.js directly on disk!');
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return;
+        }
+      }
+
+      downloadJsFile();
+    }
+
     async function connectWorkspaceDirectory() {
       if ('showDirectoryPicker' in window) {
         try {
           workspaceDirHandle = await window.showDirectoryPicker();
-          updateSyncBanner(true, `✓ Connected to folder: "${workspaceDirHandle.name}" (Auto-overwrite enabled)`);
-          await autoOverwriteLauncheventJs();
+          updateSyncBanner(true, `✓ Connected to folder: "${workspaceDirHandle.name}" (Auto-sync active)`);
+          await autoOverwriteAllFiles();
         } catch (e) {
           if (e.name === 'AbortError') return;
           alert('Could not access folder: ' + e.message);
         }
       } else {
-        alert('Your browser does not support folder linking. Use the "Overwrite launchevent.js" button instead.');
+        alert('Your browser does not support folder linking. Use the "Overwrite Add-in Files" button instead.');
       }
     }
 
@@ -1673,6 +2265,15 @@ Office.actions.associate("onNewAppointmentOrganizerHandler", onNewAppointmentOrg
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'launchevent.js';
+      a.click();
+    }
+
+    function downloadTaskpaneFile() {
+      const code = buildUpdatedTaskpaneHtml();
+      const blob = new Blob([code], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'taskpane.html';
       a.click();
     }
 

@@ -178,12 +178,7 @@
 
   <div class="card">
     <div class="card-title">1. Employee Folder:</div>
-    <div class="profile-tabs" id="profileTabs">
-      <button type="button" class="tab-btn active" id="btnMark" onclick="chooseProfile('mark')">Mark Stemmans</button>
-      <button type="button" class="tab-btn" id="btnAmanda" onclick="chooseProfile('amanda')">Amanda Stemmans</button>
-      <button type="button" class="tab-btn" id="btnEthan" onclick="chooseProfile('ethan')">Ethan Stemmans</button>
-      <button type="button" class="tab-btn" id="btnDynamic" onclick="chooseProfile('dynamic')">Current Account</button>
-    </div>
+    <div class="profile-tabs" id="profileTabs"></div>
 
     <div class="card-title">2. Select Signature Variant:</div>
     <div class="variant-tabs" id="variantTabs">
@@ -269,11 +264,32 @@
       }
     });
 
+    function renderProfileTabs() {
+      const container = document.getElementById('profileTabs');
+      if (!container) return;
+      container.innerHTML = '';
+      for (const [key, emp] of Object.entries(DIRECTORY)) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tab-btn' + (key === selectedKey ? ' active' : '');
+        btn.id = 'btn_' + key;
+        btn.textContent = emp.name ? emp.name.split(',')[0] : 'Employee';
+        btn.onclick = () => chooseProfile(key);
+        container.appendChild(btn);
+      }
+      const dynBtn = document.createElement('button');
+      dynBtn.type = 'button';
+      dynBtn.className = 'tab-btn' + (selectedKey === 'dynamic' ? ' active' : '');
+      dynBtn.id = 'btn_dynamic';
+      dynBtn.textContent = 'Current Account';
+      dynBtn.onclick = () => chooseProfile('dynamic');
+      container.appendChild(dynBtn);
+    }
+
     function chooseProfile(key) {
       selectedKey = key;
       document.querySelectorAll('.profile-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
-      const map = { mark: 'btnMark', amanda: 'btnAmanda', ethan: 'btnEthan', dynamic: 'btnDynamic' };
-      const activeBtn = document.getElementById(map[key] || 'btnDynamic');
+      const activeBtn = document.getElementById('btn_' + key);
       if (activeBtn) activeBtn.classList.add('active');
 
       renderVariantTabs();
@@ -508,6 +524,7 @@
       }
     }
 
+    renderProfileTabs();
     renderVariantTabs();
     updatePreview();
   </script>
