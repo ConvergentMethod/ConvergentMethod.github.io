@@ -476,7 +476,7 @@
         <span>Signature Customizer &amp; Employee Folders</span>
         <span class="badge">Multi-Variant Studio</span>
       </h2>
-      <p style="font-size: 13px; color: #64748B;">Select an employee folder to manage their signatures. Each employee can have multiple signature variants (such as full logo, clean text-only, dealer #, or quick reply):</p>
+      <p style="font-size: 13px; color: #64748B;">Select an employee folder and a signature variant. Every field below (name, title, company, email, phone, color, logo, and notices) is individually customizable for each signature variant:</p>
 
       <!-- Employee Folders Container -->
       <div class="folder-container">
@@ -664,6 +664,11 @@
           {
             id: "sig_1",
             name: "Corporate Standard (With Logo)",
+            fullName: "",
+            title: "",
+            company: "Convergent Method, LLC",
+            email: "",
+            phone: "",
             hasLogo: true,
             logo: "https://convergentmethod.com/media/CMFullColor.png",
             hasDisclaimer: true,
@@ -676,6 +681,11 @@
           {
             id: "sig_2",
             name: "Clean Executive (No Logo)",
+            fullName: "",
+            title: "",
+            company: "Convergent Method, LLC",
+            email: "",
+            phone: "",
             hasLogo: false,
             logo: "",
             hasDisclaimer: true,
@@ -707,6 +717,21 @@
         }
       } else {
         FOLDERS = JSON.parse(JSON.stringify(DEFAULT_FOLDERS));
+      }
+
+      // Ensure every signature variant has all fields (backward compatibility migration)
+      if (Array.isArray(FOLDERS)) {
+        FOLDERS.forEach(emp => {
+          if (Array.isArray(emp.signatures)) {
+            emp.signatures.forEach(sig => {
+              if (sig.fullName === undefined) sig.fullName = emp.name || "";
+              if (sig.title === undefined) sig.title = emp.title || "";
+              if (sig.company === undefined) sig.company = emp.company || "Convergent Method, LLC";
+              if (sig.email === undefined) sig.email = emp.email || "";
+              if (sig.phone === undefined) sig.phone = emp.phone || "";
+            });
+          }
+        });
       }
     }
 
@@ -907,6 +932,19 @@
       });
     }
 
+    function isVariantDefault(emp, sIdx) {
+      if (!emp || !emp.signatures || !emp.signatures[sIdx]) return false;
+      const sig = emp.signatures[sIdx];
+      const sigEmail = (sig.email || emp.email || '').trim().toLowerCase();
+
+      // Signatures sharing this email address
+      const peers = emp.signatures.filter(s => (s.email || emp.email || '').trim().toLowerCase() === sigEmail);
+      if (sig.isDefault) return true;
+      const hasExplicit = peers.some(s => s.isDefault);
+      if (!hasExplicit && peers[0] === sig) return true;
+      return false;
+    }
+
     function renderVariantTabs() {
       const container = document.getElementById('variantTabs');
       container.innerHTML = '';
@@ -915,7 +953,7 @@
       if (!emp || !emp.signatures) return;
 
       emp.signatures.forEach((sig, sIdx) => {
-        const isDefault = sig.isDefault || (!emp.signatures.some(s => s.isDefault) && sIdx === 0);
+        const isDefault = isVariantDefault(emp, sIdx);
         const pill = document.createElement('button');
         pill.type = 'button';
         pill.className = 'variant-pill' + (sIdx === currentSigIndex ? ' active' : '');
@@ -946,22 +984,25 @@
       const emp = FOLDERS[currentEmpIndex];
       const sig = emp.signatures[currentSigIndex];
 
-      // Auto-Insert Default Status
-      const isDefault = sig.isDefault || (!emp.signatures.some(s => s.isDefault) && currentSigIndex === 0);
+      // Auto-Insert Default Status (Scoped per email address)
+      const isDefault = isVariantDefault(emp, currentSigIndex);
       const defaultBadge = document.getElementById('defaultBadge');
       const btnMakeDefault = document.getElementById('btnMakeDefault');
+      const sigEmail = (sig.email || emp.email || '').trim();
+      const emailLabel = sigEmail ? ` for ${sigEmail}` : '';
+
       if (isDefault) {
-        defaultBadge.textContent = '★ Active Default';
+        defaultBadge.textContent = '★ Active Default' + emailLabel;
         defaultBadge.style.background = '#059669';
-        btnMakeDefault.textContent = '✓ Default Signature';
+        btnMakeDefault.textContent = '✓ Default Signature' + emailLabel;
         btnMakeDefault.style.background = '#059669';
         btnMakeDefault.disabled = true;
         btnMakeDefault.style.opacity = '0.75';
         btnMakeDefault.style.cursor = 'default';
       } else {
-        defaultBadge.textContent = 'Secondary Variant';
+        defaultBadge.textContent = 'Secondary Variant' + emailLabel;
         defaultBadge.style.background = '#64748B';
-        btnMakeDefault.textContent = '★ Set as Default';
+        btnMakeDefault.textContent = '★ Set as Default' + emailLabel;
         btnMakeDefault.style.background = '#F59E0B';
         btnMakeDefault.disabled = false;
         btnMakeDefault.style.opacity = '1';
@@ -969,11 +1010,11 @@
       }
 
       document.getElementById('vName').value = sig.name || '';
-      document.getElementById('fName').value = emp.name || '';
-      document.getElementById('fTitle').value = emp.title || '';
-      document.getElementById('fCompany').value = emp.company || 'Convergent Method, LLC';
-      document.getElementById('fEmail').value = emp.email || '';
-      document.getElementById('fPhone').value = emp.phone || '';
+      document.getElementById('fName').value = (sig.fullName !== undefined ? sig.fullName : (emp.name || ''));
+      document.getElementById('fTitle').value = (sig.title !== undefined && sig.title !== null) ? sig.title : (emp.title || '');
+      document.getElementById('fCompany').value = (sig.company !== undefined ? sig.company : (emp.company || 'Convergent Method, LLC'));
+      document.getElementById('fEmail').value = (sig.email !== undefined ? sig.email : (emp.email || ''));
+      document.getElementById('fPhone').value = (sig.phone !== undefined ? sig.phone : (emp.phone || ''));
       document.getElementById('fColor').value = sig.color || '#6FA0DB';
 
       // Extra Detail Field (e.g. Dealer #, License #)
@@ -1026,14 +1067,31 @@
       const emp = FOLDERS[currentEmpIndex];
       const sig = emp.signatures[currentSigIndex];
 
-      emp.name = document.getElementById('fName').value;
-      emp.title = document.getElementById('fTitle').value;
-      emp.company = document.getElementById('fCompany').value;
-      emp.email = document.getElementById('fEmail').value;
-      emp.phone = document.getElementById('fPhone').value;
+      const nameVal = document.getElementById('fName').value;
+      const titleVal = document.getElementById('fTitle').value;
+      const compVal = document.getElementById('fCompany').value;
+      const emailVal = document.getElementById('fEmail').value;
+      const phoneVal = document.getElementById('fPhone').value;
 
+      // Save directly to the current signature variant
       sig.name = document.getElementById('vName').value;
+      sig.fullName = nameVal;
+      sig.title = titleVal;
+      sig.company = compVal;
+      sig.email = emailVal;
+      sig.phone = phoneVal;
       sig.color = document.getElementById('fColor').value;
+
+      // Keep employee folder reference in sync for folder tabs & directory lookup key
+      if (sig.isDefault || currentSigIndex === 0 || !emp.name) {
+        emp.name = nameVal;
+      }
+      if (sig.isDefault || currentSigIndex === 0 || !emp.email) {
+        emp.email = emailVal;
+      }
+      emp.title = titleVal;
+      emp.company = compVal;
+      emp.phone = phoneVal;
       sig.hasLogo = document.getElementById('fHasLogo').checked;
       sig.hasDisclaimer = document.getElementById('fHasDisclaimer').checked;
       sig.hasEco = document.getElementById('fHasEco').checked;
@@ -1082,12 +1140,13 @@
     }
 
     function generateSignatureHtml(emp, sig) {
-      const safeName = escapeHtml(emp.name || '[Full Name & Credentials]');
-      const safeTitle = escapeHtml(emp.title || '[Job Title / Position]');
-      const safeCompany = escapeHtml(emp.company || 'Convergent Method, LLC');
-      const safeEmail = escapeHtml(emp.email || 'info@convergentmethod.com');
-      const safePhone = escapeHtml(emp.phone || '(281) 979-1336');
-      const safePhoneLink = sanitizePhoneLink(emp.phone || '+12819791336');
+      const safeName = escapeHtml(sig.fullName || emp.name || '[Full Name & Credentials]');
+      const effectiveTitle = (sig.title !== undefined && sig.title !== '') ? sig.title : (emp.title || '[Job Title / Position]');
+      const safeTitle = escapeHtml(effectiveTitle);
+      const safeCompany = escapeHtml(sig.company || emp.company || 'Convergent Method, LLC');
+      const safeEmail = escapeHtml(sig.email || emp.email || 'info@convergentmethod.com');
+      const safePhone = escapeHtml(sig.phone || emp.phone || '(281) 979-1336');
+      const safePhoneLink = sanitizePhoneLink(sig.phone || emp.phone || '+12819791336');
       const accent = sig.color || '#6FA0DB';
 
       let extraDetailHtml = '';
@@ -1120,7 +1179,7 @@
           ${safeCompany}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
-          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(emp.email || 'info@convergentmethod.com')}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(sig.email || emp.email || 'info@convergentmethod.com')}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
           <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${safePhone}</span></a>
@@ -1143,7 +1202,7 @@
           ${safeCompany}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">
-          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(emp.email || 'info@convergentmethod.com')}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(sig.email || emp.email || 'info@convergentmethod.com')}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">
           <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${safePhone}</span></a>
@@ -1210,15 +1269,23 @@
       const emp = FOLDERS[currentEmpIndex];
       if (!emp || !emp.signatures) return;
 
+      const currentSig = emp.signatures[currentSigIndex];
+      const currentEmail = (currentSig.email || emp.email || '').trim().toLowerCase();
+
+      // Set this variant as default among signatures sharing the same email address
       emp.signatures.forEach((s, idx) => {
-        s.isDefault = (idx === currentSigIndex);
+        const sEmail = (s.email || emp.email || '').trim().toLowerCase();
+        if (sEmail === currentEmail) {
+          s.isDefault = (idx === currentSigIndex);
+        }
       });
-      emp.defaultSigId = emp.signatures[currentSigIndex].id;
+      emp.defaultSigId = currentSig.id;
 
       saveStorage();
       renderUI();
 
-      alert(`✓ "${emp.signatures[currentSigIndex].name}" is now the default signature for ${emp.name || 'this employee'}!\n\nClick "⚡ Overwrite launchevent.js" to apply this change to Outlook auto-insertion.`);
+      const emailNote = currentEmail ? ` for ${currentEmail}` : '';
+      alert(`✓ "${currentSig.name}" is now the default signature${emailNote}!\n\nClick "⚡ Overwrite launchevent.js" to apply this change to Outlook auto-insertion.`);
     }
 
     // Direct Instant Add - No Modal Prompt
@@ -1238,6 +1305,11 @@
           {
             id: 'sig_' + Date.now() + '_1',
             name: 'Corporate Standard (With Logo)',
+            fullName: '',
+            title: '',
+            company: 'Convergent Method, LLC',
+            email: '',
+            phone: '',
             hasLogo: true,
             logo: 'https://convergentmethod.com/media/CMFullColor.png',
             hasDisclaimer: true,
@@ -1250,6 +1322,11 @@
           {
             id: 'sig_' + Date.now() + '_2',
             name: 'Clean Executive (No Logo)',
+            fullName: '',
+            title: '',
+            company: 'Convergent Method, LLC',
+            email: '',
+            phone: '',
             hasLogo: false,
             logo: '',
             hasDisclaimer: true,
@@ -1292,10 +1369,16 @@
       if (!emp) return;
       if (!emp.signatures) emp.signatures = [];
 
+      const currentSig = emp.signatures[currentSigIndex] || {};
       const nextNum = emp.signatures.length + 1;
       emp.signatures.push({
         id: 'sig_' + Date.now(),
         name: 'Signature Variant ' + nextNum,
+        fullName: currentSig.fullName || emp.name || '',
+        title: currentSig.title || emp.title || '',
+        company: currentSig.company || emp.company || 'Convergent Method, LLC',
+        email: currentSig.email || emp.email || '',
+        phone: currentSig.phone || emp.phone || '',
         hasLogo: false,
         logo: '',
         hasDisclaimer: true,
@@ -1303,7 +1386,7 @@
         hasExtraDetail: false,
         extraLabel: 'Dealer #:',
         extraValue: '',
-        color: '#6FA0DB'
+        color: currentSig.color || '#6FA0DB'
       });
 
       currentSigIndex = emp.signatures.length - 1;
@@ -1348,14 +1431,44 @@
 
     function buildUpdatedJsContent() {
       const entries = [];
+      const processedEmails = new Set();
+
       FOLDERS.forEach(emp => {
-        if (!emp.email || emp.email.includes('[') || emp.email.includes('firstname')) return;
+        // Collect all emails associated with this employee (comma/semicolon separated or from variants)
+        const employeeEmails = [];
+        const addEmail = (raw) => {
+          if (!raw) return;
+          raw.split(/[,;\s]+/).map(e => e.trim().toLowerCase()).forEach(e => {
+            if (e && e.includes('@') && !e.includes('[') && !e.includes('firstname') && !employeeEmails.includes(e)) {
+              employeeEmails.push(e);
+            }
+          });
+        };
+
+        addEmail(emp.email);
+        (emp.signatures || []).forEach(s => addEmail(s.email));
+
+        if (employeeEmails.length === 0) return;
+
         const defaultSig = emp.signatures.find(s => s.isDefault || s.id === emp.defaultSigId) || emp.signatures[0] || { hasLogo: true, hasDisclaimer: true, hasEco: true };
         
         const signaturesArrayCode = (emp.signatures || []).map(s => {
+          const sigFullName = (s.fullName || emp.name || '').replace(/"/g, '\\"');
+          const sigTitle = (s.title !== undefined && s.title !== null && s.title !== '') ? s.title : (emp.title || '');
+          const sigCompany = (s.company || emp.company || 'Convergent Method, LLC').replace(/"/g, '\\"');
+          const sigEmail = (s.email || emp.email || '').replace(/"/g, '\\"');
+          const sigPhone = (s.phone || emp.phone || '').replace(/"/g, '\\"');
+          const sigPhoneLink = sanitizePhoneLink(s.phone || emp.phone);
+
           return `      Object.freeze({
         id: "${(s.id || '').replace(/"/g, '\\"')}",
         name: "${(s.name || 'Signature').replace(/"/g, '\\"')}",
+        fullName: "${sigFullName}",
+        title: "${sigTitle.replace(/"/g, '\\"')}",
+        company: "${sigCompany}",
+        email: "${sigEmail}",
+        phone: "${sigPhone}",
+        phoneLink: "${sigPhoneLink}",
         hasLogo: ${s.hasLogo !== false},
         logo: "${(s.logo || 'https://convergentmethod.com/media/CMFullColor.png').replace(/"/g, '\\"')}",
         color: "${(s.color || '#6FA0DB').replace(/"/g, '\\"')}",
@@ -1367,22 +1480,41 @@
       })`;
         }).join(',\n');
 
-        entries.push(`  "${emp.email.trim().toLowerCase()}": Object.freeze({
-    name: "${emp.name.replace(/"/g, '\\"')}",
-    title: "${emp.title.replace(/"/g, '\\"')}",
-    email: "${emp.email.trim()}",
-    phone: "${emp.phone.trim()}",
-    phoneLink: "${sanitizePhoneLink(emp.phone)}",
-    hasLogo: ${defaultSig.hasLogo !== false},
-    hasDisclaimer: ${defaultSig.hasDisclaimer !== false},
-    hasEco: ${defaultSig.hasEco !== false},
-    hasExtraDetail: ${defaultSig.hasExtraDetail === true},
-    extraLabel: "${(defaultSig.extraLabel || 'Dealer #:').replace(/"/g, '\\"')}",
-    extraValue: "${(defaultSig.extraValue || '').replace(/"/g, '\\"')}",
+        // Create a directory entry for each email address associated with this employee
+        employeeEmails.forEach(addr => {
+          if (processedEmails.has(addr)) return;
+          processedEmails.add(addr);
+
+          // Find all signature variants sharing this email address
+          const peerSigs = (emp.signatures || []).filter(s => (s.email || emp.email || '').toLowerCase().includes(addr));
+          // Whichever variant is marked default for this email address is the effective default!
+          const effectiveDefault = peerSigs.find(s => s.isDefault) || peerSigs[0] || defaultSig;
+
+          const defaultSigFullName = (effectiveDefault.fullName || emp.name || '').replace(/"/g, '\\"');
+          const defaultSigTitle = (effectiveDefault.title !== undefined && effectiveDefault.title !== null && effectiveDefault.title !== '') ? effectiveDefault.title : (emp.title || '');
+          const defaultSigCompany = (effectiveDefault.company || emp.company || 'Convergent Method, LLC').replace(/"/g, '\\"');
+          const defaultSigEmail = (effectiveDefault.email || addr).trim();
+          const defaultSigPhone = (effectiveDefault.phone || emp.phone || '').trim();
+          const defaultSigPhoneLink = sanitizePhoneLink(effectiveDefault.phone || emp.phone);
+
+          entries.push(`  "${addr}": Object.freeze({
+    name: "${defaultSigFullName}",
+    title: "${defaultSigTitle.replace(/"/g, '\\"')}",
+    company: "${defaultSigCompany}",
+    email: "${defaultSigEmail}",
+    phone: "${defaultSigPhone}",
+    phoneLink: "${defaultSigPhoneLink}",
+    hasLogo: ${effectiveDefault.hasLogo !== false},
+    hasDisclaimer: ${effectiveDefault.hasDisclaimer !== false},
+    hasEco: ${effectiveDefault.hasEco !== false},
+    hasExtraDetail: ${effectiveDefault.hasExtraDetail === true},
+    extraLabel: "${(effectiveDefault.extraLabel || 'Dealer #:').replace(/"/g, '\\"')}",
+    extraValue: "${(effectiveDefault.extraValue || '').replace(/"/g, '\\"')}",
     signatures: Object.freeze([
 ${signaturesArrayCode}
     ])
   })`);
+        });
       });
 
       return `/**
@@ -1440,6 +1572,7 @@ function sanitizePhoneLink(link) {
 function buildSignatureHtml(user) {
   var safeName = escapeHtml(user.name);
   var safeTitle = escapeHtml(user.title);
+  var safeCompany = escapeHtml(user.company || "Convergent Method, LLC");
   var safeEmail = escapeHtml(user.email);
   var safePhone = escapeHtml(user.phone);
   var safePhoneLink = sanitizePhoneLink(user.phoneLink);
@@ -1474,7 +1607,7 @@ function buildSignatureHtml(user) {
             safeTitle +
           '</div>' +
           '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">' +
-            'Convergent Method, LLC' +
+            safeCompany +
           '</div>' +
           '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
@@ -1502,7 +1635,7 @@ function buildSignatureHtml(user) {
             safeTitle +
           '</div>' +
           '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">' +
-            'Convergent Method, LLC' +
+            safeCompany +
           '</div>' +
           '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
@@ -1562,19 +1695,9 @@ function resolveCurrentUserInfo() {
       }
     }
 
-    return {
-      name: displayName || "Convergent Method Team",
-      title: "Convergent Method, LLC",
-      email: email || "info@convergentmethod.com",
-      phone: "(281) 979-1336",
-      phoneLink: "+12819791336",
-      hasLogo: true,
-      hasDisclaimer: true,
-      hasEco: true
-    };
+    return null;
   } catch (e) {
-    var keys = Object.keys(TEAM_DIRECTORY);
-    return keys.length > 0 ? TEAM_DIRECTORY[keys[0]] : null;
+    return null;
   }
 }
 

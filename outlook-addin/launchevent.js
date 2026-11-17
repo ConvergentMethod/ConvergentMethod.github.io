@@ -16,6 +16,7 @@ var TEAM_DIRECTORY = Object.freeze({
   "ethanstemmans@gmail.com": Object.freeze({
     name: "Ethan Stemmans",
     title: "Electrical Engineering Assistant",
+    company: "Convergent Method, LLC",
     email: "ethanstemmans@gmail.com",
     phone: "(281) 678-6643",
     phoneLink: "2816786643",
@@ -27,13 +28,123 @@ var TEAM_DIRECTORY = Object.freeze({
     extraValue: "",
     signatures: Object.freeze([
       Object.freeze({
-        id: "standard",
-        name: "Corporate Standard",
+        id: "sig_1",
+        name: "Personal Email",
+        fullName: "Ethan Stemmans",
+        title: "Electrical Engineering Assistant",
+        company: "Convergent Method, LLC",
+        email: "ethanstemmans@gmail.com",
+        phone: "(281) 678-6643",
+        phoneLink: "2816786643",
         hasLogo: true,
         logo: "https://convergentmethod.com/media/CMFullColor.png",
-        color: "#6FA0DB",
+        color: "#6fa0db",
         hasDisclaimer: true,
         hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: ""
+      })
+    ])
+  }),
+  "markst@convergentmethod.com": Object.freeze({
+    name: "Mark Stemmans, P.E.",
+    title: "Construction Program Manager",
+    company: "Convergent Method, LLC",
+    email: "MarkSt@convergentmethod.com",
+    phone: "(281) 979-1336",
+    phoneLink: "2819791336",
+    hasLogo: true,
+    hasDisclaimer: true,
+    hasEco: true,
+    hasExtraDetail: false,
+    extraLabel: "Dealer #:",
+    extraValue: "",
+    signatures: Object.freeze([
+      Object.freeze({
+        id: "sig_1794890126652_1",
+        name: "Project",
+        fullName: "Mark Stemmans, P.E.",
+        title: "Construction Program Manager",
+        company: "Convergent Method, LLC",
+        email: "MarkSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        phoneLink: "2819791336",
+        hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6fa0db",
+        hasDisclaimer: true,
+        hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: ""
+      }),
+      Object.freeze({
+        id: "sig_1794890241199",
+        name: "President",
+        fullName: "Mark Stemmans, P.E.",
+        title: "President",
+        company: "Convergent Method, LLC",
+        email: "MarkSt@convergentmethod.com",
+        phone: "(281) 979-1336",
+        phoneLink: "2819791336",
+        hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6fa0db",
+        hasDisclaimer: true,
+        hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: ""
+      })
+    ])
+  }),
+  "amandast@convergentmethod.com": Object.freeze({
+    name: "Amanda Stemmans, MS, APRN, FNP-C",
+    title: "Project Coordinator",
+    company: "Convergent Method, LLC",
+    email: "AmandaSt@convergentmethod.com",
+    phone: "(281) 979-2162",
+    phoneLink: "2819792162",
+    hasLogo: true,
+    hasDisclaimer: true,
+    hasEco: true,
+    hasExtraDetail: false,
+    extraLabel: "Dealer #:",
+    extraValue: "",
+    signatures: Object.freeze([
+      Object.freeze({
+        id: "sig_1794890275640_1",
+        name: "Project",
+        fullName: "Amanda Stemmans, MS, APRN, FNP-C",
+        title: "Project Coordinator",
+        company: "Convergent Method, LLC",
+        email: "AmandaSt@convergentmethod.com",
+        phone: "(281) 979-2162",
+        phoneLink: "2819792162",
+        hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6fa0db",
+        hasDisclaimer: true,
+        hasEco: true,
+        hasExtraDetail: false,
+        extraLabel: "Dealer #:",
+        extraValue: ""
+      }),
+      Object.freeze({
+        id: "sig_1794891481602",
+        name: "COO",
+        fullName: "Amanda Stemmans, MS, APRN, FNP-C",
+        title: "Chief Operations Officer",
+        company: "Convergent Method, LLC",
+        email: "AmandaSt@convergentmethod.com",
+        phone: "(281) 979-2162",
+        phoneLink: "2819792162",
+        hasLogo: true,
+        logo: "https://convergentmethod.com/media/CMFullColor.png",
+        color: "#6fa0db",
+        hasDisclaimer: true,
+        hasEco: false,
         hasExtraDetail: false,
         extraLabel: "Dealer #:",
         extraValue: ""
@@ -79,6 +190,7 @@ function sanitizePhoneLink(link) {
 function buildSignatureHtml(user) {
   var safeName = escapeHtml(user.name);
   var safeTitle = escapeHtml(user.title);
+  var safeCompany = escapeHtml(user.company || "Convergent Method, LLC");
   var safeEmail = escapeHtml(user.email);
   var safePhone = escapeHtml(user.phone);
   var safePhoneLink = sanitizePhoneLink(user.phoneLink);
@@ -113,7 +225,7 @@ function buildSignatureHtml(user) {
             safeTitle +
           '</div>' +
           '<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">' +
-            'Convergent Method, LLC' +
+            safeCompany +
           '</div>' +
           '<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
@@ -141,7 +253,7 @@ function buildSignatureHtml(user) {
             safeTitle +
           '</div>' +
           '<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">' +
-            'Convergent Method, LLC' +
+            safeCompany +
           '</div>' +
           '<div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
@@ -201,19 +313,9 @@ function resolveCurrentUserInfo() {
       }
     }
 
-    return {
-      name: displayName || "Convergent Method Team",
-      title: "Convergent Method, LLC",
-      email: email || "info@convergentmethod.com",
-      phone: "(281) 979-1336",
-      phoneLink: "+12819791336",
-      hasLogo: true,
-      hasDisclaimer: true,
-      hasEco: true
-    };
+    return null;
   } catch (e) {
-    var keys = Object.keys(TEAM_DIRECTORY);
-    return keys.length > 0 ? TEAM_DIRECTORY[keys[0]] : null;
+    return null;
   }
 }
 

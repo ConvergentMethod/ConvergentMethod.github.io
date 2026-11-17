@@ -156,16 +156,6 @@
       overflow-x: auto;
       font-size: 12px;
     }
-    .security-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: #059669;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid #F1F5F9;
-    }
   </style>
 </head>
 <body>
@@ -191,14 +181,6 @@
     </button>
     <div class="status-msg" id="statusMsg"></div>
 
-    <div class="security-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-      <span>Privacy Verified: Zero email reading. No data collected.</span>
-    </div>
-  </div>
-
   <div class="card">
     <div class="card-title">Live Preview:</div>
     <div class="preview-box" id="previewContainer"></div>
@@ -210,6 +192,7 @@
       ethan: Object.freeze({
         name: "Ethan Stemmans",
         title: "Electrical Engineering Assistant",
+        company: "Convergent Method, LLC",
         email: "ethanstemmans@gmail.com",
         phone: "(281) 678-6643",
         phoneLink: "2816786643",
@@ -222,9 +205,15 @@
         extraLabel: "Dealer #:",
         extraValue: "",
         signatures: Object.freeze([
-          {
+          Object.freeze({
             id: "standard",
             name: "Corporate Standard",
+            fullName: "Ethan Stemmans",
+            title: "Electrical Engineering Assistant",
+            company: "Convergent Method, LLC",
+            email: "ethanstemmans@gmail.com",
+            phone: "(281) 678-6643",
+            phoneLink: "2816786643",
             hasLogo: true,
             logo: "https://convergentmethod.com/media/CMFullColor.png",
             color: "#6FA0DB",
@@ -233,7 +222,7 @@
             hasExtraDetail: false,
             extraLabel: "Dealer #:",
             extraValue: ""
-          }
+          })
         ])
       })
     };
@@ -249,6 +238,12 @@
                 {
                   id: "default",
                   name: user.signatureName || "Default Signature",
+                  fullName: user.name,
+                  title: user.title,
+                  company: user.company || "Convergent Method, LLC",
+                  email: user.email || email,
+                  phone: user.phone || "(281) 678-6643",
+                  phoneLink: user.phoneLink || "2816786643",
                   hasLogo: user.hasLogo !== false,
                   logo: user.logo || "https://convergentmethod.com/media/CMFullColor.png",
                   color: user.color || "#6FA0DB",
@@ -263,6 +258,7 @@
           DIRECTORY[key] = Object.freeze({
             name: user.name,
             title: user.title || "Convergent Method, LLC",
+            company: user.company || "Convergent Method, LLC",
             email: user.email || email,
             phone: user.phone || "(281) 678-6643",
             phoneLink: user.phoneLink || "2816786643",
@@ -295,13 +291,9 @@
           chooseProfile(matchedKey);
         } else if (dirKeys.length > 0) {
           chooseProfile(dirKeys[0]);
-        } else {
-          chooseProfile('dynamic');
         }
       } else if (dirKeys.length > 0) {
         chooseProfile(dirKeys[0]);
-      } else {
-        chooseProfile('dynamic');
       }
       renderProfileTabs();
       renderVariantTabs();
@@ -312,22 +304,20 @@
       const container = document.getElementById('profileTabs');
       if (!container) return;
       container.innerHTML = '';
+      const seenNames = new Set();
       for (const [key, emp] of Object.entries(DIRECTORY)) {
+        const displayName = emp.name ? emp.name.split(',')[0] : 'Employee';
+        if (seenNames.has(displayName)) continue;
+        seenNames.add(displayName);
+
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'tab-btn' + (key === selectedKey ? ' active' : '');
         btn.id = 'btn_' + key;
-        btn.textContent = emp.name ? emp.name.split(',')[0] : 'Employee';
+        btn.textContent = displayName;
         btn.onclick = () => chooseProfile(key);
         container.appendChild(btn);
       }
-      const dynBtn = document.createElement('button');
-      dynBtn.type = 'button';
-      dynBtn.className = 'tab-btn' + (selectedKey === 'dynamic' ? ' active' : '');
-      dynBtn.id = 'btn_dynamic';
-      dynBtn.textContent = 'Current Account';
-      dynBtn.onclick = () => chooseProfile('dynamic');
-      container.appendChild(dynBtn);
     }
 
     function chooseProfile(key) {
@@ -345,14 +335,12 @@
       container.innerHTML = '';
 
       const u = getSelectedUserData();
-      const variants = u.signatures || [
-        { id: "standard", name: "With Logo", hasLogo: true, hasDisclaimer: true, hasEco: true },
-        { id: "nologo", name: "No Logo", hasLogo: false, hasDisclaimer: true, hasEco: true }
-      ];
+      if (!u) return;
+      const variants = u.signatures || [];
 
       // Keep selectedVariantId if valid, otherwise reset to first
       if (!variants.some(v => v.id === selectedVariantId)) {
-        selectedVariantId = variants[0].id;
+        selectedVariantId = variants.length > 0 ? variants[0].id : null;
       }
 
       variants.forEach(v => {
@@ -372,40 +360,15 @@
 
     function getSelectedUserData() {
       if (DIRECTORY[selectedKey]) return DIRECTORY[selectedKey];
-
-      try {
-        const p = Office.context.mailbox.userProfile;
-        return {
-          name: p.displayName || "Convergent Method Team",
-          title: "Convergent Method, LLC",
-          email: p.emailAddress || "info@convergentmethod.com",
-          phone: "(281) 979-1336",
-          phoneLink: "+12819791336",
-          signatures: [
-            { id: "standard", name: "With Logo", hasLogo: true, hasDisclaimer: true, hasEco: true },
-            { id: "nologo", name: "No Logo", hasLogo: false, hasDisclaimer: true, hasEco: true }
-          ]
-        };
-      } catch (e) {
-        const firstKey = Object.keys(DIRECTORY)[0];
-        return firstKey ? DIRECTORY[firstKey] : {
-          name: "Convergent Method Team",
-          title: "Convergent Method, LLC",
-          email: "info@convergentmethod.com",
-          phone: "(281) 979-1336",
-          phoneLink: "+12819791336",
-          signatures: [
-            { id: "standard", name: "Corporate (With Logo)", hasLogo: true, hasDisclaimer: true, hasEco: true },
-            { id: "nologo", name: "Executive (No Logo)", hasLogo: false, hasDisclaimer: true, hasEco: true }
-          ]
-        };
-      }
+      const firstKey = Object.keys(DIRECTORY)[0];
+      return firstKey ? DIRECTORY[firstKey] : null;
     }
 
     function getSelectedVariant() {
       const u = getSelectedUserData();
+      if (!u) return null;
       const variants = u.signatures || [];
-      return variants.find(v => v.id === selectedVariantId) || variants[0] || { hasLogo: true, hasDisclaimer: true, hasEco: true };
+      return variants.find(v => v.id === selectedVariantId) || variants[0] || null;
     }
 
     function escapeHtml(t) {
@@ -424,11 +387,12 @@
     }
 
     function buildHtml(u, v) {
-      const safeName = escapeHtml(u.name);
-      const safeTitle = escapeHtml(u.title);
-      const safeEmail = escapeHtml(u.email);
-      const safePhone = escapeHtml(u.phone);
-      const safePhoneLink = sanitizePhoneLink(u.phoneLink);
+      const safeName = escapeHtml((v && v.fullName) ? v.fullName : u.name);
+      const safeTitle = escapeHtml((v && v.title) ? v.title : u.title);
+      const safeCompany = escapeHtml((v && v.company) ? v.company : (u.company || "Convergent Method, LLC"));
+      const safeEmail = escapeHtml((v && v.email) ? v.email : u.email);
+      const safePhone = escapeHtml((v && v.phone) ? v.phone : u.phone);
+      const safePhoneLink = sanitizePhoneLink((v && v.phoneLink) ? v.phoneLink : u.phoneLink);
       const hasLogo = v.hasLogo !== false;
       const hasDisclaimer = v.hasDisclaimer !== false;
       const hasEco = v.hasEco !== false;
@@ -463,10 +427,10 @@
           ${safeTitle}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">
-          Convergent Method, LLC
+          ${safeCompany}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">
-          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(u.email)}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent((v && v.email) ? v.email : u.email)}" style="color: ${accent}; text-decoration: none; font-weight: 500;"><span style="color: ${accent}; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">
           <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${safePhone}</span></a>
@@ -486,10 +450,10 @@
           ${safeTitle}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">
-          Convergent Method, LLC
+          ${safeCompany}
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">
-          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent(u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
+          <span style="font-weight: 600; color: #333333;">E:&nbsp;</span><a href="mailto:${encodeURIComponent((v && v.email) ? v.email : u.email)}" style="color: #6FA0DB; text-decoration: none; font-weight: 500;"><span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">${safeEmail}</span></a>
         </div>
         <div style="font-family: 'Aptos', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">
           <span style="font-weight: 600; color: #333333;">P:&nbsp;</span><a href="tel:${safePhoneLink}" style="color: #444444; text-decoration: none;"><span style="color: #444444; text-decoration: none;">${safePhone}</span></a>
@@ -523,7 +487,12 @@
     function updatePreview() {
       const u = getSelectedUserData();
       const v = getSelectedVariant();
-      document.getElementById('previewContainer').innerHTML = buildHtml(u, v);
+      const container = document.getElementById('previewContainer');
+      if (!u || !v) {
+        container.innerHTML = '<div style="color: #64748B; font-style: italic; padding: 12px; text-align: center;">No signature profile configured in Studio.</div>';
+        return;
+      }
+      container.innerHTML = buildHtml(u, v);
     }
 
     function insertSignatureNow() {
@@ -541,6 +510,12 @@
         const item = Office.context.mailbox.item;
         const u = getSelectedUserData();
         const v = getSelectedVariant();
+        if (!u || !v) {
+          msg.textContent = 'No signature configured in Studio.';
+          msg.className = 'status-msg status-error';
+          msg.style.display = 'block';
+          return;
+        }
         const html = buildHtml(u, v);
 
         if (item.body && typeof item.body.setSignatureAsync === 'function') {

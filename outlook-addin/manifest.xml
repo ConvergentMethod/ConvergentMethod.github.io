@@ -6,7 +6,7 @@
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides"
   xsi:type="MailApp">
   <Id>e3a891d4-8df2-4217-a068-07b9a5e12f6b</Id>
-  <Version>1.0.0.3</Version>
+  <Version>1.0.0.4</Version>
   <ProviderName>Convergent Method, LLC</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Convergent Method Auto Signature" />
@@ -26,16 +26,15 @@
     </Sets>
   </Requirements>
   <FormSettings>
-    <Form xsi:type="ItemRead">
+    <Form xsi:type="ItemEdit">
       <DesktopSettings>
         <SourceLocation DefaultValue="https://convergentmethod.com/outlook-addin/taskpane.html" />
-        <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
     </Form>
   </FormSettings>
   <Permissions>ReadWriteItem</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
-    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit" />
   </Rule>
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 
