@@ -144,7 +144,7 @@ var TEAM_DIRECTORY = Object.freeze({
         logo: "https://convergentmethod.com/media/CMFullColor.png",
         color: "#6fa0db",
         hasDisclaimer: true,
-        hasEco: false,
+        hasEco: true,
         hasExtraDetail: false,
         extraLabel: "Dealer #:",
         extraValue: ""
@@ -288,13 +288,6 @@ function buildSignatureHtml(user) {
     '<!-- Microsoft 365 Auto Signature - Convergent Method, LLC -->' +
     '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">' +
       '<table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Aptos, Calibri, Arial, sans-serif;">' +
-        topSection +
-        bottomSection +
-      '</table>' +
-    '</div>'
-  );
-    '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">' +
-      '<table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: \'Aptos\', Calibri, Arial, sans-serif;">' +
         topSection +
         bottomSection +
       '</table>' +
