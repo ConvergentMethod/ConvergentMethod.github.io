@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://appsforoffice.microsoft.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://convergentmethod.com data:; connect-src 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Convergent Method Signature</title>
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
-  <script type="text/javascript" src="launchevent.js"></script>
+  <script type="text/javascript" src="launchevent.js?v=1.0.4"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -187,45 +190,8 @@
   </div>
 
   <script>
-    // Primary Directory initialized with active team profiles
-    const DIRECTORY = {
-      ethan: Object.freeze({
-        name: "Ethan Stemmans",
-        title: "Electrical Engineering Assistant",
-        company: "Convergent Method, LLC",
-        email: "ethanstemmans@gmail.com",
-        phone: "(281) 678-6643",
-        phoneLink: "2816786643",
-        hasLogo: true,
-        logo: "https://convergentmethod.com/media/CMFullColor.png",
-        color: "#6FA0DB",
-        hasDisclaimer: true,
-        hasEco: true,
-        hasExtraDetail: false,
-        extraLabel: "Dealer #:",
-        extraValue: "",
-        signatures: Object.freeze([
-          Object.freeze({
-            id: "standard",
-            name: "Corporate Standard",
-            fullName: "Ethan Stemmans",
-            title: "Electrical Engineering Assistant",
-            company: "Convergent Method, LLC",
-            email: "ethanstemmans@gmail.com",
-            phone: "(281) 678-6643",
-            phoneLink: "2816786643",
-            hasLogo: true,
-            logo: "https://convergentmethod.com/media/CMFullColor.png",
-            color: "#6FA0DB",
-            hasDisclaimer: true,
-            hasEco: true,
-            hasExtraDetail: false,
-            extraLabel: "Dealer #:",
-            extraValue: ""
-          })
-        ])
-      })
-    };
+    // Directory populated from TEAM_DIRECTORY (launchevent.js)
+    const DIRECTORY = {};
 
     function syncFromTeamDirectory() {
       if (typeof TEAM_DIRECTORY !== 'undefined' && TEAM_DIRECTORY) {
@@ -269,8 +235,8 @@
     }
     syncFromTeamDirectory();
 
-    let selectedKey = 'ethan';
-    let selectedVariantId = 'standard';
+    let selectedKey = null;
+    let selectedVariantId = null;
 
     Office.onReady(function (info) {
       syncFromTeamDirectory();
