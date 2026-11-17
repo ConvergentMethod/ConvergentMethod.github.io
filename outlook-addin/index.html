@@ -1585,7 +1585,7 @@ function buildSignatureHtml(user) {
     var safeExtraLabel = escapeHtml(user.extraLabel || 'Dealer #:');
     var safeExtraValue = escapeHtml(user.extraValue);
     extraDetailHtml = 
-      '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
+      '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
         '<span style="font-weight: 600; color: #333333;">' + safeExtraLabel + '&nbsp;</span><span style="color: #444444;">' + safeExtraValue + '</span>' +
       '</div>';
   }
@@ -1600,22 +1600,22 @@ function buildSignatureHtml(user) {
           '</a>' +
         '</td>' +
         '<td valign="middle" width="387" style="width: 387px; min-width: 387px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">' +
-          '<div style="font-family: \'Century Gothic\', CenturyGothic, \'Apple Gothic\', \'Avenir Next\', Avenir, \'Segoe UI\', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
             safeName +
           '</div>' +
-          '<div style="font-family: \'Century Gothic\', CenturyGothic, \'Apple Gothic\', \'Avenir Next\', Avenir, \'Segoe UI\', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">' +
             safeTitle +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 8px 0; white-space: nowrap;">' +
             safeCompany +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
             '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' +
               '<span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
             '</a>' +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
             '<span style="font-weight: 600; color: #333333;">P:&nbsp;</span>' +
             '<a href="tel:' + safePhoneLink + '" style="color: #444444; text-decoration: none;">' +
               '<span style="color: #444444; text-decoration: none;">' + safePhone + '</span>' +
@@ -1628,22 +1628,22 @@ function buildSignatureHtml(user) {
     topSection = 
       '<tr>' +
         '<td colspan="2" valign="top" style="padding: 0 0 6px 0; vertical-align: top;">' +
-          '<div style="font-family: \'Century Gothic\', CenturyGothic, \'Apple Gothic\', \'Avenir Next\', Avenir, \'Segoe UI\', Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0;">' +
             safeName +
           '</div>' +
-          '<div style="font-family: \'Century Gothic\', CenturyGothic, \'Apple Gothic\', \'Avenir Next\', Avenir, \'Segoe UI\', Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0;">' +
             safeTitle +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 13px; font-weight: 400; color: #555555; line-height: 1.3; margin: 0 0 6px 0;">' +
             safeCompany +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
             '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' +
               '<span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
             '</a>' +
           '</div>' +
-          '<div style="font-family: \'Aptos\', Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">' +
+          '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">' +
             '<span style="font-weight: 600; color: #333333;">P:&nbsp;</span>' +
             '<a href="tel:' + safePhoneLink + '" style="color: #444444; text-decoration: none;">' +
               '<span style="color: #444444; text-decoration: none;">' + safePhone + '</span>' +
@@ -1659,7 +1659,7 @@ function buildSignatureHtml(user) {
     bottomSection = 
       '<tr><td colspan="2" height="14" style="height: 14px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td></tr>' +
       '<tr>' +
-        '<td colspan="2" style="padding: 0; margin: 0; font-family: \\'Aptos\\', Calibri, Arial, sans-serif;">' +
+        '<td colspan="2" style="padding: 0; margin: 0; font-family: Aptos, Calibri, Arial, sans-serif;">' +
           (hasEco ? '<div style="font-size: 10px; line-height: 14px; color: #6FA0DB; font-style: italic; padding-bottom: 6px;">Please do not print this e-mail unless necessary</div>' : '') +
           (hasDisclaimer ? '<div style="font-size: 10px; line-height: 14px; color: #888888;"><strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</div>' : '') +
         '</td>' +
@@ -1668,6 +1668,13 @@ function buildSignatureHtml(user) {
 
   return (
     '<!-- Microsoft 365 Auto Signature - Convergent Method, LLC -->' +
+    '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">' +
+      '<table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: Aptos, Calibri, Arial, sans-serif;">' +
+        topSection +
+        bottomSection +
+      '</table>' +
+    '</div>'
+  );
     '<div style="font-family: \\'Aptos\\', Calibri, Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; padding-top: 16px;">' +
       '<table width="560" cellpadding="0" cellspacing="0" border="0" style="width: 560px; min-width: 560px; max-width: 560px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-family: \\'Aptos\\', Calibri, Arial, sans-serif;">' +
         topSection +
