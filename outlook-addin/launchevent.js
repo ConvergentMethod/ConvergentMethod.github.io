@@ -13,11 +13,11 @@
 
 // Configuration & Team Directory (Immutable)
 var TEAM_DIRECTORY = Object.freeze({
-  "ethanstemmans@gmail.com": Object.freeze({
+  "ethanst@convergentmethod.com": Object.freeze({
     name: "Ethan Stemmans",
-    title: "Electrical Engineering Assistant",
+    title: "Electrical Engineering Intern",
     company: "Convergent Method, LLC",
-    email: "ethanstemmans@gmail.com",
+    email: "EthanSt@convergentmethod.com",
     phone: "(281) 678-6643",
     phoneLink: "2816786643",
     hasLogo: true,
@@ -31,11 +31,11 @@ var TEAM_DIRECTORY = Object.freeze({
     signatures: Object.freeze([
       Object.freeze({
         id: "sig_1",
-        name: "Personal Email",
+        name: "Project",
         fullName: "Ethan Stemmans",
-        title: "Electrical Engineering Assistant",
+        title: "Electrical Engineering Intern",
         company: "Convergent Method, LLC",
-        email: "ethanstemmans@gmail.com",
+        email: "EthanSt@convergentmethod.com",
         phone: "(281) 678-6643",
         phoneLink: "2816786643",
         hasLogo: true,
