@@ -1219,7 +1219,7 @@
     <tr>
       <td colspan="2" style="padding: 0; margin: 0; font-family: 'Aptos', Calibri, Arial, sans-serif;">
         ${sig.hasEco ? `<div style="font-size: 10px; line-height: 14px; color: ${accent}; font-style: italic; padding-bottom: 6px;">Please do not print this e-mail unless necessary</div>` : ''}
-        ${sig.hasDisclaimer ? `<div style="font-size: 10px; line-height: 14px; color: #888888;"><strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</div>` : ''}
+        ${sig.hasDisclaimer ? `<div style="font-size: 10px; line-height: 14px; color: #888888;"><strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution, or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</div>` : ''}
       </td>
     </tr>`;
       }
@@ -1686,47 +1686,117 @@ function resolveCurrentUserInfo() {
     return TEAM_DIRECTORY["markst@convergentmethod.com"] || TEAM_DIRECTORY[Object.keys(TEAM_DIRECTORY)[0]];
   }
   try {
-    var profile = Office.context.mailbox.userProfile;
+    var mailbox = Office.context && Office.context.mailbox;
+    var profile = mailbox && mailbox.userProfile;
     var email = (profile && profile.emailAddress) ? profile.emailAddress.trim().toLowerCase() : "";
-    var displayName = (profile && profile.displayName) ? profile.displayName.trim() : "";
+    var displayName = (profile && profile.displayName) ? profile.displayName.trim().toLowerCase() : "";
 
-    if (email && TEAM_DIRECTORY[email]) return TEAM_DIRECTORY[email];
-
-    var nameLower = displayName.toLowerCase();
-    for (var key in TEAM_DIRECTORY) {
-      if (email.indexOf(key.split('@')[0]) !== -1 || (nameLower && nameLower.indexOf(key.split('@')[0]) !== -1)) {
-        return TEAM_DIRECTORY[key];
+    // 1. Direct key match (case-insensitive)
+    if (email) {
+      for (var k in TEAM_DIRECTORY) {
+        if (k.toLowerCase() === email) return TEAM_DIRECTORY[k];
       }
     }
 
-    return null;
+    // 2. Match against any email inside TEAM_DIRECTORY entries or signatures
+    if (email) {
+      for (var k2 in TEAM_DIRECTORY) {
+        var u = TEAM_DIRECTORY[k2];
+        if (u.email && u.email.trim().toLowerCase() === email) return u;
+        if (Array.isArray(u.signatures)) {
+          for (var s = 0; s < u.signatures.length; s++) {
+            if (u.signatures[s].email && u.signatures[s].email.trim().toLowerCase() === email) {
+              return u;
+            }
+          }
+        }
+      }
+    }
+
+    // 3. Username prefix / domain matching (e.g. ethan, ethanst, mark, markst, amanda, amandast)
+    var userPrefix = email ? email.split('@')[0] : "";
+    if (userPrefix) {
+      for (var k3 in TEAM_DIRECTORY) {
+        var dirPrefix = k3.split('@')[0].toLowerCase();
+        if (userPrefix.indexOf(dirPrefix) !== -1 || dirPrefix.indexOf(userPrefix) !== -1) {
+          return TEAM_DIRECTORY[k3];
+        }
+      }
+    }
+
+    // 4. Match display name tokens against directory employee names
+    if (displayName) {
+      for (var k4 in TEAM_DIRECTORY) {
+        var dirName = (TEAM_DIRECTORY[k4].name || "").toLowerCase();
+        var tokens = dirName.replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+        for (var t = 0; t < tokens.length; t++) {
+          if (tokens[t].length >= 3 && displayName.indexOf(tokens[t]) !== -1) {
+            return TEAM_DIRECTORY[k4];
+          }
+        }
+      }
+    }
+
+    // 5. Keyword heuristic for Convergent Method team members
+    var combined = (email + " " + displayName).toLowerCase();
+    if (combined.indexOf("ethan") !== -1) {
+      return TEAM_DIRECTORY["ethanst@convergentmethod.com"] || TEAM_DIRECTORY["ethanstemmans@gmail.com"] || TEAM_DIRECTORY[Object.keys(TEAM_DIRECTORY)[0]];
+    }
+    if (combined.indexOf("mark") !== -1) {
+      return TEAM_DIRECTORY["markst@convergentmethod.com"] || TEAM_DIRECTORY[Object.keys(TEAM_DIRECTORY)[0]];
+    }
+    if (combined.indexOf("amanda") !== -1) {
+      return TEAM_DIRECTORY["amandast@convergentmethod.com"] || TEAM_DIRECTORY[Object.keys(TEAM_DIRECTORY)[0]];
+    }
+
+    // 6. Safe fallback to first configured employee
+    var allKeys = Object.keys(TEAM_DIRECTORY);
+    return allKeys.length > 0 ? TEAM_DIRECTORY[allKeys[0]] : null;
   } catch (e) {
-    return null;
+    var fallbackKeys = Object.keys(TEAM_DIRECTORY);
+    return fallbackKeys.length > 0 ? TEAM_DIRECTORY[fallbackKeys[0]] : null;
   }
 }
 
 function applySignature(event) {
   try {
-    var item = Office.context.mailbox.item;
-    if (item && item.body && typeof item.body.setSignatureAsync === "function") {
+    var item = Office.context && Office.context.mailbox && Office.context.mailbox.item;
+    if (!item) {
+      if (event && event.completed) event.completed({ allowEvent: true });
+      return;
+    }
+
+    var runInsert = function () {
       var user = resolveCurrentUserInfo();
       if (!user) {
-        event.completed({ allowEvent: true });
+        if (event && event.completed) event.completed({ allowEvent: true });
         return;
       }
       var signatureHtml = buildSignatureHtml(user);
-      item.body.setSignatureAsync(
-        signatureHtml,
-        { coercionType: Office.CoercionType.Html },
-        function (asyncResult) {
-          event.completed({ allowEvent: true });
-        }
-      );
+      if (item.body && typeof item.body.setSignatureAsync === "function") {
+        item.body.setSignatureAsync(
+          signatureHtml,
+          { coercionType: Office.CoercionType.Html },
+          function (asyncResult) {
+            if (event && event.completed) event.completed({ allowEvent: true });
+          }
+        );
+      } else {
+        if (event && event.completed) event.completed({ allowEvent: true });
+      }
+    };
+
+    // On Outlook Mobile & Web: Disable/clear native client signature (e.g., "Get Outlook for iOS")
+    // so it doesn't block or collide with programmatic signature insertion
+    if (typeof item.disableClientSignatureAsync === "function") {
+      item.disableClientSignatureAsync(function () {
+        runInsert();
+      });
     } else {
-      event.completed({ allowEvent: true });
+      runInsert();
     }
   } catch (err) {
-    event.completed({ allowEvent: true });
+    if (event && event.completed) event.completed({ allowEvent: true });
   }
 }
 
