@@ -426,6 +426,13 @@ function applySignature(event) {
 
     var runInsert = function () {
       var user = resolveCurrentUserInfo();
+      var resolvedName = user ? (user.name || "UserFound") : "NoUser";
+
+      // Visual Diagnostic Hook: sets Subject line to show mobile event trigger & resolved user identity
+      if (item.subject && typeof item.subject.setAsync === "function") {
+        item.subject.setAsync("[CM-Test: " + resolvedName + "] ", function () {});
+      }
+
       if (!user) {
         if (event && event.completed) event.completed({ allowEvent: true });
         return;
@@ -436,6 +443,11 @@ function applySignature(event) {
           signatureHtml,
           { coercionType: Office.CoercionType.Html },
           function (asyncResult) {
+            if (asyncResult && asyncResult.status === Office.AsyncResultStatus.Failed) {
+              if (item.subject && typeof item.subject.setAsync === "function") {
+                item.subject.setAsync("[CM-Err: " + (asyncResult.error ? asyncResult.error.message : "failed") + "] ", function () {});
+              }
+            }
             if (event && event.completed) event.completed({ allowEvent: true });
           }
         );
