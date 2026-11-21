@@ -21,6 +21,8 @@ var TEAM_DIRECTORY = Object.freeze({
     phone: "(281) 678-6643",
     phoneLink: "2816786643",
     hasLogo: true,
+    logo: "https://convergentmethod.com/media/CMFullColor.png",
+    color: "#6fa0db",
     hasDisclaimer: true,
     hasEco: true,
     hasExtraDetail: false,
@@ -55,6 +57,8 @@ var TEAM_DIRECTORY = Object.freeze({
     phone: "(281) 979-1336",
     phoneLink: "2819791336",
     hasLogo: true,
+    logo: "https://convergentmethod.com/media/CMFullColor.png",
+    color: "#6fa0db",
     hasDisclaimer: true,
     hasEco: true,
     hasExtraDetail: false,
@@ -107,6 +111,8 @@ var TEAM_DIRECTORY = Object.freeze({
     phone: "(281) 979-2162",
     phoneLink: "2819792162",
     hasLogo: true,
+    logo: "https://convergentmethod.com/media/CMFullColor.png",
+    color: "#6fa0db",
     hasDisclaimer: true,
     hasEco: true,
     hasExtraDetail: false,
@@ -197,6 +203,8 @@ function buildSignatureHtml(user) {
   var hasLogo = user.hasLogo !== false;
   var hasDisclaimer = user.hasDisclaimer !== false;
   var hasEco = user.hasEco !== false;
+  var safeAccent = escapeHtml(user.color || '#6FA0DB');
+  var safeLogoUrl = escapeHtml(user.logo || 'https://convergentmethod.com/media/CMFullColor.png');
 
   var extraDetailHtml = '';
   if (user.hasExtraDetail && user.extraValue) {
@@ -212,13 +220,13 @@ function buildSignatureHtml(user) {
   if (hasLogo) {
     topSection = 
       '<tr>' +
-        '<td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid #6FA0DB; vertical-align: middle;">' +
+        '<td valign="middle" width="153" style="width: 153px; min-width: 153px; max-width: 153px; padding: 0 24px 0 0; border-right: 2px solid ' + safeAccent + '; vertical-align: middle;">' +
           '<a href="https://convergentmethod.com" target="_blank" style="text-decoration: none;">' +
-            '<img src="https://convergentmethod.com/media/CMFullColor.png" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto; border: 0; outline: none; text-decoration: none;" />' +
+            '<img src="' + safeLogoUrl + '" alt="Convergent Method Logo" width="145" border="0" style="display: block; width: 145px; max-width: 145px; height: auto; border: 0; outline: none; text-decoration: none;" />' +
           '</a>' +
         '</td>' +
         '<td valign="middle" width="387" style="width: 387px; min-width: 387px; padding: 0 0 0 16px; vertical-align: middle; white-space: nowrap;">' +
-          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: ' + safeAccent + '; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0; white-space: nowrap;">' +
             safeName +
           '</div>' +
           '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0; white-space: nowrap;">' +
@@ -229,8 +237,8 @@ function buildSignatureHtml(user) {
           '</div>' +
           '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0; white-space: nowrap;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
-            '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' +
-              '<span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
+            '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: ' + safeAccent + '; text-decoration: none; font-weight: 500;">' +
+              '<span style="color: ' + safeAccent + '; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
             '</a>' +
           '</div>' +
           '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0; white-space: nowrap;">' +
@@ -246,7 +254,7 @@ function buildSignatureHtml(user) {
     topSection = 
       '<tr>' +
         '<td colspan="2" valign="top" style="padding: 0 0 6px 0; vertical-align: top;">' +
-          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: #6FA0DB; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0;">' +
+          '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 17px; font-weight: 700; color: ' + safeAccent + '; letter-spacing: 0.2px; line-height: 1.2; margin: 0 0 3px 0;">' +
             safeName +
           '</div>' +
           '<div style="font-family: Century Gothic, CenturyGothic, Apple Gothic, Avenir Next, Avenir, Segoe UI, Arial, sans-serif; font-size: 13px; font-weight: 600; color: #222222; line-height: 1.3; margin: 0 0 2px 0;">' +
@@ -257,8 +265,8 @@ function buildSignatureHtml(user) {
           '</div>' +
           '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0 0 2px 0;">' +
             '<span style="font-weight: 600; color: #333333;">E:&nbsp;</span>' +
-            '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' +
-              '<span style="color: #6FA0DB; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
+            '<a href="mailto:' + encodeURIComponent(user.email) + '" style="color: ' + safeAccent + '; text-decoration: none; font-weight: 500;">' +
+              '<span style="color: ' + safeAccent + '; text-decoration: none; font-weight: 500;">' + safeEmail + '</span>' +
             '</a>' +
           '</div>' +
           '<div style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12px; line-height: 1.4; margin: 0;">' +
@@ -278,7 +286,7 @@ function buildSignatureHtml(user) {
       '<tr><td colspan="2" height="14" style="height: 14px; font-size: 0; line-height: 0; padding: 0;">&nbsp;</td></tr>' +
       '<tr>' +
         '<td colspan="2" style="padding: 0; margin: 0; font-family: Aptos, Calibri, Arial, sans-serif;">' +
-          (hasEco ? '<div style="font-size: 10px; line-height: 14px; color: #6FA0DB; font-style: italic; padding-bottom: 6px;">Please do not print this e-mail unless necessary</div>' : '') +
+          (hasEco ? '<div style="font-size: 10px; line-height: 14px; color: ' + safeAccent + '; font-style: italic; padding-bottom: 6px;">Please do not print this e-mail unless necessary</div>' : '') +
           (hasDisclaimer ? '<div style="font-size: 10px; line-height: 14px; color: #888888;"><strong style="color: #666666;">Notice:</strong> This message is confidential, is intended only for the named recipient(s) and may contain information that is privileged or exempt from disclosure under applicable law. If you are not the intended recipient(s), you are notified that the dissemination, distribution or copying of this message is strictly prohibited. If you received this message and are not an intended recipient, please delete it from your computer.</div>' : '') +
         '</td>' +
       '</tr>';

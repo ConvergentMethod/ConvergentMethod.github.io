@@ -183,6 +183,7 @@
       <span>Insert Selected Signature</span>
     </button>
     <div class="status-msg" id="statusMsg"></div>
+  </div>
 
   <div class="card">
     <div class="card-title">Live Preview:</div>
@@ -238,6 +239,15 @@
     let selectedKey = null;
     let selectedVariantId = null;
 
+    const initialKeys = Object.keys(DIRECTORY);
+    if (initialKeys.length > 0) {
+      selectedKey = initialKeys[0];
+      const initialUser = DIRECTORY[selectedKey];
+      if (initialUser && initialUser.signatures && initialUser.signatures.length > 0) {
+        selectedVariantId = initialUser.signatures[0].id;
+      }
+    }
+
     Office.onReady(function (info) {
       syncFromTeamDirectory();
       const dirKeys = Object.keys(DIRECTORY);
@@ -288,6 +298,7 @@
 
     function chooseProfile(key) {
       selectedKey = key;
+      selectedVariantId = null;
       document.querySelectorAll('.profile-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById('btn_' + key);
       if (activeBtn) activeBtn.classList.add('active');
